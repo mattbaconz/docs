@@ -1,0 +1,35 @@
+---
+title: "Leaderboards"
+description: "Display competitive stats using holograms."
+---
+
+SeasonManager includes a built-in holographic leaderboard system (requires DecentHolograms) to track player statistics during the season.
+
+## Supported Stats
+
+*   **Kills**: Player kills.
+*   **Deaths**: Times died.
+*   **KDR**: Kill/Death Ratio.
+*   **Blocks Mined**: Total blocks broken.
+*   **Blocks Placed**: Total blocks placed.
+*   **Mob Kills**: Hostile/passive mobs killed.
+*   **Playtime**: Time spent on the server.
+
+## Creating a Leaderboard
+
+Admins can create a leaderboard at their current location:
+
+` /leaderboard create <stat_type>`
+
+**Example:**
+`/leaderboard create KILLS`
+
+## Managing Leaderboards
+
+*   **Remove**: Stand near a leaderboard and run `/leaderboard remove`.
+*   **List**: See all active leaderboards with `/leaderboard list`.
+*   **Update**: Force a refresh with `/leaderboard update`.
+
+## Configuration
+
+Leaderboard data is updated periodically based on the `web.refresh-interval` setting in `config.yml` (if using Prime) or on server events.

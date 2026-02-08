@@ -1,0 +1,41 @@
+---
+title: "Events"
+description: "Schedule automated events throughout the season."
+---
+
+The Event System is one of the most powerful features of SeasonManager. It allows you to script actions that happen at specific times relative to the start of the season.
+
+## How it Works
+
+Events are defined in `events.yml` using a time key and a list of actions.
+
+Key Format: `DD:HH:MM:SS` (Days:Hours:Minutes:Seconds)
+
+### Example Timeline
+
+1.  **Season Start (00:00:00:05)**:
+    *   Title: "Season has begun!"
+    *   Sound: Level Up
+2.  **Grace Period End (00:01:00:00)**:
+    *   Broadcast: "PvP is now enabled!"
+    *   Console Command: `worldborder set 5000`
+3.  **Mid-Season (15:00:00:00)**:
+    *   Broadcast: "Halfway there!"
+
+## detailed Action Reference
+
+| Tag | Description | Example |
+| :--- | :--- | :--- |
+| `[CONSOLE]` | Executes a command as the server console. | `[CONSOLE] say Hello World` |
+| `[TITLE]` | Shows a title to all players. Format: `Title;Subtitle`. Supports MiniMessage. | `[TITLE] <red>Alert;<yellow>PvP On` |
+| `[SOUND]` | Plays a sound to all players. | `[SOUND] UI_BUTTON_CLICK` |
+| `[BROADCAST]` | Sends a chat message to all players. Supports MiniMessage. | `[BROADCAST] <green>Event started!` |
+| `[DISCORD]` | Sends a message to the Discord webhook (Prime). | `[DISCORD] Season started!` |
+| `[TIP]` | Sends a gameplay tip (if enabled in config). | `[TIP] Use /stash to save items.` |
+
+## Placeholders in Events
+
+You can use standard placeholders in broadcast and title messages.
+
+*   `%seasonmanager_time_remaining%`
+*   `%seasonmanager_season_number%`

@@ -1,0 +1,42 @@
+---
+title: "Seasons"
+description: "Understanding the season cycle and phases."
+---
+
+## The Season Cycle
+
+SeasonManager revolves around the concept of a "Season". A season is a defined period of gameplay that ends with a world reset (or archive) and a fresh start.
+
+### Phases of a Season
+
+1.  **Start / Grace Period**:
+    *   The season begins.
+    *   Usually accompanied by a "Grace Period" where PvP is disabled to allow players to gather resources safely.
+2.  **Active Season**:
+    *   The main gameplay phase.
+    *   Events can trigger throughout this phase (see [Events](/features/events)).
+3.  **End of Season**:
+    *   Warnings are broadcast as the timer ticks down.
+    *   Players scramble to stash their items.
+4.  **Post-Season / Archive**:
+    *   The world is saved and zipped (Prime feature).
+    *   The server prepares for the next season (incrementing the version number).
+
+## Configuration
+
+You can customize the duration and grace period in `config.yml`:
+
+```yaml
+season:
+  duration: 30d      # 30 Days
+  grace-period: 1h   # 1 Hour
+```
+
+## Manual Control
+
+Admins can manually intervene in the cycle using commands:
+
+*   `/season start`: Starts the timer.
+*   `/season stop`: Pauses the timer.
+*   `/season settime <time>`: Adjusts the remaining time.
+*   `/season next`: Forces the season to end immediately and proceed to the next one.

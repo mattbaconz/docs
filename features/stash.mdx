@@ -1,0 +1,52 @@
+---
+title: "Cross-Season Stash"
+description: "Carry items over to the next season."
+---
+
+> [!NOTE]
+> This is a **Prime** feature.
+
+The Season Stash (or Vault) allows players to store a limited number of items that will persist across world resets. This is crucial for keeping players engaged, as they don't lose *everything* when a new season begins.
+
+## How to Use
+
+Players can open their stash using:
+*   `/stash`
+*   `/vault`
+
+This opens a GUI where they can deposit items.
+
+## Configuration
+
+You can configure the stash in `stash.yml`.
+
+### Size
+Change the size of the GUI (rows of 9).
+```yaml
+stash-size: 27
+```
+
+### Restrictions
+You can prevent certain OP items from being carried over.
+
+**Blacklist Mode**: Blocks specific items.
+```yaml
+restriction-mode: "blacklist"
+blacklisted-items:
+  - DRAGON_EGG
+  - BEACON
+  - NETHER_STAR
+```
+
+**Whitelist Mode**: Only allows specific items.
+```yaml
+restriction-mode: "whitelist"
+whitelisted-items:
+  - DIAMOND
+  - EMERALD
+```
+
+## Permissions
+
+*   `seasonmanager.stash`: Required to open the stash.
+*   `seasonmanager.stash.size.X`: Overrides the default size for VIP ranks (e.g., `seasonmanager.stash.size.54`).

@@ -1,0 +1,49 @@
+---
+title: "Installation"
+description: "How to install and set up SeasonManager on your server."
+---
+
+## Prerequisites
+
+Before installing SeasonManager, ensure your server meets the following requirements:
+
+*   **Java**: Java 17 or higher
+*   **Server Software**: Spigot, Paper, Purpur, or Folia (1.20+)
+*   **Dependencies**:
+    *   [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) (Required for placeholders)
+    *   [Vault](https://www.spigotmc.org/resources/vault.34315/) (Optional, for economy integration)
+    *   [DecentHolograms](https://www.spigotmc.org/resources/decentholograms-1-8-1-20-4-papi-support-no-dependencies.96927/) (Required for leaderboards)
+
+## Installation Steps
+
+1.  **Download the Plugin**:
+    *   **Core**: Download from [SpigotMC](https://www.spigotmc.org/resources/seasonmanager).
+    *   **Prime**: Download from your purchase email or the [Discord](https://discord.gg/seasonmanager) verification channel.
+
+2.  **Upload to Server**:
+    *   Stop your server completely.
+    *   Upload the `SeasonManager-x.x.x.jar` file to your server's `plugins` folder.
+
+3.  **Start the Server**:
+    *   Start your server.
+    *   The plugin will generate a `SeasonManager` folder in your `plugins` directory containing the default configuration files.
+
+## First-Time Setup
+
+After installation, we recommend checking the `config.yml` to set up your season parameters.
+
+1.  **Open `plugins/SeasonManager/config.yml`**.
+2.  **Adjust the `season.duration`**: Set how long you want your seasons to last (default is 30d).
+3.  **Configure `season.grace-period`**: Set the initial safe period where PvP or damage might be disabled.
+4.  **Restart or Reload**: Run `/season reload` to apply changes, or restart the server.
+
+> [!NOTE]
+> If you are using MySQL, configure the database settings in `config.yml` under `statistics.storage-type`.
+
+## Updating
+
+To update SeasonManager:
+1.  Download the new JAR file.
+2.  Stop your server.
+3.  Replace the old JAR with the new one.
+4.  Start your server. The plugin typically handles config updates automatically, but check the changelogs for any breaking changes.

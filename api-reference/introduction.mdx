@@ -1,33 +1,69 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "Developer API"
+description: "Hooks for developers to integrate with SeasonManager."
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+SeasonManager provides a Maven dependency for developers to hook into season events and access data.
 
-## Welcome
+## Maven Dependency
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+Add the following repository and dependency to your `pom.xml`:
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+```xml
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
 
-## Authentication
-
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
-
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+<dependency>
+    <groupId>com.github.mattbaconz</groupId>
+    <artifactId>seasonmanager-api</artifactId>
+    <version>1.2.26</version> <!-- Check latest release -->
+    <scope>provided</scope>
+</dependency>
 ```
+
+## Accessing the API
+
+Get the instance of the API:
+
+```java
+import me.mattbaconz.seasonmanager.api.SeasonManagerAPI;
+
+SeasonManagerAPI api = SeasonManagerAPI.getInstance();
+```
+
+## Listening to Events
+
+SeasonManager fires Bukkit events that you can listen to.
+
+### SeasonChangeStateEvent
+
+Fired when the season transitions (e.g., PRE_SEASON -> ACTIVE).
+
+```java
+@EventHandler
+public void onSeasonChange(SeasonChangeStateEvent event) {
+    if (event.getNewState() == SeasonState.ACTIVE) {
+        getLogger().info("The season has started!");
+    }
+}
+```
+
+### PlayerStashEvent
+
+Fired when a player uses the stash.
+
+```java
+@EventHandler
+public void onStashOpen(PlayerStashOpenEvent event) {
+    Player player = event.getPlayer();
+    // Custom logic
+}
+```
+
+## Common Methods
+
+*   `api.getSeasonNumber()`: Returns the current season version.
+*   `api.getTimeRemaining()`: Returns duration until season end.
+*   `api.isInGracePeriod()`: Checks if grace period is active.

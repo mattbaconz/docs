@@ -1,0 +1,40 @@
+---
+title: "Commands"
+description: "List of all commands and permissions in SeasonManager."
+---
+
+## Player Commands
+
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/season info` | View current season status and time remaining. | `seasonmanager.use` |
+| `/season help` | Show help menu. | `seasonmanager.use` |
+| `/stash` (or `/vault`) | Open the cross-season stash (Prime only). | `seasonmanager.stash` |
+| `/leaderboard top` | View top players in chat. | `seasonmanager.leaderboard.top` |
+
+## Admin Commands
+
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/season start` | Manually start the season. | `seasonmanager.admin` |
+| `/season stop` | Manually stop the season. | `seasonmanager.admin` |
+| `/season next` | Force end current season and start next (triggers archive). | `seasonmanager.admin` |
+| `/season settime <time>` | Modify time remaining (e.g. `24h`, `30m`). | `seasonmanager.admin` |
+| `/season reload` | Reload configuration files. | `seasonmanager.admin` |
+| `/leaderboard create <type>` | Create a hologram leaderboard at your location. | `seasonmanager.leaderboard.create` |
+| `/leaderboard remove` | Remove a nearby leaderboard. | `seasonmanager.leaderboard.remove` |
+| `/seasonrollback restore <id>` | Restore a previous world backup. | `seasonmanager.admin.rollback` |
+
+## Permission Nodes
+
+### General
+*   `seasonmanager.use`: Default permission for basic info.
+*   `seasonmanager.stash`: Access to stash.
+*   `seasonmanager.leaderboard.top`: View chat leaderboards.
+
+### Administration
+*   `seasonmanager.admin`: Full access to season control.
+*   `seasonmanager.archive`: Allow manual archiving.
+*   `seasonmanager.webhook`: Allow webhook testing/config.
+*   `seasonmanager.leaderboard.*`: Full leaderboard control.
+*   `seasonmanager.*`: Wildcard for all permissions.

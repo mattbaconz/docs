@@ -1,0 +1,41 @@
+---
+title: "Placeholders"
+description: "List of PlaceholderAPI placeholders."
+---
+
+SeasonManager supports PlaceholderAPI to display season information in scoreboards, tabs, and chat.
+
+## Season Info
+
+| Placeholder | Description |
+| :--- | :--- |
+| `%seasonmanager_number%` | Current season number (e.g., "1.0"). |
+| `%seasonmanager_state%` | Current state display name (e.g., "Active"). |
+| `%seasonmanager_state_raw%` | Raw state enum name (e.g., "ACTIVE"). |
+| `%seasonmanager_time_remaining%` | Formatted time until season ends. |
+| `%seasonmanager_is_active%` | "true" if season is active, else "false". |
+| `%seasonmanager_is_grace%` | "true" if currently in grace period. |
+
+## Player Statistics
+
+Requires the player to be online or cached.
+
+| Placeholder | Description |
+| :--- | :--- |
+| `%seasonmanager_kills%` | Player kills. |
+| `%seasonmanager_deaths%` | Player deaths. |
+| `%seasonmanager_kdr%` | Kill/Death Ratio. |
+| `%seasonmanager_blocks_mined%` | Blocks broken. |
+| `%seasonmanager_blocks_placed%` | Blocks placed. |
+| `%seasonmanager_mob_kills%` | Mobs killed. |
+| `%seasonmanager_playtime%` | Formatted playtime. |
+
+## Leaderboards
+
+Display the top players for specific stats. Replace `<stat>` with a valid stat type (e.g., `kills`, `deaths`) and `<rank>` with a number (1-10).
+
+**Format**: `%seasonmanager_top_<stat>_<rank>%`
+
+**Examples**:
+*   `%seasonmanager_top_kills_1%` - Name of the #1 killer.
+*   `%seasonmanager_top_playtime_3%` - Name of the #3 player by playtime.

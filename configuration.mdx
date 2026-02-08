@@ -1,0 +1,85 @@
+---
+title: "Configuration"
+description: "Detailed explanation of SeasonManager configuration files."
+---
+
+SeasonManager uses several YAML files for configuration. The main file is `config.yml`.
+
+## Main Configuration (`config.yml`)
+
+This file controls the core mechanics of the plugin.
+
+### Season Settings (`season`)
+
+Controls the duration and flow of the season.
+
+| Setting | Description | Default |
+| :--- | :--- | :--- |
+| `display-name` | The name used in messages for the season concept (e.g., "Era", "Chapter"). | "Season" |
+| `current-number` | The current season identifier. | 1.0 |
+| `duration` | Total length of the season. Supports `d` (days), `h` (hours), `m` (minutes). | 30d |
+| `auto-end` | Whether the season automatically ends when time runs out. | true |
+| `grace-period` | Initial period where special rules apply. | 1h |
+| `grace-period-pvp` | Allow PvP during grace period. | false |
+
+### World Settings (`world`)
+
+| Setting | Description | Default |
+| :--- | :--- | :--- |
+| `managed-worlds` | List of worlds SeasonManager controls. Empty means all worlds. | [] |
+| `archive-enabled` | (Prime) Whether to zip and archive worlds on season end. | true |
+| `archive-folder` | Folder name for backups. | "season-archives" |
+
+### Notifications (`notifications`)
+
+Configure how players are warned about season events.
+
+| Setting | Description | Default |
+| :--- | :--- | :--- |
+| `warning-times` | List of minutes before season end to send warnings. | [60, 30, 10, 5, 1] |
+| `broadcast-titles` | Show big titles on screen for important events. | true |
+
+## Event Configuration (`events.yml`)
+
+The `events.yml` file allows you to schedule commands and messages at specific times relative to the season start.
+
+Key format: `"DD:HH:MM:SS"`
+
+**Example:**
+```yaml
+events:
+  "00:00:00:05":
+    - "[TITLE] <gold>Season Started!"
+    - "[SOUND] ENTITY_PLAYER_LEVELUP"
+  "01:00:00:00": # Day 1
+    - "[BROADCAST] <red>PvP Enabled!"
+    - "[CONSOLE] worldborder set 5000 60"
+```
+
+### Supported Actions
+*   `[CONSOLE] <command>`: Run a console command.
+*   `[TITLE] <title>;<subtitle>`: Show a title.
+*   `[SOUND] <sound>`: Play a sound.
+*   `[BROADCAST] <msg>`: Send a chat message.
+*   `[DISCORD] <msg>`: Send to Discord webhook.
+
+## Discord Integration (`discord.yml`)
+
+*(Prime Feature)*
+
+Configure the webhook URL to send season updates to your Discord server.
+
+```yaml
+enabled: true
+webhook-url: "YOUR_WEBHOOK_URL"
+```
+
+## Stash Configuration (`stash.yml`)
+
+*(Prime Feature)*
+
+Controls the cross-season vault.
+
+*   `stash-size`: Size of the GUI (multiple of 9).
+*   `restriction-mode`: "blacklist" or "whitelist".
+*   `blacklisted-items`: List of materials that cannot be stored.
