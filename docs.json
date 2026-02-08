@@ -12,36 +12,43 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "navigation": [
-    {
-      "group": "Getting Started",
-      "pages": [
-        "index",
-        "installation"
-      ]
-    },
-    {
-      "group": "Usage",
-      "pages": [
-        "commands",
-        "configuration",
-        "placeholders"
-      ]
-    },
-    {
-      "group": "Features",
-      "pages": [
-        "features/seasons",
-        "features/events",
-        "features/stash",
-        "features/leaderboards"
-      ]
-    },
-    {
-      "group": "Developer",
-      "pages": [
-        "api-reference/introduction"
-      ]
-    }
-  ]
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "General",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "index",
+              "installation"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "commands",
+              "configuration",
+              "placeholders"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "features/seasons",
+              "features/events",
+              "features/stash",
+              "features/leaderboards"
+            ]
+          },
+          {
+            "group": "Developer",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }
