@@ -3,8 +3,8 @@
   "name": "SeasonManager Docs",
   "theme": "mint",
   "logo": {
-    "dark": "/favicon.ico",
-    "light": "/favicon.ico"
+    "dark": "/logo/logo.png",
+    "light": "/logo/logo.png"
   },
   "favicon": "/favicon.ico",
   "colors": {
