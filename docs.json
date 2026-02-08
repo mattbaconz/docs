@@ -1,6 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "name": "SeasonManager Docs",
+  "theme": "mint",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -11,21 +12,11 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "topbarLinks": [
-    {
-      "name": "Support",
-      "url": "mailto:support@seasonmanager.com"
-    }
-  ],
-  "topbarCtaButton": {
-    "name": "Get Plugin",
-    "url": "https://www.spigotmc.org/resources/seasonmanager"
-  },
   "navigation": [
     {
       "group": "Getting Started",
       "pages": [
-        "introduction",
+        "index",
         "installation"
       ]
     },

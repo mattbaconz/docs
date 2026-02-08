@@ -1,97 +1,65 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: Introduction
+description: "Welcome to the official SeasonManager documentation."
 ---
 
-## Setting up
+<img
+  className="block dark:hidden"
+  src="/images/hero-light.svg"
+  alt="Hero Light"
+/>
+<img
+  className="hidden dark:block"
+  src="/images/hero-dark.svg"
+  alt="Hero Dark"
+/>
 
-Get your documentation site up and running in minutes.
+## What is SeasonManager?
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+**SeasonManager** is a comprehensive plugin designed to add seasonal mechanics to your Minecraft server. It allows you to create dynamic, evolving worlds with scheduled events, cross-season progression, and competitive leaderboards.
 
-## Make it yours
+Whether you're running a survival server, an SMP, or a competitive game mode, SeasonManager provides the tools to keep your gameplay fresh and engaging.
 
-Design a docs site that looks great and empowers your users.
+### Key Features
 
-<Columns cols={2}>
+<CardGroup cols={2}>
   <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
+    title="Seasonal Cycles"
+    icon="arrows-rotate"
+    href="/features/seasons"
   >
-    Edit your docs locally and preview them in real time.
-  </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+    Manage season durations, grace periods, and automatic world wipes with ease.
   </Card>
   <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
+    title="Event System"
+    icon="calendar-days"
+    href="/features/events"
   >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
-
-## Create beautiful pages
-
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+    Schedule custom events like PvP enabling, world border changes, and more using a flexible configuration.
   </Card>
   <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
+    title="Cross-Season Stash"
+    icon="vault"
+    href="/features/stash"
   >
-    Add sample code to demonstrate how to use your product.
+    Allow players to carry over specific items between seasons using a virtual vault (Prime feature).
   </Card>
   <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
+    title="Leaderboards"
+    icon="trophy"
+    href="/features/leaderboards"
   >
-    Display images and other media.
+    Display holographic leaderboards for stats like kills, deaths, and playtime.
   </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+</CardGroup>
 
-## Need inspiration?
+## Editions
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+SeasonManager is available in two editions:
+
+- **Core**: The free version with essential features for seasonal management.
+- **Prime**: The premium version with advanced features like the visual dashboard, cross-season stash, and event hooks.
+
+## Getting Started
+
+Ready to start your first season? Head over to the [Installation](/installation) guide to get set up.
