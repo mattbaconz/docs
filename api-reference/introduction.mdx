@@ -1,9 +1,9 @@
 ---
 title: "Developer API"
-description: "Hooks for developers to integrate with SeasonManager."
+description: "Integrate your own plugins with SeasonManager."
 ---
 
-SeasonManager provides a Maven dependency for developers to hook into season events and access data.
+SeasonManager provides a comprehensive API to interact with seasons, events, the stash, and leaderboards.
 
 ## Maven Dependency
 
@@ -17,53 +17,83 @@ Add the following repository and dependency to your `pom.xml`:
 
 <dependency>
     <groupId>com.github.mattbaconz</groupId>
-    <artifactId>seasonmanager-api</artifactId>
-    <version>1.2.26</version> <!-- Check latest release -->
+    <artifactId>seasonmanager-common</artifactId>
+    <version>1.2.26</version>
     <scope>provided</scope>
 </dependency>
 ```
 
-## Accessing the API
+## Accessing Services
 
-Get the instance of the API:
+You can access the core services through the main plugin class `SeasonManagerBootstrap`.
 
 ```java
-import me.mattbaconz.seasonmanager.api.SeasonManagerAPI;
+import me.mattbaconz.seasonmanager.SeasonManagerBootstrap;
 
-SeasonManagerAPI api = SeasonManagerAPI.getInstance();
+SeasonManagerBootstrap plugin = SeasonManagerBootstrap.getInstance();
 ```
 
-## Listening to Events
+### 1. Cycle Manager (Seasons)
+Manage the state of the current season.
 
-SeasonManager fires Bukkit events that you can listen to.
+```java
+SeasonCycleManager cycleManager = plugin.getCycleManager();
 
-### SeasonChangeStateEvent
+// Get current state
+SeasonState state = cycleManager.getState(); // PRE_SEASON, ACTIVE, ENDED
 
-Fired when the season transitions (e.g., PRE_SEASON -> ACTIVE).
+// Get time remaining
+long millisRemaining = cycleManager.getTimeRemaining();
+```
+
+### 2. Stash Service (Cross-Season Persistence)
+Interact with the player stash system.
+
+```java
+IStashService stashService = plugin.getStashService();
+
+// Open stash for a player
+stashService.openStash(player);
+
+// Save player data asynchronously
+stashService.saveStash(player).thenRun(() -> {
+    getLogger().info("Stash saved!");
+});
+```
+
+### 3. Leaderboard Manager
+Create and manage holographic leaderboards programmatically.
+
+```java
+ILeaderboardManager leaderboardManager = plugin.getLeaderboardManager();
+
+if (leaderboardManager.isAvailable()) {
+    leaderboardManager.createLeaderboard(
+        "custom_top_kills",
+        location,
+        StatType.KILLS,
+        10
+    );
+}
+```
+
+## Events
+
+SeasonManager fires standard Bukkit events.
+
+| Event Class | Description |
+| :--- | :--- |
+| `SeasonChangeStateEvent` | Fired when the season transitions (e.g., from Grace Period to Active). |
+| `PlayerStashOpenEvent` | Fired when a player opens their stash. |
+| `SeasonEventTriggerEvent` | Fired when a scheduled event (from `events.yml`) executes. |
+
+### Example Listener
 
 ```java
 @EventHandler
 public void onSeasonChange(SeasonChangeStateEvent event) {
     if (event.getNewState() == SeasonState.ACTIVE) {
-        getLogger().info("The season has started!");
+        Bukkit.broadcastMessage("The season has officially begun!");
     }
 }
 ```
-
-### PlayerStashEvent
-
-Fired when a player uses the stash.
-
-```java
-@EventHandler
-public void onStashOpen(PlayerStashOpenEvent event) {
-    Player player = event.getPlayer();
-    // Custom logic
-}
-```
-
-## Common Methods
-
-*   `api.getSeasonNumber()`: Returns the current season version.
-*   `api.getTimeRemaining()`: Returns duration until season end.
-*   `api.isInGracePeriod()`: Checks if grace period is active.
