@@ -1,0 +1,39 @@
+---
+title: 'Commands & Permissions'
+description: 'List of commands and permissions'
+---
+
+Here is a complete list of commands and permissions available in SeasonManager.
+
+## Commands
+
+### Season Command
+**Usage**: `/season <subcommand>`  
+**Permission**: `seasonmanager.use`
+
+| Subcommand | Description                                           | Lite  | Prime |
+| :--------- | :---------------------------------------------------- | :---: | :---: |
+| `start`    | Starts the season timer.                              |   ✅   |   ✅   |
+| `stop`     | Stops the season timer.                               |   ✅   |   ✅   |
+| `next`     | Advances to the next season (triggers reset in Prime).|   ✅   |   ✅   |
+| `info`     | View current season information.                      |   ✅   |   ✅   |
+| `help`     | View help menu.                                       |   ✅   |   ✅   |
+| `settime`  | Manually set the remaining time.                      |   ❌   |   ✅   |
+| `reload`   | Reloads the configuration.                            |   ❌   |   ✅   |
+
+### Vault Command
+**Usage**: `/vault`  
+**Description**: Opens your cross-season vault storage.  
+**Permission**: `seasonmanager.vault`  
+**Availability**: **Prime Only**
+
+## Permissions
+
+| Permission              | Description                                     | Default |
+| :---------------------- | :---------------------------------------------- | :------ |
+| `seasonmanager.use`     | Allows use of basic season commands.            | `true`  |
+| `seasonmanager.admin`   | Allows use of admin commands (start/stop/next). | `op`    |
+| `seasonmanager.vault`   | Access to the cross-season vault.               | `true`  |
+| `seasonmanager.archive` | Allows triggering manual archives (Prime).      | `op`    |
+| `seasonmanager.webhook` | Allows configuring webhooks (Prime).            | `op`    |
+| `seasonmanager.*`       | Grants all permissions.                         | `op`    |

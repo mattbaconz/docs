@@ -1,0 +1,77 @@
+---
+title: 'Configuration'
+description: 'Configuring SeasonManager'
+---
+
+The `config.yml` file allows you to customize every aspect of SeasonManager. Below is the default configuration with explanations for each setting.
+
+```yaml
+# ══════════════════════════════════════════════════════════════════════════════
+# SeasonManager - Main Configuration
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Season Settings
+# ─────────────────────────────────────────────────────────────────────────────
+season:
+  # Current season number available for flexible increments (e.g. 1.0, 1.1)
+  current-number: 1.0
+  
+  # Amount to increment season by when advancing (e.g. 1.0, 0.1)
+  increment: 1.0
+  
+  # Current state: PRE_SEASON, ACTIVE, or POST_SEASON
+  state: PRE_SEASON
+  
+  # Default season duration (e.g., 7d = 7 days, 12h = 12 hours)
+  duration: 30d
+  
+  # Automatically end season when timer reaches zero
+  auto-end: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BossBar Settings
+# ─────────────────────────────────────────────────────────────────────────────
+bossbar:
+  timer:
+    enabled: true
+    text: "<gradient:#00FFFF:#00AAAA><bold>⌛ SEASON TIMER</bold></gradient> <gray>»</gray> <gold>%time%</gold> <gray>remaining</gray>"
+    color: YELLOW
+    style: PROGRESS
+
+# ─────────────────────────────────────────────────────────────────────────────
+# World Settings
+# ─────────────────────────────────────────────────────────────────────────────
+world:
+  # Worlds to manage (empty = all worlds)
+  managed-worlds: []
+  
+  # Archive folder for world backups (relative to server root)
+  archive-folder: "season-archives"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Notifications
+# ─────────────────────────────────────────────────────────────────────────────
+notifications:
+  warning-times:
+    - 60    # 1 hour
+    - 30    # 30 minutes
+    - 10    # 10 minutes
+    - 5     # 5 minutes
+    - 1     # 1 minute
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Player Join Settings
+# ─────────────────────────────────────────────────────────────────────────────
+on-join:
+  show-title: true
+  show-bossbars: true
+  delay-ticks: 20
+```
+
+## Explanation
+
+*   **season.current-number**: Tracks the iteration of your season.
+*   **season.duration**: Supports standard time formats (d, h, m, s).
+*   **world.managed-worlds**: If left empty `[]`, all worlds on the server will be included in archival/reset processes.
+*   **notifications.warning-times**: Add or remove integers to configure when chat/title warnings appear before the season ends.

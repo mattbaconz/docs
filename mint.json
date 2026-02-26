@@ -1,0 +1,62 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Baconz Plugins",
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373",
+    "anchors": "#0D9373"
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "https://discord.gg/yourdiscord"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get Plugins",
+    "url": "https://builtbybit.com/members/mattbaconz"
+  },
+  "tabs": [
+    {
+      "name": "SeasonManager",
+      "url": "seasonmanager"
+    },
+    {
+        "name": "Pyramid",
+        "url": "pyramid"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "SeasonManager",
+      "pages": [
+        "seasonmanager/index",
+        "seasonmanager/installation",
+        "seasonmanager/configuration",
+        "seasonmanager/commands",
+        "seasonmanager/features"
+      ]
+    },
+    {
+      "group": "Pyramid",
+      "pages": [
+        "pyramid/index",
+        "pyramid/installation",
+        "pyramid/configuration",
+        "pyramid/commands",
+        "pyramid/permissions",
+        "pyramid/features"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "discord": "https://discord.gg/yourdiscord",
+    "github": "https://github.com/mattbaconz"
+  }
+}
