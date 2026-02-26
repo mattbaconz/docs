@@ -15,7 +15,15 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "https://discord.gg/yourdiscord"
+      "url": "https://discord.com/invite/VQjTVKjs46"
+    },
+    {
+      "name": "Spigot",
+      "url": "https://www.spigotmc.org/members/mattbaconz.2410113/"
+    },
+    {
+      "name": "Modrinth",
+      "url": "https://modrinth.com/user/mattbaconz"
     }
   ],
   "topbarCtaButton": {
