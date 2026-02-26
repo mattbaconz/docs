@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "SeasonManager Docs",
+  "name": "Baconz Plugins",
   "theme": "mint",
   "logo": {
     "dark": "/logo/logo.png",
@@ -8,43 +8,71 @@
   },
   "favicon": "/favicon.ico",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#4ade80",
-    "dark": "#15803d"
+    "primary": "#3b82f6",
+    "light": "#60a5fa",
+    "dark": "#2563eb"
   },
   "navigation": {
     "tabs": [
       {
-        "tab": "General",
+        "tab": "Home",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Introduction",
             "pages": [
-              "index",
-              "installation"
+              "index"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "SeasonManager",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "seasonmanager/index",
+              "seasonmanager/installation"
             ]
           },
           {
             "group": "Usage",
             "pages": [
-              "commands",
-              "configuration",
-              "placeholders"
+              "seasonmanager/commands",
+              "seasonmanager/configuration",
+              "seasonmanager/placeholders"
             ]
           },
           {
             "group": "Features",
             "pages": [
-              "features/seasons",
-              "features/events",
-              "features/stash",
-              "features/leaderboards"
+              "seasonmanager/features"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Pyramid",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "pyramid/index",
+              "pyramid/installation"
             ]
           },
           {
-            "group": "Developer",
+            "group": "Usage",
             "pages": [
-              "api-reference/introduction"
+              "pyramid/commands",
+              "pyramid/configuration"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "pyramid/permissions",
+              "pyramid/features"
             ]
           }
         ]
