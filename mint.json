@@ -47,16 +47,14 @@
   "navigation": [
     {
       "group": "General",
+      "tab": "Home",
       "pages": [
-        "index",
-        "installation",
-        "configuration",
-        "commands",
-        "placeholders"
+        "index"
       ]
     },
     {
       "group": "SeasonManager",
+      "tab": "SeasonManager",
       "pages": [
         "seasonmanager/index",
         "seasonmanager/installation",
@@ -67,6 +65,7 @@
     },
     {
       "group": "Pyramid",
+      "tab": "Pyramid",
       "pages": [
         "pyramid/index",
         "pyramid/installation",
