@@ -32,15 +32,29 @@
   },
   "tabs": [
     {
+      "name": "Home",
+      "url": "/"
+    },
+    {
       "name": "SeasonManager",
       "url": "seasonmanager"
     },
     {
-        "name": "Pyramid",
-        "url": "pyramid"
+      "name": "Pyramid",
+      "url": "pyramid"
     }
   ],
   "navigation": [
+    {
+      "group": "General",
+      "pages": [
+        "index",
+        "installation",
+        "configuration",
+        "commands",
+        "placeholders"
+      ]
+    },
     {
       "group": "SeasonManager",
       "pages": [
