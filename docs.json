@@ -96,6 +96,25 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "OmniSync",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "omnisync/index",
+              "omnisync/installation"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "omnisync/configuration",
+              "omnisync/commands"
+            ]
+          }
+        ]
       }
     ]
   }

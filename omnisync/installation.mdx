@@ -1,0 +1,79 @@
+---
+title: 'Installation'
+description: 'Install OmniSync on backend and proxy servers'
+---
+
+## Requirements
+
+- **Java 21+**
+- **Paper or Folia backend servers**
+- **Velocity proxy** for transfer protection
+- **Redis 6+**
+- **OmniSync license key**
+
+<Note>
+Purpur is Paper-based and may work on compatible builds, but test it on your exact
+target version before advertising or using it in production.
+</Note>
+
+## Files
+
+Use the release jars:
+
+```text
+OmniSync-Paper-1.0.0-o.jar
+OmniSync-Velocity-1.0.0-o.jar
+```
+
+## Backend Setup
+
+1. Stop each backend server.
+2. Place `OmniSync-Paper-1.0.0-o.jar` into each backend `plugins` folder.
+3. Start each backend once to generate `plugins/OmniSync/config.yml`.
+4. Stop each backend again.
+5. Set your `license-key`.
+6. Set the same `redis-uri` and `redis-key-prefix` on every backend in the same network.
+7. Set a unique `server-name` on every backend.
+8. Start the backend servers.
+
+## Velocity Setup
+
+1. Stop the Velocity proxy.
+2. Place `OmniSync-Velocity-1.0.0-o.jar` into the proxy `plugins` folder.
+3. Start Velocity once to generate `plugins/omnisync/config.properties`.
+4. Stop Velocity again.
+5. Set your `license-key`.
+6. Set the same `redis-uri` and `redis-key-prefix` used by the backend servers.
+7. Start Velocity.
+
+## License Key
+
+Paper config:
+
+```yaml
+license-key: "YOUR_KEY_HERE"
+```
+
+Velocity config:
+
+```properties
+license-key=YOUR_KEY_HERE
+```
+
+The legacy key name `license_key` is also accepted.
+
+<Warning>
+If the license key is missing, invalid, or the license API cannot be reached,
+OmniSync will not run.
+</Warning>
+
+## Redis Setup
+
+All backend servers and the Velocity proxy must reach the same Redis instance.
+
+```yaml
+redis-uri: "redis://localhost:6379"
+redis-key-prefix: "omnisync"
+```
+
+Use a different `redis-key-prefix` for test, staging, and production networks.

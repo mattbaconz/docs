@@ -1,0 +1,50 @@
+---
+title: 'Overview'
+description: 'Redis-backed player data sync for Paper/Folia and Velocity networks'
+---
+
+**OmniSync** synchronizes core player profile data across backend servers using Redis.
+It is built for modern proxy networks where player transfers must wait for safe data
+handoff instead of racing between servers.
+
+## What OmniSync Provides
+
+- **Redis locks** to protect profile saves during transfers.
+- **Velocity transfer guard** to delay backend switches while a lock is active.
+- **Limbo queue** to hold joining players until their data can be applied safely.
+- **Dirty flag protection** to stop stale session overwrites after crashes.
+- **Folia-safe player application** through entity scheduler calls.
+- **Admin recovery commands** for force saves, unlocks, cleanup, and status checks.
+
+## Synced Data
+
+OmniSync can synchronize:
+
+- Inventory storage contents
+- Armor and offhand
+- Ender chest
+- Health, hunger, saturation, and exhaustion
+- Experience level, progress, and total experience
+- Flight state and fly speed
+- Absorption hearts
+- Fire ticks and remaining air
+- Optional game mode
+
+## Not Included
+
+OmniSync does not sync economy, location, advancements, statistics, permissions,
+or chat data in the current release.
+
+<Warning>
+BungeeCord is not supported in this release. Use Velocity for proxy transfer
+protection.
+</Warning>
+
+## Architecture
+
+OmniSync has two jars:
+
+1. **Paper/Folia backend plugin**: captures and applies player profile data.
+2. **Velocity proxy plugin**: delays server transfers while Redis locks are active.
+
+Both components must use the same Redis URI and `redis-key-prefix` for one network.

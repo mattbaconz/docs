@@ -46,6 +46,10 @@
     {
       "name": "Evolve+",
       "url": "evolveplus"
+    },
+    {
+      "name": "OmniSync",
+      "url": "omnisync"
     }
   ],
   "navigation": [
@@ -84,6 +88,15 @@
         "evolveplus/commands",
         "evolveplus/configuration",
         "evolveplus/admin-workflows"
+      ]
+    },
+    {
+      "group": "OmniSync",
+      "pages": [
+        "omnisync/index",
+        "omnisync/installation",
+        "omnisync/configuration",
+        "omnisync/commands"
       ]
     }
   ],

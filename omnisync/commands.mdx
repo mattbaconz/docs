@@ -1,0 +1,67 @@
+---
+title: 'Commands'
+description: 'OmniSync admin commands and permissions'
+---
+
+## Permission
+
+All OmniSync admin commands require:
+
+```text
+omnisync.admin
+```
+
+The permission defaults to server operators.
+
+## Command Reference
+
+| Command | Description |
+| --- | --- |
+| `/omnisync help` | Show the command list. |
+| `/omnisync reload` | Reload config and reconnect Redis. |
+| `/omnisync force <online-player>` | Save a live snapshot for an online player. |
+| `/omnisync unlock <uuid\|online-player>` | Clear the Redis lock and dirty flag. |
+| `/omnisync cleardata <uuid\|online-player>` | Purge offline profile data from Redis. |
+| `/omnisync status` | Show Redis latency and limbo queue count. |
+
+## Recovery Workflows
+
+### Force Save A Player
+
+Use this when an online player's current profile needs to be written immediately:
+
+```text
+/omnisync force Steve
+```
+
+### Unlock A Stale Session
+
+Use this after checking that the player is safe to release from quarantine:
+
+```text
+/omnisync unlock 00000000-0000-0000-0000-000000000000
+```
+
+You can also use an online player name:
+
+```text
+/omnisync unlock Steve
+```
+
+### Clear Offline Data
+
+Use this only when you intentionally want to remove stored profile data:
+
+```text
+/omnisync cleardata 00000000-0000-0000-0000-000000000000
+```
+
+OmniSync refuses to clear data for an online player.
+
+### Check Status
+
+```text
+/omnisync status
+```
+
+This reports Redis latency and the number of players currently in the limbo queue.

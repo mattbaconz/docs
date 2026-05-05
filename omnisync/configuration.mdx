@@ -1,0 +1,105 @@
+---
+title: 'Configuration'
+description: 'Configure Redis, license keys, sync fields, and messages'
+---
+
+## Backend Config
+
+Backend config is generated at:
+
+```text
+plugins/OmniSync/config.yml
+```
+
+Default structure:
+
+```yaml
+redis-uri: "redis://localhost:6379"
+redis-key-prefix: "omnisync"
+server-name: "OmniServer-1"
+license-key: "YOUR_KEY_HERE"
+
+data-ttl-days: 7
+limbo-timeout-seconds: 10
+
+sync:
+  inventory: true
+  enderchest: true
+  armor: true
+  offhand: true
+  hunger: true
+  health: true
+  experience: true
+  flight: true
+  absorption: true
+  environment-state: true
+  game-mode: false
+
+experimental:
+  native-serialization: false
+```
+
+## Redis Settings
+
+- `redis-uri`: Redis connection URI.
+- `redis-key-prefix`: Prefix for OmniSync keys. Must match across one network.
+- `server-name`: Unique backend identity used for dirty-session ownership.
+
+Examples:
+
+```yaml
+redis-uri: "redis://:password@10.0.0.5:6379/0"
+redis-key-prefix: "network:survival"
+server-name: "survival-1"
+```
+
+## Safety Settings
+
+- `data-ttl-days`: Number of days Redis profile hashes are retained.
+- `limbo-timeout-seconds`: Maximum time a player can wait in lock/quarantine limbo.
+
+## Sync Field Toggles
+
+Disable fields your network manages per server.
+
+Common examples:
+
+```yaml
+sync:
+  inventory: true
+  experience: true
+  health: true
+  flight: true
+  game-mode: false
+```
+
+`game-mode` is disabled by default because most networks manage game modes per
+server or per game.
+
+## Messages
+
+Messages use MiniMessage formatting:
+
+```yaml
+messages:
+  prefix: "<gray>[<gradient:#00ff00:#00aa00>OmniSync</gradient>] <reset>"
+  sync_success: "<gradient:#00ff00:#00aa00>Profile synchronized successfully.</gradient>"
+```
+
+## Velocity Config
+
+Velocity config is generated at:
+
+```text
+plugins/omnisync/config.properties
+```
+
+Example:
+
+```properties
+redis-uri=redis://localhost:6379
+redis-key-prefix=omnisync
+license-key=YOUR_KEY_HERE
+```
+
+The Velocity Redis settings must match the backend servers.
