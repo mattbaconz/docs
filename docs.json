@@ -76,6 +76,26 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Evolve+",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "evolveplus/index",
+              "evolveplus/installation"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "evolveplus/commands",
+              "evolveplus/configuration",
+              "evolveplus/admin-workflows"
+            ]
+          }
+        ]
       }
     ]
   }

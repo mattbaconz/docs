@@ -1,0 +1,93 @@
+---
+title: 'Admin Workflows'
+description: 'Common Evolve+ setup and management workflows'
+---
+
+## Open and Edit the Tree
+
+```text
+/evolve tree
+/evolve edit
+```
+
+When edit mode is armed, click a projected node to open Node Studio.
+
+To edit a specific node directly:
+
+```text
+/evolve edit primitive_tools
+```
+
+## Test Era Progression
+
+Use a small contribution first:
+
+```text
+/evolve status
+/evolve contribute 1k
+/evolve progress AGRARIAN
+```
+
+Then test larger progress rollover:
+
+```text
+/evolve addprogress AGRARIAN 1m
+/evolve status
+```
+
+## Force an Era
+
+```text
+/evolve setera INDUSTRIAL
+```
+
+This is useful for testing blocked materials, effects, world border expansion, and node availability.
+
+## Reset Progression
+
+Reset a player:
+
+```text
+/evolve reset player Steve
+```
+
+Reset the global era state:
+
+```text
+/evolve reset global PRIMITIVE
+```
+
+## Grant or Revoke Nodes
+
+```text
+/evolve grant Steve primitive_tools
+/evolve revoke Steve primitive_tools
+```
+
+If the player has the tree open, Evolve+ refreshes the projection after the profile changes.
+
+## Manage Lockouts
+
+```text
+/evolve lockout Steve agrarian_roots
+/evolve unlockout Steve agrarian_roots
+```
+
+Use lockouts for branch choices where unlocking one path should block another.
+
+## Create a Backup
+
+```text
+/evolve backup
+```
+
+Backups snapshot cached progression state. For full production safety, also back up your MongoDB database.
+
+## Recommended Release Checklist
+
+- Confirm the license key is set.
+- Confirm `/evolve status` shows the expected economy state.
+- Confirm `/evolve tree` opens without client disconnects.
+- Confirm at least one node can be unlocked.
+- Confirm `/evolve contribute 1k` works with your economy provider.
+- Confirm `/evolve backup` succeeds.

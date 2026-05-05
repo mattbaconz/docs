@@ -1,0 +1,44 @@
+---
+title: "Placeholders"
+description: "List of SeasonManager PlaceholderAPI placeholders."
+---
+
+SeasonManager supports PlaceholderAPI to display season information in scoreboards, tabs, chat, and other supported plugins.
+
+## Season Info
+
+| Placeholder | Description |
+| :--- | :--- |
+| `%seasonmanager_number%` | Current season number, such as `1.0`. |
+| `%seasonmanager_state%` | Current state display name, such as `Active`. |
+| `%seasonmanager_state_raw%` | Raw state enum name, such as `ACTIVE`. |
+| `%seasonmanager_time_remaining%` | Formatted time until the season ends. |
+| `%seasonmanager_is_active%` | `true` if the season is active. |
+| `%seasonmanager_is_grace%` | `true` if the server is in a grace period. |
+
+## Player Statistics
+
+| Placeholder | Description |
+| :--- | :--- |
+| `%seasonmanager_kills%` | Player kills. |
+| `%seasonmanager_deaths%` | Player deaths. |
+| `%seasonmanager_kdr%` | Kill/death ratio. |
+| `%seasonmanager_blocks_mined%` | Blocks broken. |
+| `%seasonmanager_blocks_placed%` | Blocks placed. |
+| `%seasonmanager_mob_kills%` | Mobs killed. |
+| `%seasonmanager_playtime%` | Formatted playtime. |
+
+## Leaderboards
+
+Use this format:
+
+```text
+%seasonmanager_top_<stat>_<rank>%
+```
+
+Examples:
+
+```text
+%seasonmanager_top_kills_1%
+%seasonmanager_top_playtime_3%
+```

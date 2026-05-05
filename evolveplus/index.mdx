@@ -1,0 +1,55 @@
+---
+title: 'Overview'
+description: 'Server-wide tech tree and global era progression'
+---
+
+**Evolve+** is a progression engine for long-term Minecraft servers. It lets players unlock research nodes, fund shared era goals, and advance the entire server through a configurable civilization-style timeline.
+
+The default setup ships with **87 tech nodes** and **14 eras**, but the system is built so you can replace that content with your own eras, requirements, rewards, costs, messages, and layout.
+
+## Core Concepts
+
+- **Floating tech tree**: Players use `/evolve tree` to view a world-projected research lattice.
+- **Research nodes**: Nodes can require money, XP, items, prerequisite nodes, and specific eras.
+- **Global eras**: Players fund shared era goals with `/evolve contribute <amount>`.
+- **Progress rollover**: Extra contribution progress can roll into later eras.
+- **Node Studio**: Admins can edit node names, descriptions, prerequisites, costs, and positions in-game.
+- **Server controls**: Eras can block materials, apply effects, expand world borders, and run rewards.
+- **Persistence**: MongoDB can persist profiles and global state. Redis can sync events across servers.
+
+## Best Fit
+
+Evolve+ works best on servers where progression matters:
+
+- Survival SMP
+- Economy
+- Towny or civilization servers
+- Seasonal servers
+- Long-term community progression servers
+
+## Quick Start
+
+```text
+/evolve tree
+/evolve status
+/evolve contribute 1k
+/evolve edit primitive_tools
+/evolve admin
+```
+
+## Documentation Sections
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/evolveplus/installation">
+    Install the plugin, configure licensing, and add optional integrations.
+  </Card>
+  <Card title="Commands" icon="terminal" href="/evolveplus/commands">
+    Player commands, admin commands, and permissions.
+  </Card>
+  <Card title="Configuration" icon="gear" href="/evolveplus/configuration">
+    Configure eras, nodes, holograms, economy, database, and messages.
+  </Card>
+  <Card title="Admin Workflows" icon="wrench" href="/evolveplus/admin-workflows">
+    Common setup, testing, and live-server management workflows.
+  </Card>
+</CardGroup>

@@ -1,0 +1,69 @@
+---
+title: 'Commands'
+description: 'Command and permission reference'
+---
+
+All player-facing commands use `/evolve`. The alias `/evolveplus` is also registered.
+
+## Player Commands
+
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/evolve` | Show the command matrix. | `evolve.use` |
+| `/evolve tree` | Open the floating tech tree. | `evolve.use` |
+| `/evolve clear` | Dismiss the projected tech tree. | `evolve.use` |
+| `/evolve research <node_id>` | Unlock a node by command instead of clicking it. | `evolve.use` |
+| `/evolve contribute <amount>` | Fund the next global era goal. | `evolve.use` |
+| `/evolve progress [era]` | Inspect era progress. | `evolve.use` |
+| `/evolve status` | Show your tree, era, economy, and balance status. | `evolve.use` |
+| `/evolve version` | Show the plugin version. | `evolve.version` |
+
+## Compact Contribution Amounts
+
+Evolve+ supports configurable suffixes so players do not need to type long numbers.
+
+```text
+/evolve contribute 1k
+/evolve contribute 10k
+/evolve contribute 1m
+/evolve contribute 1b
+/evolve contribute 1t
+```
+
+## Admin Commands
+
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/evolve admin` | Show the admin toolkit. | `evolve.admin.tools` |
+| `/evolve edit` | Toggle direct node edit mode. | `evolve.edit` |
+| `/evolve edit <node_id>` | Open Node Studio for a specific node. | `evolve.edit` |
+| `/evolve reload` | Reload configs, nodes, eras, language, and economy state. | `evolve.reload` |
+| `/evolve reset player <player>` | Reset a player's progression profile. | `evolve.reset` |
+| `/evolve reset global [era]` | Reset global progression to an era. | `evolve.reset` |
+| `/evolve backup` | Snapshot cached progression state. | `evolve.backup` |
+| `/evolve setera <era>` | Force the current global era. | `evolve.admin.tools` |
+| `/evolve addprogress <era> <amount>` | Add global progress to an era. | `evolve.admin.tools` |
+| `/evolve setprogress <era> <amount>` | Set global progress for an era. | `evolve.admin.tools` |
+| `/evolve inspect <player>` | Inspect player profile, unlocks, lockouts, and balance. | `evolve.admin.tools` |
+| `/evolve grant <player> <node>` | Grant a node to a player. | `evolve.admin.tools` |
+| `/evolve revoke <player> <node>` | Revoke a node from a player. | `evolve.admin.tools` |
+| `/evolve lockout <player> <node>` | Lock a player out of a node. | `evolve.admin.tools` |
+| `/evolve unlockout <player> <node>` | Remove a node lockout from a player. | `evolve.admin.tools` |
+| `/evolve save` | Flush cached profile and era state. | `evolve.admin.tools` |
+
+## Permissions
+
+```text
+evolve.use
+evolve.version
+evolve.admin
+evolve.reload
+evolve.edit
+evolve.progress.admin
+evolve.reset
+evolve.backup
+evolve.admin.tools
+evolve.*
+```
+
+`evolve.admin` includes the normal admin command permissions.

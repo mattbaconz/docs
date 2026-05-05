@@ -1,0 +1,71 @@
+---
+title: 'Installation'
+description: 'How to install Evolve+'
+---
+
+## Requirements
+
+- **Server**: Paper, Folia, or Purpur.
+- **Versions**: 1.20.6+, 1.21.x, 26.1+, and newer compatible Paper API builds.
+- **Java**: Java 21 bytecode. Use the Java version required by your server software.
+- **License**: Evolve+ uses Matt DRM license verification when DRM is enabled.
+
+## Optional Integrations
+
+- **VaultUnlocked or Vault**: Required only for money costs and `/evolve contribute`.
+- **Economy provider**: Required with Vault for economy features. Mineconomy works for modern test servers.
+- **MongoDB**: Persistent player profiles and global era state.
+- **Redis**: Optional multi-server sync.
+
+## Install Steps
+
+1. Download the latest Evolve+ jar.
+2. Place it in your server's `plugins` folder.
+3. Start the server once to generate the config files.
+4. Stop the server.
+5. Open `plugins/EvolvePlus/config.yml`.
+6. Paste your license key under `drm.license-key`.
+7. Configure Vault/economy, MongoDB, and Redis only if you need those features.
+8. Start the server again.
+
+## License Setup
+
+```yaml
+drm:
+  enabled: true
+  strict: true
+  product-id: "EVOLVEPLUS"
+  verify-url: "https://matt-drm.vercel.app/api/verify"
+  license-key: "YOUR_KEY_HERE"
+```
+
+<Note>
+Buyers can claim their Evolve+ license key from the official Discord after purchase.
+</Note>
+
+## Local Testing
+
+For private local testing only, you can disable DRM:
+
+```yaml
+drm:
+  enabled: false
+```
+
+Do not ship public production servers with your private test configuration.
+
+## Economy Setup
+
+To use money costs and `/evolve contribute`, install:
+
+1. VaultUnlocked or another Vault-compatible bridge.
+2. A Vault economy provider.
+3. Evolve+.
+
+When the hook is working, startup logs should include:
+
+```text
+Vault Economy Hook successfully established.
+```
+
+If Vault is missing or no provider is registered, Evolve+ still loads, but money requirements and contributions will fail until an economy is available.

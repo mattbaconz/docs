@@ -42,19 +42,21 @@
     {
       "name": "Pyramid",
       "url": "pyramid"
+    },
+    {
+      "name": "Evolve+",
+      "url": "evolveplus"
     }
   ],
   "navigation": [
     {
       "group": "General",
-      "tab": "Home",
       "pages": [
         "index"
       ]
     },
     {
       "group": "SeasonManager",
-      "tab": "SeasonManager",
       "pages": [
         "seasonmanager/index",
         "seasonmanager/installation",
@@ -65,7 +67,6 @@
     },
     {
       "group": "Pyramid",
-      "tab": "Pyramid",
       "pages": [
         "pyramid/index",
         "pyramid/installation",
@@ -73,6 +74,16 @@
         "pyramid/commands",
         "pyramid/permissions",
         "pyramid/features"
+      ]
+    },
+    {
+      "group": "Evolve+",
+      "pages": [
+        "evolveplus/index",
+        "evolveplus/installation",
+        "evolveplus/commands",
+        "evolveplus/configuration",
+        "evolveplus/admin-workflows"
       ]
     }
   ],

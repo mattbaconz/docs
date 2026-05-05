@@ -1,0 +1,126 @@
+---
+title: 'Configuration'
+description: 'Configuring Evolve+'
+---
+
+Evolve+ is configured through YAML files in `plugins/EvolvePlus`.
+
+## Files
+
+| File | Purpose |
+| :--- | :--- |
+| `config.yml` | DRM, database, Redis, Folia behavior, hologram layout, contribution suffixes, and region unlocks. |
+| `economy.yml` | Economy balancing and wealth multiplier settings. |
+| `eras.yml` | Era order, goals, requirements, blocked materials, and era effects. |
+| `nodes.yml` | Tech node content, display positions, requirements, costs, lockouts, and rewards. |
+| `lang.yml` | Messages, colors, command output, GUI text, and hologram text. |
+
+## Eras
+
+Each era is defined under `eras`.
+
+```yaml
+eras:
+  AGRARIAN:
+    display-name: "Agrarian Age"
+    order: 1
+    goal: 10000.0
+    requirements:
+      - crop_rotation
+    blocked-materials:
+      - REPEATER
+      - COMPARATOR
+    effects:
+      - type: SATURATION
+        amplifier: 0
+        ambient: true
+```
+
+Important fields:
+
+- `order`: Determines progression order.
+- `goal`: Money required for global contribution progression.
+- `requirements`: Nodes that should exist before this era is considered complete.
+- `blocked-materials`: Materials blocked until later eras.
+- `effects`: Potion effects applied while the era is active.
+
+## Nodes
+
+Each node is defined under `nodes`.
+
+```yaml
+nodes:
+  primitive_tools:
+    name: "Primitive Tools"
+    description: "Access to basic stone-age equipment."
+    era: "PRIMITIVE"
+    requirements: []
+    lockouts: []
+    rewards:
+      - "give <player> stone_pickaxe 1"
+      - "experience add <player> 100 points"
+    display: { x: 0.0, y: 2.5, z: 0.0 }
+    costs:
+      money: 250.0
+      xp_levels: 3
+```
+
+Node fields:
+
+- `name`: Display name in the tree and editor.
+- `description`: Marketplace-facing and in-game description.
+- `era`: Era the node belongs to.
+- `requirements`: Parent nodes required before unlock.
+- `lockouts`: Mutually exclusive nodes to lock after unlock.
+- `rewards`: Console commands executed after unlock.
+- `display`: Floating tech tree position.
+- `costs`: Money, XP, and item requirements.
+
+## Contribution Suffixes
+
+Configure player-friendly amount suffixes in `config.yml`.
+
+```yaml
+contribution:
+  compact-amounts:
+    enabled: true
+    suffixes:
+      k: 1000
+      m: 1000000
+      b: 1000000000
+      t: 1000000000000
+```
+
+This lets players type commands such as `/evolve contribute 1m`.
+
+## Hologram Layout
+
+The floating tech tree is controlled under `hologram`.
+
+```yaml
+hologram:
+  enabled: true
+  render-mode: "BUKKIT_TEXT_DISPLAY"
+  layout:
+    scale:
+      x: 1.0
+      y: 1.0
+      z: 1.0
+```
+
+Use `display` positions in `nodes.yml` for individual node placement and the `hologram.layout` section for global scaling, offsets, and interaction tuning.
+
+## Database
+
+For local testing, Evolve+ can run in memory. For production, MongoDB is recommended.
+
+```yaml
+database:
+  mongo-enabled: true
+  mongo-uri: "mongodb://127.0.0.1:27017/?directConnection=true"
+  mongo-fail-fast: false
+  redis:
+    enabled: false
+```
+
+Redis is optional and only needed for cross-server synchronization.
