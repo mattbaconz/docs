@@ -8,7 +8,7 @@ description: 'How to install Evolve+'
 - **Server**: Paper, Folia, or Purpur.
 - **Versions**: 1.20.6+, 1.21.x, 26.1+, and newer compatible Paper API builds.
 - **Java**: Java 21 bytecode. Use the Java version required by your server software.
-- **License**: Evolve+ uses Matt DRM license verification when DRM is enabled.
+- **License**: Evolve+ requires a Matt DRM license key for commercial releases.
 
 ## Optional Integrations
 
@@ -24,19 +24,14 @@ description: 'How to install Evolve+'
 3. Start the server once to generate the config files.
 4. Stop the server.
 5. Open `plugins/EvolvePlus/config.yml`.
-6. Paste your license key under `drm.license-key`.
+6. Paste your license key into the top-level `license-key` field.
 7. Configure Vault/economy, MongoDB, and Redis only if you need those features.
 8. Start the server again.
 
 ## License Setup
 
 ```yaml
-drm:
-  enabled: true
-  strict: true
-  product-id: "EVOLVEPLUS"
-  verify-url: "https://matt-drm.vercel.app/api/verify"
-  license-key: "YOUR_KEY_HERE"
+license-key: "YOUR_KEY_HERE"
 ```
 
 <Note>
@@ -45,7 +40,7 @@ Buyers can claim their Evolve+ license key from the official Discord after purch
 
 ## Local Testing
 
-For private local testing only, you can disable DRM:
+For private local testing only, you can disable DRM by removing the top-level `license-key` field and using:
 
 ```yaml
 drm:
