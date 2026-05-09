@@ -1,0 +1,190 @@
+---
+title: 'Customization'
+description: 'Create custom eras, nodes, rewards, and tree layouts'
+---
+
+Evolve+ is built around two main files:
+
+- `eras.yml`: the server-wide timeline.
+- `nodes.yml`: the upgrades players unlock.
+
+Back up both files before large edits. After changing YAML, run:
+
+```text
+/evolve reload
+```
+
+If you changed the starting era or removed old eras, also reset global state:
+
+```text
+/evolve reset global PRIMITIVE
+```
+
+## Add an Era
+
+Add eras under `eras` in `eras.yml`.
+
+```yaml
+eras:
+  STEAM:
+    display-name: "Steam Age"
+    order: 5
+    goal: 250000.0
+    requirements:
+      - steam_engine
+    blocked-materials:
+      - BEACON
+      - ELYTRA
+    effects:
+      - type: HASTE
+        amplifier: 0
+        ambient: true
+```
+
+Rules:
+
+- Use an internal id without spaces, such as `STEAM`.
+- `display-name` is the readable name.
+- `order` controls the era order. Every era should have a unique number.
+- `goal` makes the era fundable with `/evolve contribute`.
+- Eras without `goal` are not normal contribution targets.
+- `blocked-materials` uses Bukkit material names, such as `ELYTRA`.
+- `effects` uses potion effect ids, such as `speed`, `haste`, or `resistance`.
+
+Keep `PRIMITIVE` as the first era unless you are intentionally rebuilding the full timeline.
+
+## Add a Node
+
+Add nodes under `nodes` in `nodes.yml`.
+
+```yaml
+nodes:
+  steam_engine:
+    name: "Steam Engine"
+    description: "Unlock early machinery and powered industry."
+    era: "STEAM"
+    requirements: [steelworks]
+    lockouts: []
+    rewards:
+      - "give <player> furnace 4"
+      - "experience add <player> 250 points"
+    display: { x: 4.0, y: 4.5, z: 18.0 }
+    costs:
+      money: 50000.0
+      xp_levels: 20
+      items:
+        - { material: IRON_INGOT, amount: 64 }
+        - { material: COPPER_INGOT, amount: 32 }
+```
+
+Node rules:
+
+- The node id, such as `steam_engine`, is used by commands and requirements.
+- `era` must match an era id from `eras.yml`.
+- `requirements` are parent node ids that must be unlocked first.
+- `lockouts` are nodes blocked after this one is unlocked.
+- `rewards` are console commands. Use `<player>` for the player name.
+- `money` costs require Vault plus an economy provider.
+- `items.material` must be a valid Bukkit material name.
+
+A player can unlock a node only when:
+
+- the server has reached that node's era,
+- all required parent nodes are unlocked,
+- the player is not locked out of the node,
+- all costs can be paid.
+
+## Position the Tree
+
+Each node has a `display` position:
+
+```yaml
+display: { x: 0.0, y: 3.0, z: 10.0 }
+```
+
+Use this simple layout rule:
+
+- `x`: left and right.
+- `y`: height.
+- `z`: depth away from the tree origin.
+
+Use `config.yml` to scale or move the whole tree:
+
+```yaml
+hologram:
+  layout:
+    scale:
+      x: 1.0
+      y: 1.0
+      z: 1.0
+    offset:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+```
+
+Use `/evolve tree` after edits to check spacing. Use `/evolve clear` to remove the projection.
+
+## Edit Existing Nodes In-Game
+
+Node Studio can edit existing nodes without opening YAML:
+
+```text
+/evolve edit
+```
+
+Then click a projected node, or open one directly:
+
+```text
+/evolve edit steam_engine
+```
+
+Node Studio supports:
+
+- display name,
+- description,
+- requirements,
+- lockouts,
+- costs.
+
+Create new nodes and edit node positions in `nodes.yml`.
+
+## Customize Visuals and Text
+
+Use these files:
+
+- `config.yml`: tree colors, hitboxes, animation, layout, editor GUI slots, contribution suffixes.
+- `lang.yml`: messages, command output, hologram text, and GUI item text.
+
+Useful tree settings:
+
+```yaml
+hologram:
+  animation:
+    enabled: true
+    amplitude: 0.12
+  interaction:
+    raycast-radius: 1.35
+  colors:
+    unlocked:
+      background: "#16a34a"
+    available:
+      background: "#d97706"
+    locked:
+      background: "#be123c"
+```
+
+## Quick Test Checklist
+
+After customizing:
+
+```text
+/evolve reload
+/evolve status
+/evolve tree
+/evolve research <node_id>
+/evolve contribute 1k
+/evolve progress <era>
+```
+
+Watch the console during startup or reload. Evolve+ will warn or disable if a node references an unknown era, requirement, or lockout.

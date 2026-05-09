@@ -5,11 +5,13 @@ description: 'Configuring Evolve+'
 
 Evolve+ is configured through YAML files in `plugins/EvolvePlus`.
 
+For step-by-step examples, see [Customization](/evolveplus/customization).
+
 ## Files
 
 | File | Purpose |
 | :--- | :--- |
-| `config.yml` | DRM, database, Redis, Folia behavior, hologram layout, contribution suffixes, and region unlocks. |
+| `config.yml` | License key, database, Redis, Folia behavior, hologram layout, contribution suffixes, and region unlocks. |
 | `economy.yml` | Economy balancing and wealth multiplier settings. |
 | `eras.yml` | Era order, goals, requirements, blocked materials, and era effects. |
 | `nodes.yml` | Tech node content, display positions, requirements, costs, lockouts, and rewards. |
@@ -40,7 +42,7 @@ Important fields:
 
 - `order`: Determines progression order.
 - `goal`: Money required for global contribution progression.
-- `requirements`: Nodes that should exist before this era is considered complete.
+- `requirements`: Node ids associated with this era's intended milestone path.
 - `blocked-materials`: Materials blocked until later eras.
 - `effects`: Potion effects applied while the era is active.
 
