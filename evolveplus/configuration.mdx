@@ -95,6 +95,29 @@ contribution:
 
 This lets players type commands such as `/evolve contribute 1m`.
 
+## Discord Webhooks
+
+Evolve+ can post rich Discord webhook embeds for era transitions, node unlocks, and contributions.
+
+```yaml
+discord:
+  enabled: true
+  webhook-url: "https://discord.com/api/webhooks/..."
+  username: "Evolve+"
+  mention-role-id: ""
+  mention-era-transitions: false
+  events:
+    era-transitions: true
+    node-unlocks: true
+    contributions: true
+  contributions:
+    minimum: 10000.0
+```
+
+After setting the webhook, run `/evolve discord test`.
+
+Keep `mention-era-transitions` disabled unless you intentionally want Discord role pings when a new era starts.
+
 ## Hologram Layout
 
 The floating tech tree is controlled under `hologram`.
