@@ -50,6 +50,10 @@
     {
       "name": "OmniSync",
       "url": "omnisync"
+    },
+    {
+      "name": "Pledge",
+      "url": "pledge"
     }
   ],
   "navigation": [
@@ -97,6 +101,17 @@
         "omnisync/installation",
         "omnisync/configuration",
         "omnisync/commands"
+      ]
+    },
+    {
+      "group": "Pledge",
+      "pages": [
+        "pledge/index",
+        "pledge/installation",
+        "pledge/configuration",
+        "pledge/commands",
+        "pledge/placeholders",
+        "pledge/marketplace"
       ]
     }
   ],

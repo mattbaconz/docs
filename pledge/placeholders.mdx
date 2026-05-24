@@ -1,0 +1,45 @@
+---
+title: 'Placeholders'
+description: 'PlaceholderAPI values exposed by Pledge.'
+---
+
+Pledge registers a `pledge` PlaceholderAPI expansion when PlaceholderAPI is installed.
+
+## Goal placeholders
+
+Replace `<goal>` with the configured goal id.
+
+| Placeholder | Description |
+| --- | --- |
+| `%pledge_goal_<goal>_current%` | Current goal progress. |
+| `%pledge_goal_<goal>_target%` | Goal target. |
+| `%pledge_goal_<goal>_remaining%` | Remaining amount to complete. |
+| `%pledge_goal_<goal>_percent%` | Rounded percent with `%`. |
+| `%pledge_goal_<goal>_percent_raw%` | Raw rounded percent number. |
+| `%pledge_goal_<goal>_status%` | `DRAFT`, `ACTIVE`, `COMPLETED`, or `EXPIRED`. |
+
+## Sale placeholders
+
+| Placeholder | Description |
+| --- | --- |
+| `%pledge_sale_active%` | `true` when a sale is active. |
+| `%pledge_sale_remaining%` | Active sale countdown. |
+
+## Supporter board placeholders
+
+| Placeholder | Description |
+| --- | --- |
+| `%pledge_recent_<rank>_name%` | Recent supporter player name. |
+| `%pledge_recent_<rank>_amount%` | Recent supporter amount and currency. |
+| `%pledge_top_daily_<rank>_name%` | Daily top supporter player name. |
+| `%pledge_top_weekly_<rank>_name%` | Weekly top supporter player name. |
+| `%pledge_top_monthly_<rank>_amount%` | Monthly top supporter amount and currency. |
+| `%pledge_top_yearly_<rank>_name%` | Yearly top supporter player name. |
+
+## Test placeholders
+
+```text
+/papi parse --null %pledge_goal_spring_goal_percent%
+/papi parse --null %pledge_sale_remaining%
+/papi parse --null %pledge_top_weekly_1_name%
+```

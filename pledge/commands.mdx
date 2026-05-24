@@ -1,0 +1,68 @@
+---
+title: 'Commands'
+description: 'Pledge player commands, admin commands, and permissions.'
+---
+
+## Player commands
+
+| Command | Permission | Description |
+| --- | --- | --- |
+| `/goals` | `pledge.goals.view` | Open the public goals GUI. |
+| `/support` | `pledge.support.view` | Open the support hub and store preview GUI. |
+
+## Admin commands
+
+| Command | Permission | Console | Description |
+| --- | --- | --- | --- |
+| `/pledge` | `pledge.admin` | Yes | Show help or open the admin GUI. |
+| `/pledge admin` | `pledge.admin` | Yes | Show the admin tool deck. |
+| `/pledge status` | `pledge.status` | Yes | Show provider, goals, boards, and storage status. |
+| `/pledge reload` | `pledge.reload` | Yes | Reload safe config sections. |
+| `/pledge goals list` | `pledge.goal.view` | Yes | List configured goals. |
+| `/pledge goals info <id>` | `pledge.goal.view` | Yes | Inspect one goal. |
+| `/pledge goals start <id>` | `pledge.goal.admin` | Yes | Start a goal. |
+| `/pledge goals stop <id>` | `pledge.goal.admin` | Yes | Stop a goal. |
+| `/pledge goals add <id> <amount>` | `pledge.goal.admin` | Yes | Add progress to a goal. |
+| `/pledge goals set <id> <amount>` | `pledge.goal.admin` | Yes | Set exact goal progress. |
+| `/pledge goals reset <id>` | `pledge.goal.admin` | Yes | Reset a goal to draft and zero progress. |
+| `/pledge goals complete <id>` | `pledge.goal.admin` | Yes | Complete a goal and run rewards once. |
+| `/pledge purchase simulate <goal> <player> <amount>` | `pledge.purchase.simulate` | Yes | Test the purchase flow. |
+| `/pledge reward test <goal>` | `pledge.reward.test` | Yes | Test a goal reward. |
+| `/pledge webhook test <provider> <goal> <player> <amount>` | `pledge.webhook.test` | Yes | Test provider routing without exposing HTTP. |
+| `/pledge sale list` | `pledge.sale.admin` | Yes | List configured sales. |
+| `/pledge sale status` | `pledge.sale.admin` | Yes | Show the active sale countdown. |
+| `/pledge sale start <id>` | `pledge.sale.admin` | Yes | Start a sale countdown. |
+| `/pledge sale stop` | `pledge.sale.admin` | Yes | Stop the active sale. |
+| `/pledge sale announce` | `pledge.sale.admin` | Yes | Broadcast the active sale announcement now. |
+| `/pledge boards recent [limit]` | `pledge.board.view` | Yes | Show latest accepted purchases. |
+| `/pledge boards top [limit]` | `pledge.board.view` | Yes | Show this month's top supporters. |
+| `/pledge top [daily\|weekly\|monthly\|yearly] [limit]` | `pledge.board.view` | Yes | Open or print the selected top board. |
+
+## Permissions
+
+| Permission | Default | Description |
+| --- | --- | --- |
+| `pledge.admin` | op | Full admin access. |
+| `pledge.status` | op | View status output. |
+| `pledge.reload` | op | Reload safe config sections. |
+| `pledge.goal.view` | op | View goal admin details. |
+| `pledge.goal.admin` | op | Start, stop, edit, reset, and complete goals. |
+| `pledge.purchase.simulate` | op | Simulate purchases. |
+| `pledge.reward.test` | op | Test rewards. |
+| `pledge.sale.admin` | op | Manage sale countdowns. |
+| `pledge.board.view` | op | View supporter board command output. |
+| `pledge.bossbar.view` | true | View configured goal bossbars. |
+| `pledge.webhook.test` | op | Test provider webhook routing. |
+| `pledge.goals.view` | true | View public goals. |
+| `pledge.support.view` | true | View the support GUI. |
+| `pledge.preview.ranks` | true | View rank previews. |
+
+## Common setup workflow
+
+```text
+/pledge status
+/pledge goals list
+/pledge goals start spring_goal
+/pledge purchase simulate spring_goal Steve 10
+/pledge top weekly
+```

@@ -1,0 +1,153 @@
+---
+title: 'Configuration'
+description: 'Configure Pledge goals, supporter boards, providers, sales, Discord alerts, and messages.'
+---
+
+Pledge splits configuration across several files in `plugins/Pledge`.
+
+## config.yml
+
+```yaml title="config.yml"
+version: 1
+locale: en_us
+debug: false
+license_key: "YOUR_KEY_HERE"
+
+modules:
+  goals: true
+  boards: true
+  rewards: true
+  sales: true
+  provider_bridge: true
+  discord_bridge: true
+  preview: true
+
+storage:
+  type: sqlite
+  sqlite:
+    file: pledge.db
+```
+
+## providers.yml
+
+Use `providers.yml` to enable store providers, webhook processing, and Discord alerts.
+
+```yaml title="providers.yml"
+providers:
+  manual:
+    enabled: true
+  tebex:
+    enabled: false
+    webhook_secret: "change_me"
+    public_store_url: "https://example.tebex.io"
+    verify_signatures: true
+  craftingstore:
+    enabled: false
+    api_key: "change_me"
+    webhook_secret: "change_me"
+  webhook_server:
+    enabled: false
+    host: "0.0.0.0"
+    port: 8092
+    tebex_path: "/pledge/tebex"
+    craftingstore_path: "/pledge/craftingstore"
+
+discord:
+  enabled: false
+  webhook_url: ""
+  username: "Pledge"
+  avatar_url: ""
+  suppress_mentions: true
+```
+
+## goals.yml
+
+Goals can track money amount, purchase count, package count, or manual progress.
+
+```yaml title="goals.yml"
+goals:
+  spring_goal:
+    display_name: "<gradient:#7dd3fc:#c084fc><bold>Spring Community Goal</bold></gradient>"
+    type: amount
+    provider: tebex
+    target_amount: 250.00
+    currency: USD
+    start_mode: manual
+    expires_after_hours: 168
+    display:
+      bossbar: true
+      gui_slot: 13
+    rewards:
+      on_complete:
+        - type: broadcast
+          message: "<green>Spring Goal Complete! Global rewards unlocked.</green>"
+        - type: console_command
+          command: "eco give * 1000"
+```
+
+## boards.yml
+
+Supporter boards can show recent supporters and top supporters for daily, weekly, monthly, and yearly windows.
+
+```yaml title="boards.yml"
+boards:
+  recent_supporters:
+    enabled: true
+    limit: 10
+    display_name: "<gradient:#7dd3fc:#c084fc>Recent Supporters</gradient>"
+  top:
+    default_period: monthly
+  top_daily:
+    enabled: true
+    limit: 10
+  top_weekly:
+    enabled: true
+    limit: 10
+  top_monthly:
+    enabled: true
+    limit: 10
+  top_yearly:
+    enabled: true
+    limit: 10
+  bossbar_goal:
+    enabled: true
+    goal_id: spring_goal
+    color: PURPLE
+    style: SEGMENTED_10
+    visibility_mode: on_purchase
+    show_duration_seconds: 45
+```
+
+## sales.yml
+
+```yaml title="sales.yml"
+sales:
+  weekend:
+    display_name: "<gradient:#f59e0b:#f97316><bold>Weekend Sale</bold></gradient>"
+    starts_at: manual
+    duration_hours: 48
+    announcements:
+      every_minutes: 30
+      message: "<gold>Weekend Sale</gold> ends in <white>{remaining}</white>."
+```
+
+## messages.yml
+
+Use `messages.yml` to customize command text, GUI titles, GUI items, social links, board items, and admin menu copy.
+
+```yaml title="messages.yml"
+messages:
+  social:
+    discord_url: "https://discord.gg/kgHNJJsB2t"
+  command:
+    no_permission: "No permission."
+    reload_success: "Reloaded safe config sections."
+  gui:
+    goals_title: "<gradient:#7dd3fc:#c084fc><bold>Pledge Goals</bold></gradient>"
+    support_title: "<gradient:#7dd3fc:#c084fc><bold>Support Hub</bold></gradient>"
+    admin_title: "<gradient:#7dd3fc:#c084fc><bold>Pledge Admin</bold></gradient>"
+```
+
+## Reload behavior
+
+Run `/pledge reload` for safe config changes. Storage changes and deep integration changes may require a restart.

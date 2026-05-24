@@ -116,6 +116,27 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Pledge",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "pledge/index",
+              "pledge/installation"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "pledge/configuration",
+              "pledge/commands",
+              "pledge/placeholders",
+              "pledge/marketplace"
+            ]
+          }
+        ]
       }
     ]
   }

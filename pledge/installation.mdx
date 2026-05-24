@@ -1,0 +1,45 @@
+---
+title: 'Installation'
+description: 'Install Pledge on Paper or Folia and activate your license.'
+---
+
+## Requirements
+
+- **Server software**: Paper/Folia `1.20.6-26.x.x`
+- **Java**: Java 21 or newer
+- **License**: A paid Pledge license key
+- **Optional**: PlaceholderAPI for placeholders
+
+## Install Pledge
+
+1. Stop your server.
+2. Place `Pledge.jar` in the `plugins` folder.
+3. Start the server once so Pledge generates its config files.
+4. Stop the server again.
+5. Open `plugins/Pledge/config.yml`.
+6. Replace `YOUR_KEY_HERE` with your Pledge license key.
+7. Start the server.
+
+```yaml title="plugins/Pledge/config.yml"
+license_key: "MATT-XXXX-XXXX"
+```
+
+## Claim your license
+
+Join the support Discord and claim the `PLEDGE` product license. Paste the generated key into `config.yml` before running Pledge in production.
+
+<Card title="Join Discord" icon="discord" href="https://discord.gg/kgHNJJsB2t">
+  Claim your license key and get support.
+</Card>
+
+## First checks
+
+Run these commands after startup:
+
+```text
+/pledge status
+/goals
+/support
+```
+
+If Pledge cannot verify the key, it disables itself during startup. Check the console log and confirm the key is present, valid, and claimed for the `PLEDGE` product.
