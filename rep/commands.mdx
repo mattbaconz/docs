@@ -1,0 +1,57 @@
+---
+title: 'Commands'
+description: 'Rep player commands, admin commands, and permissions.'
+---
+
+The main command is `/rep` (alias `/reputation`). Most player commands require `rep.use`. Admin commands require `rep.admin`.
+
+## Player commands
+
+| Command | Permission | Console | Description |
+| --- | --- | --- | --- |
+| `/rep` | `rep.use` | No | Open your reputation profile GUI. |
+| `/rep <player>` | `rep.use` | No | Open another player's profile GUI. |
+| `/rep <player> plus` | `rep.use` | No | Give positive rep (amount from `reputation-amounts.plus`). |
+| `/rep <player> minus` | `rep.use` | No | Give negative rep (amount from `reputation-amounts.minus`). |
+| `/rep check` | `rep.use` | Yes | Show your score and rank. |
+| `/rep check <player>` | `rep.use` | Yes | Show another player's score and rank. |
+| `/rep top` | `rep.use` | Yes | Open the leaderboard GUI (players) or print top players (console). |
+| `/rep rewards` | `rep.use` | No | Open the rank rewards viewer GUI. |
+| `/rep help` | `rep.use` | Yes | Open the help GUI (players) or print help text (console). |
+| `/rep info` | none | Yes | Show plugin version and stats. |
+| `/rep stats` | none | Yes | Alias for `info`. |
+| `/rep version` | none | Yes | Alias for `info`. |
+
+Player commands respect cooldowns (`cooldowns` in config) and world restrictions. Admin commands bypass cooldowns and world restrictions.
+
+## Admin commands
+
+| Command | Permission | Console | Description |
+| --- | --- | --- | --- |
+| `/rep reload` | `rep.admin` | Yes | Reload config and messages. |
+| `/rep set <player> <amount>` | `rep.admin` | Yes | Set a player's reputation score. Works on offline players. |
+| `/rep add <player> <amount>` | `rep.admin` | Yes | Add (or subtract) reputation. Use a negative amount to reduce score. |
+| `/rep remove <player> <amount>` | `rep.admin` | Yes | Alias for `add` — subtracts the given amount. |
+| `/rep take <player> <amount>` | `rep.admin` | Yes | Alias for `add` with a negative amount. |
+| `/rep reset <player>` | `rep.admin` | Yes | Reset a player to `general.default-score`. |
+
+## Permissions
+
+| Permission | Default | Description |
+| --- | --- | --- |
+| `rep.use` | `true` | Use player-facing reputation commands and GUIs. |
+| `rep.admin` | `op` | Use `reload`, `set`, `add`, `remove`, `take`, and `reset`. |
+
+## Common setup workflow
+
+1. Confirm players have `rep.use` (default is `true`).
+2. Set `reputation-amounts.plus` and `minus` in config.
+3. Test with `/rep check` on yourself.
+4. Give test rep: `/rep <player> plus`.
+5. Verify rank assignment with [Ranks & thresholds](/rep/ranks).
+
+## Notes
+
+- Console cannot run `/rep` with no arguments or `/rep <player> plus|minus` — those are player-only interactive flows.
+- Self-rep can be blocked with `general.prevent-self-rep`.
+- Offline targets require `general.allow-offline-rep` to be enabled for player-given rep; admin commands always work on offline players.

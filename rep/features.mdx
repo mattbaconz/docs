@@ -1,0 +1,122 @@
+---
+title: 'Features'
+description: 'Player-facing reputation mechanics in Rep.'
+---
+
+This page covers how Rep behaves in gameplay. For config keys, see [Configuration](/rep/configuration). For rank tier logic, see [Ranks & thresholds](/rep/ranks).
+
+## Giving and receiving reputation
+
+Players give reputation through:
+
+- **Profile GUI** — open with `/rep` or `/rep <player>`, then use the plus/minus buttons
+- **Commands** — `/rep <player> plus` or `/rep <player> minus`
+- **Feeding** — right-click another player while holding food (when `feeding.enabled` is true)
+
+Receivers get notifications when `notifications.notify-receiver-on-plus` or `notify-receiver-on-minus` is enabled. Sounds and particles can play on give/receive and on rank changes.
+
+Cooldowns limit how often players can give rep:
+
+- `cooldowns.global-command-cooldown` — between any `/rep` use
+- `cooldowns.player-specific-cooldown` — before giving to the same target again
+- `cooldowns.max-rep-per-day` — daily cap on rep given (0 = unlimited)
+
+## Automatic reputation from events
+
+Rep adjusts scores when players perform configured actions. Examples from the default config:
+
+| Event | Default change |
+| --- | --- |
+| Player kill | −5 |
+| Villager kill | −10 |
+| Tame animal | +2 |
+| Villager trade | +1 |
+| Cure zombie villager | +20 |
+
+Set any event to `0` to disable it. Full list is under `event-changes` in [Configuration](/rep/configuration).
+
+## Per-mob reputation
+
+`mob-changes` lets you reward or penalize hitting or killing specific mobs. Use Paper `EntityType` names:
+
+```yaml title="mob-changes excerpt"
+mob-changes:
+  hit-default: 0
+  kill-default: 0
+  hit-cooldown-seconds: 1
+  kill:
+    CREEPER: 5
+    ENDER_DRAGON: 200
+    DOLPHIN: -300
+```
+
+`hit-default` and `kill-default` apply when a mob is not listed individually.
+
+## Feeding mechanic
+
+When enabled, a player can right-click another player while holding food to transfer reputation:
+
+```yaml title="feeding"
+feeding:
+  enabled: false
+  rep-amount: 1
+  consume-food: true
+  require-food: true
+  cooldown-seconds: 30
+```
+
+## Leaderboard
+
+`/rep top` opens a paginated GUI for players showing the highest reputation scores. Console gets plain text output. The number of entries comes from `general.leaderboard-size`.
+
+## Rank rewards viewer
+
+`/rep rewards` opens a GUI listing every rank, the score required to reach it, and whether the viewing player has unlocked it. Locked ranks show how many points are still needed.
+
+## Rank rewards on tier change
+
+When `rank-rewards.enabled` is true, Rep runs console commands and optional server broadcasts when a player moves up or down a rank:
+
+```yaml title="rank-rewards excerpt"
+rank-rewards:
+  enabled: true
+  broadcast-rankup: true
+  broadcast-rankdown: true
+  commands:
+    known:
+      - "give {player} diamond 1"
+```
+
+Use `{player}` for the player name and `{uuid}` for their UUID. `rankdown-commands` runs on demotion — useful for LuckPerms group sync without re-granting item rewards.
+
+## Chat and tab display
+
+Enable rank prefixes in chat and the tab list:
+
+```yaml title="general"
+general:
+  use-chat-prefix: false
+  use-tab-prefix: false
+```
+
+When enabled, the rank's `chat-prefix` appears after the player name in chat or in the tab list.
+
+## Multi-language messages
+
+Rep ships translations in `plugins/Rep/lang/`:
+
+```yaml title="language"
+language:
+  locale: en_US
+  fallback-to-english: true
+```
+
+Available locales include `en_US`, `es_ES`, `de_DE`, `fr_FR`, `zh_CN`, `ja_JP`, `pt_BR`, and `ru_RU`.
+
+## MySQL for multi-server setups
+
+The free release supports MySQL storage so multiple servers can share one reputation database. Set `storage.method: mysql` on each instance and point them at the same database. See [Installation](/rep/installation) for connection settings.
+
+## GUIs
+
+Rep includes profile, leaderboard, help, and rewards GUIs. Customize titles, border materials, items, and pagination under the `gui` section in [Configuration](/rep/configuration).

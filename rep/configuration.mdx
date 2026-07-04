@@ -1,0 +1,235 @@
+---
+title: 'Configuration'
+description: 'Configure Rep ranks, events, cooldowns, storage, and GUI.'
+---
+
+Rep stores settings in `plugins/Rep/config.yml`. Messages are in `messages.yml`; translations live in `lang/`. Reload both with `/rep reload`.
+
+For rank tier logic and threshold examples, see [Ranks & thresholds](/rep/ranks).
+
+## General
+
+```yaml title="general"
+general:
+  default-score: 0
+  debug: false
+  prevent-self-rep: true
+  allow-offline-rep: false
+  leaderboard-size: 10
+  use-chat-prefix: false
+  use-tab-prefix: false
+```
+
+| Key | Description |
+| --- | --- |
+| `default-score` | Starting reputation for new players and `/rep reset` |
+| `debug` | Extra console logging |
+| `prevent-self-rep` | Block giving rep to yourself |
+| `allow-offline-rep` | Allow player commands to target offline players |
+| `leaderboard-size` | Players shown in `/rep top` |
+| `use-chat-prefix` | Show rank prefix after player name in chat |
+| `use-tab-prefix` | Show rank prefix in the tab list |
+
+## Cooldowns
+
+```yaml title="cooldowns"
+cooldowns:
+  global-command-cooldown: 60
+  player-specific-cooldown: 3600
+  max-rep-per-day: 0
+```
+
+All values are in seconds. `max-rep-per-day: 0` means unlimited.
+
+## Reputation amounts
+
+```yaml title="reputation-amounts"
+reputation-amounts:
+  plus: 1
+  minus: -1
+```
+
+Used by `/rep <player> plus` and `/rep <player> minus`.
+
+## Ranks
+
+Define rank tiers under `ranks`. Each entry needs `name`, `score-threshold`, and `chat-prefix`.
+
+See [Ranks & thresholds](/rep/ranks) for assignment rules and worked examples.
+
+## Event changes
+
+Automatic rep from player actions. Set any key to `0` to disable.
+
+```yaml title="event-changes"
+event-changes:
+  player-kill: -5
+  villager-kill: -10
+  iron-golem-kill: -15
+  attack-tamed-animal: -3
+  attack-villager: -5
+  attack-iron-golem: -5
+  tame-animal: 2
+  breed-animal: 1
+  villager-trade: 1
+  cure-zombie-villager: 20
+```
+
+## Mob changes
+
+Per-entity rep on hit or kill. Use Paper `EntityType` names.
+
+```yaml title="mob-changes"
+mob-changes:
+  hit-default: 0
+  kill-default: 0
+  hit-cooldown-seconds: 1
+  hit:
+    ZOMBIE: 0
+  kill:
+    CREEPER: 5
+    ENDER_DRAGON: 200
+```
+
+## World restrictions
+
+```yaml title="world-restrictions"
+world-restrictions:
+  mode: blacklist
+  worlds:
+    - example_world_name
+```
+
+- `blacklist` — rep is disabled in listed worlds (default behavior)
+- `whitelist` — rep only works in listed worlds
+
+The legacy `disabled-worlds` list is used only when `world-restrictions` is missing from config.
+
+## Feeding
+
+```yaml title="feeding"
+feeding:
+  enabled: false
+  rep-amount: 1
+  consume-food: true
+  require-food: true
+  cooldown-seconds: 30
+```
+
+## Notifications
+
+```yaml title="notifications"
+notifications:
+  notify-receiver-on-plus: true
+  notify-receiver-on-minus: true
+```
+
+## Sounds
+
+```yaml title="sounds"
+sounds:
+  enabled: true
+  receive-plus: ENTITY_EXPERIENCE_ORB_PICKUP
+  receive-minus: ENTITY_VILLAGER_NO
+  rank-up: ENTITY_PLAYER_LEVELUP
+  rank-down: BLOCK_ANVIL_LAND
+  volume: 1.0
+  pitch: 1.0
+```
+
+Set any sound to `none` to disable that effect. Use valid Bukkit `Sound` enum names.
+
+## Particles
+
+```yaml title="particles"
+particles:
+  enabled: true
+  receive-plus: VILLAGER_HAPPY
+  receive-minus: VILLAGER_ANGRY
+  rank-up: TOTEM_OF_UNDYING
+  count: 10
+```
+
+Set any particle to `none` to disable. Use valid Bukkit `Particle` enum names.
+
+## Rank rewards
+
+```yaml title="rank-rewards"
+rank-rewards:
+  enabled: true
+  broadcast-rankup: true
+  broadcast-rankdown: true
+  commands:
+    known:
+      - "give {player} diamond 1"
+  rankdown-commands:
+    stranger: []
+```
+
+Commands run as console. Placeholders: `{player}`, `{uuid}`.
+
+## GUI
+
+```yaml title="gui"
+gui:
+  titles:
+    profile: "&b&lReputation Profile"
+    leaderboard: "&e&lTop Players"
+    help: "&a&lReputation Help"
+    rewards: "&6&lRank Rewards"
+  borders:
+    self-profile: CYAN_STAINED_GLASS_PANE
+    leaderboard: YELLOW_STAINED_GLASS_PANE
+  leaderboard-per-page: 28
+  cooldown-ms: 500
+  items:
+    plus-rep-item: LIME_DYE
+    minus-rep-item: RED_DYE
+```
+
+Use Bukkit `Material` names for items and borders.
+
+## Placeholders
+
+```yaml title="placeholders"
+placeholders:
+  score-format: raw
+  compact:
+    enabled: true
+    min-value: 1000
+    decimal-places: 1
+    strip-trailing-zeros: true
+    suffixes:
+      thousand: k
+      million: m
+    thresholds:
+      thousand: 1000
+      million: 1000000
+```
+
+`score-format` controls `%rep_score%` (`raw` or `compact`). See [Placeholders](/rep/placeholders).
+
+## Language
+
+```yaml title="language"
+language:
+  locale: en_US
+  fallback-to-english: true
+```
+
+## Storage
+
+```yaml title="storage"
+storage:
+  method: yaml
+  mysql:
+    host: localhost
+    port: 3306
+    database: minecraft
+    username: root
+    password: password
+    use-ssl: false
+    cache-ttl-seconds: 30
+```
+
+See [Installation](/rep/installation) for MySQL multi-server setup.

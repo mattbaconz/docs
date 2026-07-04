@@ -137,6 +137,28 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Rep",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "rep/index",
+              "rep/installation"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "rep/ranks",
+              "rep/configuration",
+              "rep/commands",
+              "rep/placeholders",
+              "rep/features"
+            ]
+          }
+        ]
       }
     ]
   }

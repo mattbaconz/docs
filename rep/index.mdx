@@ -1,0 +1,58 @@
+---
+title: 'Rep'
+description: 'Player reputation scores, ranks, GUI, automatic events, and PlaceholderAPI for Paper and Folia servers.'
+---
+
+**Rep** is a reputation system for Minecraft servers. Players earn scores from other players and in-game actions, climb configurable rank tiers, and see their standing in GUIs, chat, and the tab list.
+
+## What Rep does
+
+- **Player reputation** via `/rep` commands and profile GUIs
+- **Automatic rep** from kills, trades, taming, villager cures, and other world events
+- **Per-mob rep** for hitting or killing specific entity types
+- **Feeding mechanic** to give rep by right-clicking another player with food
+- **Rank tiers** with chat/tab prefixes, sounds, particles, and rank-up rewards
+- **Leaderboard** GUI and text output for top players
+- **PlaceholderAPI** placeholders for score, rank, and prefix
+- **Storage** in YAML or MySQL for single-server or multi-server setups
+
+## Compatibility
+
+Rep supports **Paper/Purpur/Folia 1.21–26.x** and requires **Java 21+**.
+
+<Note>
+A Pro edition with network sync is planned but not released yet. These docs cover the current free release.
+</Note>
+
+## Quick commands
+
+```text
+/rep
+/rep Steve plus
+/rep check
+/rep top
+/rep rewards
+```
+
+## Documentation sections
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/rep/installation">
+    Install Rep, configure storage, and run your first checks.
+  </Card>
+  <Card title="Ranks & thresholds" icon="layer-group" href="/rep/ranks">
+    How score thresholds assign ranks, with worked examples.
+  </Card>
+  <Card title="Configuration" icon="gear" href="/rep/configuration">
+    Every section of config.yml explained.
+  </Card>
+  <Card title="Commands" icon="terminal" href="/rep/commands">
+    Player and admin commands with permissions.
+  </Card>
+  <Card title="Placeholders" icon="brackets-curly" href="/rep/placeholders">
+    PlaceholderAPI values for score, rank, and prefix.
+  </Card>
+  <Card title="Features" icon="star" href="/rep/features">
+    Gameplay mechanics: GUIs, events, feeding, and rewards.
+  </Card>
+</CardGroup>

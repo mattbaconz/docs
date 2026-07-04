@@ -54,6 +54,10 @@
     {
       "name": "Pledge",
       "url": "pledge"
+    },
+    {
+      "name": "Rep",
+      "url": "rep"
     }
   ],
   "navigation": [
@@ -112,6 +116,18 @@
         "pledge/commands",
         "pledge/placeholders",
         "pledge/marketplace"
+      ]
+    },
+    {
+      "group": "Rep",
+      "pages": [
+        "rep/index",
+        "rep/installation",
+        "rep/ranks",
+        "rep/configuration",
+        "rep/commands",
+        "rep/placeholders",
+        "rep/features"
       ]
     }
   ],

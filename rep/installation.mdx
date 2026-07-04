@@ -1,0 +1,96 @@
+---
+title: 'Installation'
+description: 'Install Rep on Paper or Folia and configure storage.'
+---
+
+## Requirements
+
+- **Server software**: Paper, Purpur, or Folia **1.21–26.x**
+- **Java**: Java 21 or newer
+- **Optional**: PlaceholderAPI for score, rank, and prefix placeholders
+
+## Install Rep
+
+1. Stop your server.
+2. Place the Rep JAR in the `plugins` folder.
+3. Start the server once so Rep generates its config files.
+4. Stop the server again.
+5. Open `plugins/Rep/config.yml` and adjust settings (see [Configuration](/rep/configuration)).
+6. Start the server.
+
+Rep creates `config.yml` and `messages.yml` under `plugins/Rep/`. Language files are stored in `plugins/Rep/lang/`.
+
+## First-run checklist
+
+Before opening the server to players, review these settings:
+
+```yaml title="plugins/Rep/config.yml"
+general:
+  default-score: 0
+
+reputation-amounts:
+  plus: 1
+  minus: -1
+
+ranks:
+  stranger:
+    name: Stranger
+    score-threshold: 0
+    chat-prefix: "&7[Stranger]"
+```
+
+- Set `general.default-score` for new players.
+- Review `ranks` thresholds — see [Ranks & thresholds](/rep/ranks) for how assignment works.
+- Set `reputation-amounts.plus` and `minus` for player-given rep.
+- Remove example worlds from `world-restrictions.worlds` if you use blacklist mode.
+
+## Storage
+
+### YAML (default)
+
+```yaml title="storage"
+storage:
+  method: yaml
+```
+
+Reputation data is stored in `plugins/Rep/data/`. This is the simplest option for a single server.
+
+### MySQL (multi-server)
+
+Use MySQL when multiple servers should share the same reputation database:
+
+```yaml title="storage"
+storage:
+  method: mysql
+  mysql:
+    host: localhost
+    port: 3306
+    database: minecraft
+    username: root
+    password: password
+    use-ssl: false
+    cache-ttl-seconds: 30
+```
+
+- Point every Rep instance at the same database.
+- `cache-ttl-seconds` controls how often each server refreshes from the database. Use **30–60** on networks; use **0** on a single server for always-fresh reads.
+
+## First checks
+
+After startup, run these commands:
+
+```text
+/rep info
+/rep check
+/rep top
+```
+
+If PlaceholderAPI is installed, test a placeholder:
+
+```text
+/papi parse me %rep_score%
+```
+
+<Card title="Join Discord" icon="discord" href="https://discord.com/invite/VQjTVKjs46">
+  Get support and plugin updates.
+</Card>

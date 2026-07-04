@@ -1,0 +1,59 @@
+---
+title: 'Placeholders'
+description: 'PlaceholderAPI values exposed by Rep.'
+---
+
+Rep registers a `rep` PlaceholderAPI expansion when PlaceholderAPI is installed. All placeholders require an online player context.
+
+## Score placeholders
+
+| Placeholder | Description |
+| --- | --- |
+| `%rep_score%` | Score in raw or compact format, based on `placeholders.score-format` |
+| `%rep_score_raw%` | Full integer score |
+| `%rep_score_compact%` | Compact format (`10k`, `1.5m`, etc.) |
+| `%rep_score_short%` | Alias for `%rep_score_compact%` |
+| `%rep_score_formatted%` | Alias for `%rep_score_compact%` |
+
+## Rank placeholders
+
+| Placeholder | Description |
+| --- | --- |
+| `%rep_rank%` | Current rank display name |
+| `%rep_prefix%` | Rank chat prefix with color codes |
+
+Rank values follow the [score threshold rules](/rep/ranks) in config.
+
+## Compact formatting
+
+When `placeholders.score-format` is `compact`, or when using `%rep_score_compact%`, Rep uses the `placeholders.compact` section:
+
+```yaml title="plugins/Rep/config.yml"
+placeholders:
+  score-format: raw
+  compact:
+    enabled: true
+    min-value: 1000
+    decimal-places: 1
+    strip-trailing-zeros: true
+    suffixes:
+      thousand: k
+      million: m
+```
+
+`placeholders.compact.thresholds` only controls when numbers switch to `k`/`m`/`b` style — it does **not** affect rank tiers.
+
+## Test placeholders
+
+```text
+/papi parse me %rep_score%
+/papi parse me %rep_score_raw%
+/papi parse me %rep_rank%
+/papi parse me %rep_prefix%
+```
+
+## Common uses
+
+- Scoreboard plugins: `%rep_score%` or `%rep_score_compact%`
+- Chat format plugins: `%rep_prefix%` before the player name
+- Tab list plugins: `%rep_rank%` next to the player name
