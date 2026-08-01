@@ -1,0 +1,73 @@
+---
+title: 'Storage and sell'
+description: 'Collect and sell loot, price providers, and the autosell permission.'
+---
+
+Spawners deposit items and XP into storage instead of spawning living entities into the world.
+
+## Open storage
+
+```text
+/3ts storage
+```
+
+Permission: `3tspawner.storage`
+
+Default capacity comes from `storage.yml`:
+
+```yaml title="storage.yml"
+storage:
+  default-capacity: 10000
+  per-mob-overrides: {}
+```
+
+Upgrades and stack count raise effective capacity. Display mode (`paged` / `compact`) is under `menus.yml` → `storage`.
+
+## Collect
+
+```text
+/3ts collect
+```
+
+Moves stored items into the player inventory when space allows (`3tspawner.collect`).
+
+## Sell
+
+```text
+/3ts sell
+/3ts sell confirm
+```
+
+Permission: `3tspawner.sell`. Large payouts may require confirmation when above `economy.sell-confirmation-threshold`.
+
+```yaml title="economy.yml"
+economy:
+  currency-symbol: "$"
+  sell-confirmation-threshold: 1000000
+  default-sell-multiplier: 1.0
+  sell-grants-xp: true
+
+prices:
+  provider: auto
+  use-builtin: true
+```
+
+When `sell-grants-xp` is true, a full sell-all also grants stored XP.
+
+## Price sources
+
+| Provider | Behavior |
+| --- | --- |
+| `auto` | Stonkz → Essentials worth → ShopGUI+ → builtin loot `sell-price` |
+| `builtin` | Loot-table / mob sell prices only |
+| `stonkz` / `essentials` / `shopguiplus` | Force that source first |
+
+Reload the price plugin after editing worth tables, then `/3ts reload`.
+
+## `3tspawner.autosell`
+
+Despite the name, this permission does **not** auto-sell. It grants a **5% bonus** on sell payouts when Vault economy is active. Default is `false`.
+
+## Player settings
+
+`/3ts settings` can skip sell confirmation and adjust display label preference (`3tspawner.settings`).

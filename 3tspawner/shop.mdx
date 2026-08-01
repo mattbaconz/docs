@@ -1,0 +1,53 @@
+---
+title: 'Shop'
+description: 'Dual physical and virtual catalog, search, sort, and auto-fill.'
+---
+
+The shop sells spawner units for Vault currency. Open with:
+
+```text
+/3ts shop
+/spawnershop
+```
+
+Permission: `3tspawner.shop`
+
+## Default catalog
+
+Shipped `shop.yml` lists **vanilla mobs only**, each with a **physical** and **virtual** listing. Custom / Mythic / item-producer mobs are **not** in the default catalog — add them via `mobs/custom.yml` and shop entries (or auto-fill) when you opt in.
+
+## Auto-fill
+
+```yaml title="config.yml"
+shop:
+  auto-fill-mobs: true
+  auto-fill-modes: [physical, virtual]
+  hide-disabled-modes: true
+  max-purchase-amount: 64
+```
+
+When auto-fill is on, missing mobs from `mobs/*.yml` get new shop rows on load/reload. Existing rows are never overwritten. Listings for disabled modes can be hidden.
+
+## GUI behavior
+
+- Tier categories and paging live in `menus.yml` (`shop.categories`, `page-size`)
+- Buy amount presets and custom amounts up to `max-purchase-amount`
+- Search and sort are available in the shop GUI
+
+## Pricing
+
+Edit prices per listing in `shop.yml`:
+
+```yaml title="shop.yml"
+zombie:
+  material: SPAWNER
+  price: 5000
+  mode: physical
+zombie_virtual:
+  material: SPAWNER
+  mob-key: zombie
+  price: 5000
+  mode: virtual
+```
+
+`mode` must be `physical` or `virtual`. Virtual rows can set `mob-key` when the shop key differs from the mob key.

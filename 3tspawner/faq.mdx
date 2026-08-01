@@ -1,0 +1,75 @@
+---
+title: 'FAQ'
+description: 'License, Folia, migration, performance claims, and common questions.'
+---
+
+## License
+
+### Do I need a license key?
+
+Yes for paid builds. Set `license_key` in `config.yml`. Claim product id **`3TSPAWNER`** in Discord (`/claim 3TSPAWNER`), then paste the key.
+
+### What if the license API is down?
+
+With a previously successful verify cached, `license.grace_hours` (default `72`) can allow boot. Fresh installs without a valid key will not stay enabled when verification fails.
+
+<Card title="Discord support" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  License claims and troubleshooting.
+</Card>
+
+## Platforms
+
+### Does 3TSpawner support Folia?
+
+**Experimental / beta.** The plugin is Folia-aware and declares support, but do not advertise or rely on Folia as production-stable until you soak-test your own setup.
+
+### Paper / Purpur versions?
+
+Target **Java 21+** and Paper/Purpur from **1.20.6 through year-based 26.x**.
+
+## Features
+
+### Physical or virtual?
+
+Both, plus **clusters**. Toggle each under `modes` in `config.yml`.
+
+### Is the default shop vanilla-only?
+
+Yes. Shipped `shop.yml` is vanilla physical + virtual listings. Custom, Mythic, Elite, and `provider: item` gens are opt-in.
+
+### What is `3tspawner.autosell`?
+
+A **5% sell payout bonus**. It does **not** automatically sell storage.
+
+### Can I rename `/3ts`?
+
+Yes — `commands.primary` and `aliases` in `config.yml`, then **full restart**.
+
+### Why does migration say beta?
+
+Migration tools (`/3ts migrate …`) are labeled **beta**. Always `/3ts backup create` before `apply`. Perfect imports depend on the source plugin.
+
+## Performance
+
+### Will it fix my lag?
+
+It is designed to cut entity load via virtual/cluster production and lag-safety. Results vary with TPS, hardware, other plugins, and limits.
+
+### What about the ~1.3% Spark figure?
+
+That is a **showcase / demo** observation, not a warranty for every server. Treat it as marketing proof of a tuned demo, then measure your own Spark report.
+
+## Support template
+
+```text
+3TSpawner version:
+Server software/version:
+Java version:
+Storage backend (sqlite/mysql):
+Plugins list:
+What happened:
+Expected behavior:
+Steps to reproduce:
+Console error:
+Output of /3ts doctor:
+```

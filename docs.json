@@ -145,7 +145,8 @@
             "group": "General",
             "pages": [
               "rep/index",
-              "rep/installation"
+              "rep/installation",
+              "rep/core-vs-pro"
             ]
           },
           {
@@ -155,7 +156,52 @@
               "rep/configuration",
               "rep/commands",
               "rep/placeholders",
-              "rep/features"
+              "rep/features",
+              "rep/integrations"
+            ]
+          },
+          {
+            "group": "Pro",
+            "pages": [
+              "rep/pro",
+              "rep/pro-redis",
+              "rep/pro-seasons",
+              "rep/pro-dashboard"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "3TSpawner",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "3tspawner/index",
+              "3tspawner/installation",
+              "3tspawner/faq"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "3tspawner/commands",
+              "3tspawner/configuration",
+              "3tspawner/placeholders",
+              "3tspawner/integrations"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "3tspawner/physical-spawners",
+              "3tspawner/virtual-spawners",
+              "3tspawner/clusters",
+              "3tspawner/shop",
+              "3tspawner/storage-and-sell",
+              "3tspawner/upgrades",
+              "3tspawner/mobs-and-loot",
+              "3tspawner/presets"
             ]
           }
         ]

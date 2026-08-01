@@ -1,0 +1,63 @@
+---
+title: 'Mobs and loot'
+description: 'Mob packs, custom.yml, loot tables, and provider:item generators.'
+---
+
+## Shipped packs
+
+Fresh installs use tier folders:
+
+| Folder | Contents |
+| --- | --- |
+| `mobs/overworld.yml`, `nether.yml`, `end.yml`, `deep_dark.yml` | Vanilla mob definitions |
+| `loot-tables/*.yml` | Matching drop tables and sell prices |
+
+Legacy monolith `mobs.yml` / `loot-tables.yml` still load until you add any YAML under the new folders (folders then win).
+
+## Mob fields
+
+```yaml title="mobs/overworld.yml (shape)"
+mobs:
+  zombie:
+    entity-type: ZOMBIE
+    label: "Zombie"            # plain text for GUI titles
+    display-name: "<gradient:#4ADE80:#86EFAC>Zombie</gradient>"
+    tier: overworld
+    base-price: 5000
+    production:
+      interval-seconds: 30
+      xp-per-cycle: 5
+    drops-table: zombie_default
+```
+
+- `label` — plain titles (`<mob>` in menus)
+- `display-name` — MiniMessage for lore / holograms
+- `drops-table` — key in the matching loot-tables file
+
+## Custom and third-party mobs
+
+Copy examples, then rename:
+
+1. `mobs/custom.yml.example` → `mobs/custom.yml`
+2. `loot-tables/custom.yml.example` → `loot-tables/custom.yml`
+3. `/3ts reload`
+
+Providers:
+
+| `provider` | Notes |
+| --- | --- |
+| `vanilla` | Default |
+| `mythicmobs` | Set `mythic-id` |
+| `elitemobs` | Set elite type field |
+| `custom` | YAML-only custom entry |
+| `item` | Direct item producer — no loot table; set `material`, optional `amount` / `sell-price`. `entity-type` is cage cosmetic only |
+
+Item producers (cobble/diamond gens in the example) are **opt-in** and are **not** in default `shop.yml`.
+
+## Adding a shop listing
+
+After defining the mob, either rely on `shop.auto-fill-mobs` or add rows to `shop.yml` manually. See [Shop](/3tspawner/shop).
+
+## Default shop honesty
+
+Out of the box, the buy catalog is **vanilla mobs only**. Mythic, Elite, and item gens stay optional admin content.

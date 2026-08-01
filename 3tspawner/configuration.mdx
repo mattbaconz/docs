@@ -1,0 +1,85 @@
+---
+title: 'Configuration'
+description: 'Overview of config.yml and split YAML files shipped with 3TSpawner.'
+---
+
+On first boot, 3TSpawner writes files under `plugins/3TSpawner/`. Most edits apply after `/3ts reload`. **Command root changes** (`commands.primary`, `aliases`, `gui-roots`) need a full server restart.
+
+## Core files
+
+| File | Purpose |
+| --- | --- |
+| `config.yml` | License, branding, modes, limits, holograms, lag-safety, shop behavior, break rules |
+| `economy.yml` | Currency format, sell confirmation, price provider |
+| `database.yml` | SQLite (default) or MySQL |
+| `storage.yml` | Default storage capacity and per-mob overrides |
+| `shop.yml` | Buy catalog (physical + virtual listings) |
+| `menus.yml` | GUI titles, buttons, shop categories, filler |
+| `messages.yml` | Chat prefix and message templates |
+| `permissions.yml` | VIP / limit override numbers |
+| `integrations.yml` | Soft-depend toggles and display provider |
+| `lang/<code>.yml` | Locale overlays (`en`, `id`, `ru`, `es`, `zh`, `de`, `fr`) |
+| `mobs/*.yml` | Mob definitions by tier |
+| `loot-tables/*.yml` | Drop tables and sell prices |
+| `upgrades/*.yml` | Upgrade trees (`production`, `storage`, `economy`) |
+| `presets/*.yml` | Balance overlays applied via `/3ts admin preset apply` |
+
+## Modes and limits
+
+```yaml title="config.yml (excerpt)"
+modes:
+  classic:
+    enabled: true
+    stack-on-place: false
+  virtual:
+    enabled: true
+    merge-same-type: true
+  cluster:
+    enabled: true
+    radius-blocks: 16
+    same-type-only: true
+
+limits:
+  default-max-stack: 999999
+  per-chunk-spawner-limit: 128
+  per-player-virtual-limit: 250
+  disabled-worlds: []
+```
+
+## License block
+
+```yaml title="config.yml"
+license_key: "YOUR_KEY_HERE"
+license:
+  verify_on_startup: true
+  grace_hours: 72
+  recheck_hours: 24
+  debug: false
+```
+
+## Economy and prices
+
+```yaml title="economy.yml"
+prices:
+  provider: auto   # auto | builtin | stonkz | essentials | shopguiplus
+  use-builtin: true
+```
+
+`auto` tries Stonkz → EssentialsX worth → ShopGUI+ Worth → loot-table `sell-price` fallback.
+
+## Database
+
+Default is SQLite (`data.db`). Switch `database.type` to `mysql` and fill host/credentials for networked setups.
+
+## Localization
+
+Set `locale.default` or force one language with `locale.force` in `config.yml`. Client language is auto-detected when `force` is blank.
+
+## White-label tips
+
+- `messages.yml` + `lang/` for chat copy
+- `menus.yml` for GUI titles (use plain `label` from mobs for `<mob>` in titles)
+- `config.yml` → `holograms.lines` for TextDisplay lines
+- `config.yml` → `spawner-item` for placed/dropped item name and lore
+
+See [Physical spawners](/3tspawner/physical-spawners), [Shop](/3tspawner/shop), and [Upgrades](/3tspawner/upgrades) for feature-specific knobs.

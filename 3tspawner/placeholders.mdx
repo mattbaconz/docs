@@ -1,0 +1,25 @@
+---
+title: 'Placeholders'
+description: 'PlaceholderAPI values for 3TSpawner.'
+---
+
+Requires [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/). Enable under `integrations.yml` → `placeholderapi.enabled: true`.
+
+Identifier: `3tspawner`
+
+| Placeholder | Description |
+| --- | --- |
+| `%3tspawner_total_physical%` | Count of physical spawners on the server |
+| `%3tspawner_total_virtual%` | Virtual spawner count for the player (or all if no player) |
+| `%3tspawner_total_clusters%` | Cluster count for the player (or all) |
+| `%3tspawner_total_spawners%` | Physical + virtual count |
+| `%3tspawner_storage_value%` | Estimated sell value of the player's storage |
+| `%3tspawner_storage_used%` | Items used in virtual + cluster storage |
+| `%3tspawner_storage_capacity%` | Effective capacity (includes upgrades × stack) |
+| `%3tspawner_multiplier%` | Default sell multiplier from `economy.yml` |
+
+Example scoreboard line:
+
+```text
+Spawners: %3tspawner_total_spawners% | Value: %3tspawner_storage_value%
+```

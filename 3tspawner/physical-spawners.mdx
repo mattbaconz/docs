@@ -1,0 +1,72 @@
+---
+title: 'Physical spawners'
+description: 'Place, stack, break, holograms, offline progress, and lag-safety.'
+---
+
+Physical mode places managed spawner blocks that produce into storage instead of flooding the world with entities.
+
+## Place and stack
+
+- Permission: `3tspawner.place` / `3tspawner.stack`
+- Default `modes.classic.stack-on-place: false` — placing deposits one unit; sneak + right-click stacks from hand
+- Chunk limit: `limits.per-chunk-spawner-limit` (default `128`)
+- Max stack: `limits.default-max-stack`
+
+## Break behavior
+
+```yaml title="config.yml"
+spawner-break:
+  contents: preserve   # preserve | payout | discard
+  keep-upgrades: true
+```
+
+- **preserve** (default) — loot, XP, and upgrades stay on the dropped item
+- **payout** — sell storage + grant XP to the breaker
+- **discard** — wipe contents on break
+
+## Holograms
+
+TextDisplay holograms are enabled by default:
+
+```yaml title="config.yml"
+holograms:
+  enabled: true
+  offset-y: 1.2
+  update-interval-seconds: 1
+  lines:
+    - "<mob_display> x<stack>"
+    - "<sym_diamond> Storage | <used>/<capacity>"
+    - "<sym_diamond> XP | <xp>"
+```
+
+Useful placeholders: `<mob>`, `<mob_display>`, `<stack>`, `<used>`, `<capacity>`, `<xp>`, `<value>`, `<interval>`, `<owner>`, `<upgrade_speed>`, branding symbols.
+
+Set `enabled: false` or clear `lines` to disable.
+
+## Offline progress
+
+```yaml
+offline-progress:
+  enabled: true
+  max-duration-minutes: 360
+  multiplier: 0.35
+```
+
+Production while the owner is offline is capped and multiplied. Presets change these values.
+
+## Lag-safety
+
+```yaml
+lag-safety:
+  enabled: true
+  tps-threshold: 17.5
+  pause-production: false
+  slow-production: true
+  pause-display-updates: true
+```
+
+When TPS drops below the threshold, production can slow and hologram updates can pause.
+
+## Item branding
+
+Customize the physical item under `spawner-item` in `config.yml` (MiniMessage display name and lore with `<mob>`, `<stack>`, `<owner>`, etc.).

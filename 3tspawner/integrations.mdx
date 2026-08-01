@@ -1,0 +1,69 @@
+---
+title: 'Integrations'
+description: 'Vault, PlaceholderAPI, WorldGuard, Mythic/Elite, Stonkz, MySQL, and more.'
+---
+
+Soft dependencies never crash the plugin when missing. Check live status with:
+
+```text
+/3ts integrations
+```
+
+## Economy
+
+| Plugin | Role |
+| --- | --- |
+| **Vault** + economy | Required for shop purchases and sell deposits |
+| **Stonkz** / StonkzLite | Optional price source when `prices.provider` is `auto` or `stonkz` |
+| **EssentialsX** | Optional worth.yml prices |
+| **ShopGUIPlus** | Optional Worth prices |
+| **CoinsEngine** / **PlayerPoints** | Soft-detected; keep Vault as the primary sell path unless you customize |
+
+Price provider in `economy.yml`: `auto` | `builtin` | `stonkz` | `essentials` | `shopguiplus`.
+
+## Protection and display
+
+| Plugin | Role |
+| --- | --- |
+| **WorldGuard** | Place / break / interact checks when enabled |
+| **PlaceholderAPI** | `%3tspawner_*%` placeholders |
+| Display | Built-in **TextDisplay** holograms (`integrations.display.provider: text_display`) |
+
+## Custom mob providers
+
+Opt-in via `mobs/custom.yml` (copy from `custom.yml.example`):
+
+| Provider | Use |
+| --- | --- |
+| `vanilla` | Default entity types |
+| `mythicmobs` | Mythic / MythicMobs mob ids |
+| `elitemobs` | EliteMobs types |
+| `custom` | YAML-only custom entries |
+| `item` | Direct item producers (gens) — not in the default shop |
+
+## Storage backends
+
+Configured in `database.yml`:
+
+- **SQLite** (default) — single-file, fine for most servers
+- **MySQL** — set `type: mysql` and pool credentials for larger / networked setups
+
+## Toggles
+
+```yaml title="integrations.yml"
+integrations:
+  vault:
+    enabled: true
+  placeholderapi:
+    enabled: true
+  worldguard:
+    enabled: true
+  stonkz:
+    enabled: true
+  mythicmobs:
+    enabled: true
+  elitemobs:
+    enabled: true
+  display:
+    provider: text_display
+```

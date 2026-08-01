@@ -1,0 +1,64 @@
+---
+title: '3TSpawner'
+description: 'Physical, virtual, and cluster spawners with shop, sell, upgrades, and holograms for Paper and Purpur.'
+---
+
+**3TSpawner** is a hybrid spawner economy plugin. Players place physical spawners, run virtual spawners without blocks, or form clusters that share storage, XP, and upgrades — then collect and sell loot through one Vault-backed loop.
+
+## Modes
+
+- **Physical** — placeable spawner blocks with stacking, break preserve, and TextDisplay holograms.
+- **Virtual** — inventory-style spawners with merge-same-type and per-player limits.
+- **Cluster** — nearby same-type physical stacks share one storage/XP/upgrade pool (default radius 16).
+
+## Compatibility
+
+3TSpawner targets **Paper / Purpur `1.20.6` through year-based `26.x`** and requires **Java 21+**.
+
+<Warning>
+Folia support is **experimental / beta**. The jar declares `folia-supported`, but do not treat Folia as production-stable until your own soak tests pass.
+</Warning>
+
+<Note>
+Paid builds require a license key in `config.yml`. Claim product id `3TSPAWNER` in Discord, then paste the key before production use.
+</Note>
+
+## Quick commands
+
+```text
+/3ts
+/3ts shop
+/3ts virtual
+/3ts storage
+/3ts sell
+/3ts doctor
+```
+
+## Documentation sections
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/3tspawner/installation">
+    Java, Paper/Purpur, Vault, license key, and first doctor check.
+  </Card>
+  <Card title="Commands" icon="terminal" href="/3tspawner/commands">
+    Player and admin commands plus permission tables.
+  </Card>
+  <Card title="Configuration" icon="gear" href="/3tspawner/configuration">
+    config.yml and split YAML files for economy, shop, menus, and more.
+  </Card>
+  <Card title="Physical spawners" icon="cube" href="/3tspawner/physical-spawners">
+    Place, stack, break, holograms, offline progress, lag-safety.
+  </Card>
+  <Card title="Virtual spawners" icon="layer-group" href="/3tspawner/virtual-spawners">
+    Virtual list, merge, and limits.
+  </Card>
+  <Card title="Clusters" icon="diagram-project" href="/3tspawner/clusters">
+    Radius, shared storage/XP/upgrades, capacity × stack.
+  </Card>
+  <Card title="Shop" icon="store" href="/3tspawner/shop">
+    Dual physical/virtual catalog, search, sort, auto-fill.
+  </Card>
+  <Card title="FAQ" icon="circle-question" href="/3tspawner/faq">
+    License, Folia, migration beta, and performance claims.
+  </Card>
+</CardGroup>

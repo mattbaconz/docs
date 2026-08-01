@@ -1,0 +1,68 @@
+---
+title: 'Installation'
+description: 'Install 3TSpawner on Paper or Purpur and activate your license.'
+---
+
+## Requirements
+
+- **Server software**: Paper or Purpur `1.20.6` through `26.x`
+- **Java**: Java 21 or newer
+- **Economy**: Vault + an economy plugin (required for shop/sell)
+- **License**: A paid 3TSpawner license key (product id `3TSPAWNER`)
+- **Optional**: PlaceholderAPI, WorldGuard, MythicMobs, EliteMobs, Stonkz
+
+<Warning>
+Folia is experimental. Prefer Paper/Purpur for production until you validate Folia on a staging copy of your world.
+</Warning>
+
+## Install 3TSpawner
+
+1. Stop your server.
+2. Place `3TSpawner.jar` in the `plugins` folder.
+3. Install Vault and your economy plugin if they are not already present.
+4. Start the server once so 3TSpawner generates its config files.
+5. Stop the server again.
+6. Open `plugins/3TSpawner/config.yml`.
+7. Replace `YOUR_KEY_HERE` with your license key.
+8. Start the server.
+
+```yaml title="plugins/3TSpawner/config.yml"
+license_key: "MATT-XXXX-XXXX"
+license:
+  verify_on_startup: true
+  grace_hours: 72
+```
+
+## Claim your license
+
+Join the support Discord and claim the `3TSPAWNER` product license (for example `/claim 3TSPAWNER`). Paste the generated key into `config.yml` before running in production.
+
+<Card title="Join Discord" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Claim your license key and get support.
+</Card>
+
+## First checks
+
+Run these after startup:
+
+```text
+/3ts doctor
+/3ts integrations
+/3ts admin preset list
+```
+
+Recommended first preset on a fresh SMP:
+
+```text
+/3ts admin preset apply casual-smp
+```
+
+If the plugin cannot verify the key and grace does not apply, it disables during startup. Check the console log and confirm the key is present, valid, and claimed for `3TSPAWNER`.
+
+## Staging checklist
+
+- [ ] Vault economy deposit/withdraw works
+- [ ] Place / stack / break a physical spawner
+- [ ] Open `/3ts virtual`, `/3ts shop`, `/3ts storage`
+- [ ] Sell loot once (`/3ts sell`)
+- [ ] Create a backup (`/3ts backup create`) before migration experiments

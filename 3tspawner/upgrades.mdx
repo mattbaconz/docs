@@ -1,0 +1,56 @@
+---
+title: 'Upgrades'
+description: 'Upgrade YAML trees and effect types for production, storage, and economy.'
+---
+
+Upgrades live under `plugins/3TSpawner/upgrades/`:
+
+- `production.yml` — speed, drops, fortune, overclock, and related
+- `storage.yml` — capacity and storage multipliers
+- `economy.yml` — sell value, XP multipliers, automation unlocks
+
+Legacy single `upgrades.yml` still loads if the folder has no YAML yet. Once any file exists under `upgrades/`, the folder wins.
+
+## How they appear
+
+Each upgrade key with `display-name`, `description`, `material`, `max-level`, `cost`, and `effect` shows in the upgrade GUI automatically after `/3ts reload`.
+
+```yaml title="upgrades/production.yml (excerpt)"
+upgrades:
+  speed:
+    display-name: "<gradient:#FFB800:#FF3D00>Production Speed</gradient>"
+    description: "Faster production cycles"
+    material: CLOCK
+    max-level: 10
+    cost:
+      type: money
+      base: 10000
+      growth: 1.35
+    effect:
+      type: interval_multiplier
+      per-level: -0.05
+      minimum: 0.35
+```
+
+## Effect types
+
+| Effect | Meaning |
+| --- | --- |
+| `interval_multiplier` | Faster cycles (lower interval; respect `minimum`) |
+| `storage_multiplier` | Multiply storage capacity |
+| `flat_storage` | Add flat capacity |
+| `drop_multiplier` | More items per cycle |
+| `drop_chance_bonus` | Extra drop chance |
+| `xp_multiplier` | More XP per cycle |
+| `sell_multiplier` | Better sell payouts |
+| `offline_multiplier` | Better offline progress |
+| `critical_chance` | Chance of critical production |
+| `unlock` | Gate automation / features |
+
+## Costs
+
+Money costs use Vault. `base` × `growth` per level. Presets can override bases (for example `competitive-economy` raises speed costs).
+
+## Cluster and virtual
+
+Cluster upgrades apply to the shared pool (`3tspawner.cluster.upgrade`). Virtual and physical each keep their own upgrade maps on that entity.

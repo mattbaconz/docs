@@ -1,0 +1,50 @@
+---
+title: 'Clusters'
+description: 'Cluster radius, shared storage and XP, upgrades, and capacity scaling.'
+---
+
+Clusters group nearby same-type physical spawners into one economy unit: shared storage, XP, and upgrades, with capacity scaled by total stack.
+
+## Defaults
+
+```yaml title="config.yml"
+modes:
+  cluster:
+    enabled: true
+    radius-blocks: 16
+    same-type-only: true
+    rebuild-debounce-seconds: 3
+```
+
+- **radius-blocks** — how far members can be from each other
+- **same-type-only** — only matching mob keys form a cluster
+- **rebuild-debounce-seconds** — delay before membership rebuild after place/break
+
+## Player commands
+
+```text
+/3ts cluster
+/clusters
+```
+
+Permissions:
+
+- `3tspawner.cluster.use` — open menus
+- `3tspawner.cluster.create` — participate in formation
+- `3tspawner.cluster.upgrade` — buy upgrades for the cluster
+
+## Shared pools
+
+Members contribute production into one storage and XP pool. Upgrades apply to the cluster as a whole. Effective storage capacity multiplies with total stack count (same rules as virtual stacks).
+
+## Disable for a preset
+
+Skyblock/prison style often turns clusters off:
+
+```yaml title="presets/skyblock-prison.yml"
+modes:
+  cluster:
+    enabled: false
+```
+
+Apply with `/3ts admin preset apply skyblock-prison`.

@@ -1,0 +1,100 @@
+---
+title: 'Commands'
+description: '3TSpawner player commands, admin commands, GUI roots, and permissions.'
+---
+
+Root command defaults to `/3ts` with aliases `3tspawner`, `tspawner`, and `spawners`. Change `commands.primary` / `aliases` in `config.yml`, then **restart** the server — `/3ts reload` does not re-register command roots.
+
+## Player commands
+
+| Command | Permission | Description |
+| --- | --- | --- |
+| `/3ts` | `3tspawner.use` | Open the main hub / help. |
+| `/3ts help` | `3tspawner.use` | Show help. |
+| `/3ts virtual` | `3tspawner.virtual` | Open virtual spawners. |
+| `/3ts storage` | `3tspawner.storage` | Open storage browser. |
+| `/3ts sell [confirm]` | `3tspawner.sell` | Sell stored loot. |
+| `/3ts collect` | `3tspawner.collect` | Collect stored loot into inventory. |
+| `/3ts shop` | `3tspawner.shop` | Open the spawner shop. |
+| `/3ts settings` | `3tspawner.settings` | Player preferences (sell confirm, labels). |
+| `/3ts cluster` | `3tspawner.cluster.use` | Open cluster menus. |
+| `/3ts friends` | `3tspawner.friends` | Manage trusted friends (USE / MANAGE). |
+
+## Dedicated GUI roots
+
+Configured under `commands.gui-roots` (restart required to change):
+
+| Root (default) | Opens |
+| --- | --- |
+| `/vspawners`, `/vspawner` | Virtual spawners |
+| `/clusters`, `/spawnerclusters` | Clusters |
+| `/spawnershop` | Spawner shop |
+
+Set any root list to `[]` to disable it.
+
+## Admin commands
+
+| Command | Permission | Description |
+| --- | --- | --- |
+| `/3ts reload` | `3tspawner.admin.reload` | Reload safe config sections. |
+| `/3ts give <player> <mob> [amount]` | `3tspawner.admin.give` | Give physical spawner items. |
+| `/3ts givevirtual <player> <mob> [amount]` | `3tspawner.admin.give` | Give virtual spawner counts. |
+| `/3ts inspect [player\|location\|id]` | `3tspawner.admin.inspect` | Inspect spawners. |
+| `/3ts backup create` | `3tspawner.admin.backup` | Create a backup. |
+| `/3ts migrate …` | `3tspawner.admin.migrate` | Migration tools (**beta**). |
+| `/3ts benchmark production\|storage\|cluster` | `3tspawner.admin.benchmark` | Run benchmarks. |
+| `/3ts doctor` | `3tspawner.admin.doctor` | Diagnostics. |
+| `/3ts integrations` | `3tspawner.admin.integrations` | Integration status. |
+| `/3ts debug production` | `3tspawner.admin.debug` | Debug production. |
+| `/3ts admin` / `/3ts admin menu` | `3tspawner.admin` | Admin hub. |
+| `/3ts admin preset list\|apply <name>` | `3tspawner.admin.preset` | List or apply balance presets. |
+
+Migration subcommands: `scan`, `dryrun <source>`, `apply <source>`, `export`, `rollback`, `cancel`.
+
+## Permissions
+
+### Player
+
+| Permission | Default | Description |
+| --- | --- | --- |
+| `3tspawner.use` | true | Basic commands |
+| `3tspawner.menu` | true | Open menus |
+| `3tspawner.virtual` | true | Virtual features |
+| `3tspawner.place` | true | Place physical spawners |
+| `3tspawner.break` | true | Break owned physical spawners |
+| `3tspawner.stack` | true | Stack physical spawners |
+| `3tspawner.cluster.use` | true | Open cluster menus |
+| `3tspawner.cluster.create` | true | Participate in cluster formation |
+| `3tspawner.cluster.upgrade` | true | Upgrade cluster spawners |
+| `3tspawner.storage` | true | Open storage |
+| `3tspawner.sell` | true | Sell loot |
+| `3tspawner.collect` | true | Collect loot |
+| `3tspawner.shop` | true | Open shop |
+| `3tspawner.settings` | true | Settings menu |
+| `3tspawner.friends` | true | Friends / trusted access |
+| `3tspawner.autosell` | false | **5% sell payout bonus** (not automatic selling) |
+
+### Limits and bypass
+
+| Permission | Default | Description |
+| --- | --- | --- |
+| `3tspawner.limit.stack.vip` | false | VIP physical stack limit (`permissions.yml`) |
+| `3tspawner.limit.virtual.vip` | false | VIP virtual limit |
+| `3tspawner.bypass.limits` | op | Bypass spawner limits |
+| `3tspawner.bypass.protection` | op | Bypass external protection checks |
+
+### Admin
+
+| Permission | Default | Description |
+| --- | --- | --- |
+| `3tspawner.admin` | op | Full admin (includes children below) |
+| `3tspawner.admin.reload` | op | Reload |
+| `3tspawner.admin.give` | op | Give spawners |
+| `3tspawner.admin.inspect` | op | Inspect |
+| `3tspawner.admin.backup` | op | Backup |
+| `3tspawner.admin.doctor` | op | Doctor |
+| `3tspawner.admin.integrations` | op | Integrations |
+| `3tspawner.admin.debug` | op | Debug |
+| `3tspawner.admin.benchmark` | op | Benchmark |
+| `3tspawner.admin.migrate` | op | Migration |
+| `3tspawner.admin.preset` | op | Presets |

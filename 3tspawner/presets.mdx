@@ -1,0 +1,58 @@
+---
+title: 'Presets'
+description: 'Balance presets: casual-smp, skyblock-prison, competitive-economy, showcase.'
+---
+
+Presets are YAML overlays under `plugins/3TSpawner/presets/`. Apply them with:
+
+```text
+/3ts admin preset list
+/3ts admin preset apply <name>
+```
+
+Permission: `3tspawner.admin.preset`
+
+## casual-smp
+
+Softer offline progress and slower production buckets — good default for survival / SMP economies.
+
+- Offline max duration `240` minutes, multiplier `0.20`
+- Production tick every `8` seconds, `16` buckets
+- Virtual limit `150`
+
+## skyblock-prison
+
+Virtual-heavy, clusters off, faster ticks for gen-style servers.
+
+- `modes.cluster.enabled: false`
+- Offline max `120` minutes, multiplier `0.50`
+- Tick every `3` seconds, `24` buckets
+- Virtual limit `500`
+
+## competitive-economy
+
+Tighter chunk limits and steeper upgrade costs.
+
+- Chunk spawner limit `64`
+- Virtual limit `200`
+- Offline multiplier `0.25`
+- Speed upgrade base `25000`, growth `1.50`
+
+## showcase
+
+Fast demo timings for recordings and PlugDev showcases — **not** a production economy balance.
+
+- All three modes enabled
+- Tick every `2` seconds
+- Short offline window (`60` minutes)
+
+<Warning>
+Showcase (and any Spark / MSPT figures from a demo world) are for demos only. Real server load depends on hardware, plugins, player count, and your config. A published showcase figure around **~1.3% MSPT** is not a guarantee for your production network.
+</Warning>
+
+## After applying
+
+1. Review `config.yml` / economy / limits for your brand
+2. Tune mob prices and loot sell prices
+3. Run `/3ts doctor`
+4. Test place → produce → sell on staging

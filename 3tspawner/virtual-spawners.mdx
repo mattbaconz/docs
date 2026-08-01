@@ -1,0 +1,44 @@
+---
+title: 'Virtual spawners'
+description: 'Virtual spawner list, merge-same-type, and player limits.'
+---
+
+Virtual spawners produce without placing a block. They are ideal for skyblock, gens, and players who want capacity without chunk clutter.
+
+## Open the GUI
+
+```text
+/3ts virtual
+/vspawners
+```
+
+Permission: `3tspawner.virtual`
+
+## Merge same type
+
+```yaml title="config.yml"
+modes:
+  virtual:
+    enabled: true
+    merge-same-type: true
+```
+
+When enabled, shop buys, admin gives, and migrations increment the count on an existing row for that mob instead of creating duplicate rows.
+
+## Limits
+
+- `limits.per-player-virtual-limit` (default `250`)
+- VIP override via `3tspawner.limit.virtual.vip` and `permissions.yml`
+- Bypass with `3tspawner.bypass.limits`
+
+## Give virtual spawners
+
+```text
+/3ts givevirtual <player> <mob> [amount]
+```
+
+Requires `3tspawner.admin.give`.
+
+## Storage and upgrades
+
+Each virtual row has its own storage, XP, and upgrade levels. Capacity scales with stack count and storage upgrades — see [Storage and sell](/3tspawner/storage-and-sell) and [Upgrades](/3tspawner/upgrades).
