@@ -51,11 +51,12 @@ limits:
 ```yaml title="config.yml"
 license_key: "YOUR_KEY_HERE"
 license:
-  verify_on_startup: true
   grace_hours: 72
   recheck_hours: 24
   debug: false
 ```
+
+Verification always runs on startup. There is no config switch to skip it. Grace applies only when the verify API is unreachable after a prior successful check for that key.
 
 ## Economy and prices
 
