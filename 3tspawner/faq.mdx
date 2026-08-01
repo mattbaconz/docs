@@ -7,7 +7,7 @@ description: 'License, Folia, migration, performance claims, and common question
 
 ### Do I need a license key?
 
-Yes for paid builds. Set `license_key` in `config.yml`. Claim product id **`3TSPAWNER`** in Discord (`/claim 3TSPAWNER`), then paste the key.
+Yes for paid builds. Set `license_key` in `config.yml`. Claim product id **`3TSPAWNER`** in Discord (`/claim 3TSPAWNER`), then paste the key. Verification always runs on startup — there is no config option to skip it.
 
 ### What if the license API is down?
 
@@ -21,7 +21,7 @@ With a previously successful verify cached, `license.grace_hours` (default `72`)
 
 ### Does 3TSpawner support Folia?
 
-**Experimental / beta.** The plugin is Folia-aware and declares support, but do not advertise or rely on Folia as production-stable until you soak-test your own setup.
+**Yes.** `folia-supported: true` and a region-safe scheduler facade. Paper, Purpur, and Folia are supported targets for `1.20.6`–`26.x` (Java 21+). Use `/3ts doctor` to confirm Folia detection on your host.
 
 ### Paper / Purpur versions?
 
