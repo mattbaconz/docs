@@ -1,6 +1,6 @@
 ---
 title: 'Commands'
-description: 'Rep player commands, admin commands, and permissions.'
+description: 'Rep player commands, admin commands, Pro commands, and permissions.'
 ---
 
 The main command is `/rep` (alias `/reputation`). Most player commands require `rep.use`. Admin commands require `rep.admin`.
@@ -17,6 +17,8 @@ The main command is `/rep` (alias `/reputation`). Most player commands require `
 | `/rep check <player>` | `rep.use` | Yes | Show another player's score and rank. |
 | `/rep top` | `rep.use` | Yes | Open the leaderboard GUI (players) or print top players (console). |
 | `/rep rewards` | `rep.use` | No | Open the rank rewards viewer GUI. |
+| `/rep history` | `rep.use` | Yes | Open evidence GUI (players) or print a short dump (console). Pro, evidence on. |
+| `/rep history <player>` | `rep.use` | Yes | Evidence for another player. |
 | `/rep help` | `rep.use` | Yes | Open the help GUI (players) or print help text (console). |
 | `/rep info` | none | Yes | Show plugin version and stats. |
 | `/rep stats` | none | Yes | Alias for `info`. |
@@ -34,13 +36,49 @@ Player commands respect cooldowns (`cooldowns` in config) and world restrictions
 | `/rep remove <player> <amount>` | `rep.admin` | Yes | Alias for `add` — subtracts the given amount. |
 | `/rep take <player> <amount>` | `rep.admin` | Yes | Alias for `add` with a negative amount. |
 | `/rep reset <player>` | `rep.admin` | Yes | Reset a player to `general.default-score`. |
+| `/rep seed` | `rep.admin` | Yes | Seed demo players and evidence rows (local / showcase). |
+
+## Pro commands
+
+These commands require **Rep Pro** with a valid license and the relevant feature enabled in `pro-settings`.
+
+### Evidence
+
+| Command | Permission | Console | Description |
+| --- | --- | --- | --- |
+| `/rep history [player]` | `rep.use` | Yes | Evidence GUI / chat dump. |
+
+Requires `pro-settings.trust.evidence-enabled: true`. See [Pro evidence](/rep/pro-evidence).
+
+### Redis sync
+
+| Command | Permission | Console | Description |
+| --- | --- | --- | --- |
+| `/rep redis flush` | `rep.admin.redissync` | Yes | Flush local reputation cache and broadcast invalidation to all connected servers. |
+| `/rep sync flush` | `rep.admin.redissync` | Yes | Alias for `/rep redis flush`. |
+
+Requires `pro-settings.redis-sync: true`. See [Pro Redis sync](/rep/pro-redis).
+
+### Seasons
+
+| Command | Permission | Console | Description |
+| --- | --- | --- | --- |
+| `/rep season info` | `rep.use` | Yes | Show the active season name, time remaining, and settings. |
+| `/rep season top` | `rep.use` | Yes | Show the top players for the current season. |
+| `/rep season start` | `rep.admin` | Yes | Start a new season manually. |
+| `/rep season end` | `rep.admin` | Yes | End the current season early (runs wipe or carry-over). |
+| `/rep season archive` | `rep.admin` | Yes | Archive season results without starting the next season. |
+
+Requires `pro-settings.seasons-enabled: true`. See [Pro seasons](/rep/pro-seasons).
 
 ## Permissions
 
 | Permission | Default | Description |
 | --- | --- | --- |
 | `rep.use` | `true` | Use player-facing reputation commands and GUIs. |
-| `rep.admin` | `op` | Use `reload`, `set`, `add`, `remove`, `take`, and `reset`. |
+| `rep.admin` | `op` | Use `reload`, `set`, `add`, `remove`, `take`, `reset`, and season admin commands (`start`, `end`, `archive`). |
+| `rep.pro` | `false` | Informational node for Rep Pro features. Pro features are gated by license key, not this permission alone. |
+| `rep.admin.redissync` | `op` | Use `/rep redis flush` and `/rep sync flush`. |
 
 ## Common setup workflow
 

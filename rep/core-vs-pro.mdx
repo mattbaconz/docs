@@ -1,0 +1,75 @@
+---
+title: 'Core vs Pro'
+description: 'Compare Rep Core and Rep Pro — trust infrastructure vs the free score.'
+---
+
+Rep comes in two editions: **Core** (free) and **Pro** (paid). Both share the same reputation commands, GUIs, ranks, events, and PlaceholderAPI score/rank placeholders. **+/- gameplay is not paywalled.**
+
+Pro is the **trust layer**: evidence, anti-farm, trust tiers. Redis and seasons prove it still works on a network. The web dashboard is optional and off by default.
+
+## Feature comparison
+
+| Feature | Core | Pro |
+| :-- | :---: | :---: |
+| **Profile, leaderboard, help, rewards GUIs** | ✅ | ✅ |
+| **Player-given rep (`plus` / `minus`)** | ✅ | ✅ |
+| **Automatic event rep (kills, trades, taming, etc.)** | ✅ | ✅ |
+| **Per-mob rep** | ✅ | ✅ |
+| **Feeding mechanic** | ✅ | ✅ |
+| **Rank tiers, sounds, particles, rewards** | ✅ | ✅ |
+| **PlaceholderAPI (`%rep_score%`, `%rep_rank%`, etc.)** | ✅ | ✅ |
+| **YAML storage** | ✅ | ✅ |
+| **MySQL shared database** | ✅ | ✅ |
+| **Folia support** | ✅ | ✅ |
+| **Cooldowns and daily caps** | ✅ | ✅ |
+| **Evidence history (`/rep history`)** | ❌ | ✅ |
+| **Anti-farm (reciprocal + unique hourly)** | ❌ | ✅ |
+| **Trust tiers + on-enter commands** | ❌ | ✅ |
+| **`%rep_trust_tier%` / `%rep_trust_tier_id%`** | ❌ | ✅ |
+| **Redis cache invalidation** | ❌ | ✅ |
+| **Reputation seasons** | ❌ | ✅ |
+| **Web dashboard (off by default)** | ❌ | ✅ |
+| **Discord season webhooks** | ❌ | ✅ |
+| **License key required** | ❌ | ✅ |
+
+## When Core is enough
+
+Rep Core is the right choice for:
+
+- A single Paper or Folia server using YAML storage
+- A network that shares one MySQL database and can tolerate a short cache TTL between score updates
+- Servers that only need a score, ranks, and +/- GUIs — not an audit trail
+
+Core MySQL keeps reputation **data** consistent across backends. Each server still holds a local cache; changes made on one server may not appear on another until that cache refreshes.
+
+## When you need Pro
+
+Rep Pro is for servers where reputation **gates something** (trade, ranks, trust):
+
+- **Evidence** — staff can open `/rep history` instead of arguing about `/rep check`
+- **Anti-farm** — blocks A +repping B after B recently +repped A; caps unique +rep targets per hour. This is **not** alt detection
+- **Trust tiers** — score bands with console commands on enter (LuckPerms examples ship in config)
+- **Live sync** (optional) — Redis pub/sub invalidates local caches when any server changes a score, on top of shared MySQL
+- **Seasons** (optional) — timed boards with wipe or carry-over
+
+Pro requires a valid `REP_PRO` license key. See [Rep Pro](/rep/pro) for setup and pricing.
+
+## Download
+
+| Edition | Where to get it |
+| --- | --- |
+| **Core** | [Modrinth](https://modrinth.com/plugin/r3p/versions) or [SpigotMC](https://www.spigotmc.org/resources/rep-the-modern-reputation-system-folia-1-21-support.130238/) |
+| **Pro** | BuiltByBit (Rep Pro) — **$9.99** |
+
+<Warning>
+Install **one** JAR per server: `Rep-PRO-*.jar` **or** `Rep-*.jar`. Never both.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Rep Pro overview" icon="star" href="/rep/pro">
+    License setup, pricing, and the trust wedge.
+  </Card>
+  <Card title="Installation" icon="download" href="/rep/installation">
+    Install Core or Pro and configure storage.
+  </Card>
+</CardGroup>

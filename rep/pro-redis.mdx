@@ -1,0 +1,88 @@
+---
+title: 'Pro Redis sync'
+description: 'Cross-server cache invalidation for Rep Pro with shared MySQL and Redis.'
+---
+
+Rep Pro **Redis sync** is **network proof**, not the reason to buy. Buy Pro for [evidence](/rep/pro-evidence), [anti-farm](/rep/pro-anti-farm), and [trust tiers](/rep/pro-trust-tiers). Use Redis when those scores must stay cache-fresh across backends.
+
+It keeps reputation scores consistent across a multi-server network in near real time. It does not replace MySQL — both are required.
+
+## Requirements
+
+- **Rep Pro** with a valid `REP_PRO` license key
+- **Shared MySQL** on every backend (`storage.method: mysql`, same database)
+- **Redis** reachable from every backend
+- `pro-settings.redis-sync: true`
+
+<Note>
+Core MySQL alone shares reputation data but each server caches records locally. Redis sync invalidates those caches instantly when any server changes a score. See [Installation](/rep/installation) for the difference.
+</Note>
+
+## How it works
+
+Redis sync uses a **cache invalidation** model — not full payload replication.
+
+1. All servers read and write reputation through **shared MySQL** (source of truth).
+2. Each server keeps a **local in-memory cache** of player records for performance.
+3. When any server changes a player's score, it:
+   - Writes the update to MySQL
+   - Publishes an **invalidation message** on a Redis pub/sub channel
+4. Other servers receive the message, drop that player from their local cache, and fetch fresh data from MySQL on the next access.
+
+Rep does **not** send score payloads over Redis. Only a lightweight "this UUID changed" signal is published. This keeps messages small and avoids race conditions between servers.
+
+```
+Server A                    Redis                    Server B
+   |                          |                          |
+   |-- score change --------->|                          |
+   |-- write MySQL            |                          |
+   |-- publish INVALIDATE --->|-- invalidate UUID ------->|
+   |                          |                   drop cache
+   |                          |              next read -> MySQL
+```
+
+## Configuration
+
+```yaml title="plugins/Rep/config.yml"
+pro-settings:
+  license-key: "YOUR_KEY_HERE"
+  redis-sync: true
+  redis:
+    host: localhost
+    port: 6379
+    password: ""
+```
+
+| Key | Description |
+| --- | --- |
+| `redis-sync` | Enable Redis pub/sub invalidation |
+| `redis.host` | Redis hostname |
+| `redis.port` | Redis port (default `6379`) |
+| `redis.password` | Password, or empty if none |
+
+Point every Rep Pro backend at the **same** MySQL database and **same** Redis instance.
+
+## Manual cache flush
+
+If caches drift or you need a full refresh after maintenance:
+
+```text
+/rep redis flush
+/rep sync flush
+```
+
+Both commands require `rep.admin.redissync`. They flush the local cache on the executing server and broadcast invalidation to all connected backends.
+
+## Troubleshooting
+
+| Symptom | Check |
+| --- | --- |
+| Scores stale on other servers | Confirm `redis-sync: true`, Redis is reachable, and all servers use the same MySQL database |
+| Redis errors in console | Verify `redis.host`, `redis.port`, and `redis.password` |
+| Flush has no effect | Confirm the command sender has `rep.admin.redissync` and Redis sync is enabled |
+
+## Related pages
+
+- [Rep Pro](/rep/pro) — license and overview
+- [Installation](/rep/installation) — MySQL setup and Core vs Pro storage notes
+- [Commands](/rep/commands) — `/rep redis flush` permission details

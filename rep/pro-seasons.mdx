@@ -1,0 +1,91 @@
+---
+title: 'Pro seasons'
+description: 'Reputation seasons for Rep Pro — lifecycle, archives, wipe vs carry-over, and Discord webhooks.'
+---
+
+**Reputation seasons** let you run timed competitive periods with their own leaderboards. This is **network proof**, not the Pro hero feature. Evidence, anti-farm, and trust tiers are the reason to buy.
+
+Requires **Rep Pro** with a valid license and `pro-settings.seasons-enabled: true` (off by default).
+
+## Configuration
+
+```yaml title="plugins/Rep/config.yml"
+pro-settings:
+  license-key: "YOUR_KEY_HERE"
+  seasons-enabled: true
+  seasons:
+    auto-start: true
+    duration-days: 30
+    on-end: wipe   # wipe | carry-over
+    carry-over-percent: 0
+    start-score: 0
+    discord-webhook: ""
+```
+
+| Key | Description |
+| --- | --- |
+| `auto-start` | Start the first season automatically when the server boots |
+| `duration-days` | Length of each season in real-world days |
+| `on-end` | `wipe` resets all scores to `start-score`; `carry-over` keeps a percentage |
+| `carry-over-percent` | Percentage of each player's score kept when `on-end` is `carry-over` (0–100) |
+| `start-score` | Score assigned after a wipe, or the baseline after carry-over is applied |
+| `discord-webhook` | Discord webhook URL for season-end announcements (leave empty to disable) |
+
+### Wipe vs carry-over
+
+**Wipe** — every player's reputation resets to `start-score` when the season ends. Best for clean competitive resets.
+
+**Carry-over** — each player keeps `carry-over-percent` of their current score (rounded), then the season restarts. Use this for softer resets where veterans retain some standing.
+
+Example with `carry-over-percent: 25` and `start-score: 0`: a player with 400 rep ends the season with 100 rep.
+
+## Season lifecycle
+
+1. **Start** — a season is created with a unique ID and display name. `auto-start: true` begins the first season on boot; admins can also run `/rep season start`.
+2. **Active play** — all reputation changes count toward both the player's overall score and their **season score**.
+3. **End** — when `duration-days` elapses or an admin runs `/rep season end`, Rep applies `wipe` or `carry-over`, archives results, and optionally sends a Discord webhook.
+4. **Archive** — season standings are stored for history. Admins can archive without immediately starting the next season via `/rep season archive`.
+5. **Next season** — after end (or manual start), a new season begins with a fresh ID and timer.
+
+## Commands
+
+| Command | Permission | Description |
+| --- | --- | --- |
+| `/rep season info` | `rep.use` | Show active season name, ID, time remaining, and settings |
+| `/rep season top` | `rep.use` | Print the current season leaderboard |
+| `/rep season start` | `rep.admin` | Start a new season manually |
+| `/rep season end` | `rep.admin` | End the current season early |
+| `/rep season archive` | `rep.admin` | Archive season results without starting the next season |
+
+See [Commands](/rep/commands) for the full command reference.
+
+## PlaceholderAPI
+
+Season placeholders are available when seasons are enabled:
+
+| Placeholder | Description |
+| --- | --- |
+| `%rep_season%` | Active season display name |
+| `%rep_season_id%` | Active season numeric ID |
+| `%rep_season_score%` | Player's score for the current season |
+| `%rep_season_rank%` | Player's position on the season leaderboard |
+
+```text
+/papi parse me %rep_season%
+/papi parse me %rep_season_score%
+/papi parse me %rep_season_rank%
+```
+
+See [Placeholders](/rep/placeholders) for the full list.
+
+## Discord webhook
+
+When `seasons.discord-webhook` is set, Rep sends an embed to Discord when a season ends. The message typically includes the season name, duration, and top players.
+
+Leave the webhook URL empty to disable Discord notifications.
+
+## Related pages
+
+- [Rep Pro](/rep/pro) — license and overview
+- [Pro web dashboard](/rep/pro-dashboard) — browser view of season stats
+- [Configuration](/rep/configuration) — full `pro-settings` reference

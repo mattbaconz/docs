@@ -1,9 +1,11 @@
 ---
 title: 'Rep'
-description: 'Player reputation scores, ranks, GUI, automatic events, and PlaceholderAPI for Paper and Folia servers.'
+description: 'Player reputation for Paper and Folia. Core is the score. Pro adds evidence, anti-farm, and trust tiers.'
 ---
 
 **Rep** is a reputation system for Minecraft servers. Players earn scores from other players and in-game actions, climb configurable rank tiers, and see their standing in GUIs, chat, and the tab list.
+
+Rep ships in two editions: **Rep Core** (free) and **Rep Pro** (paid). Core covers the full reputation experience on one server or across a network with shared MySQL. Pro adds **evidence, anti-farm, and trust tiers**. Redis cache invalidation and seasons are network extras. The web dashboard is optional and off by default.
 
 ## What Rep does
 
@@ -13,15 +15,40 @@ description: 'Player reputation scores, ranks, GUI, automatic events, and Placeh
 - **Feeding mechanic** to give rep by right-clicking another player with food
 - **Rank tiers** with chat/tab prefixes, sounds, particles, and rank-up rewards
 - **Leaderboard** GUI and text output for top players
-- **PlaceholderAPI** placeholders for score, rank, and prefix
+- **PlaceholderAPI** placeholders for score, rank, prefix, and (Pro) trust tier
 - **Storage** in YAML or MySQL for single-server or multi-server setups
+
+<Card title="Core vs Pro" icon="scale-balanced" href="/rep/core-vs-pro">
+  Compare free Core with Pro trust infrastructure (evidence, anti-farm, tiers).
+</Card>
 
 ## Compatibility
 
 Rep supports **Paper/Purpur/Folia 1.21–26.x** and requires **Java 21+**.
 
+## Download
+
+### Rep Core (free)
+
+<CardGroup cols={2}>
+  <Card title="Modrinth" icon="download" href="https://modrinth.com/plugin/r3p/versions">
+    Download Rep Core from Modrinth.
+  </Card>
+  <Card title="SpigotMC" icon="download" href="https://www.spigotmc.org/resources/rep-the-modern-reputation-system-folia-1-21-support.130238/">
+    Download Rep Core from SpigotMC.
+  </Card>
+</CardGroup>
+
+### Rep Pro (paid)
+
+<CardGroup cols={1}>
+  <Card title="BuiltByBit (Rep Pro)" icon="download" href="#">
+    Purchase Rep Pro on BuiltByBit. ($9.99)
+  </Card>
+</CardGroup>
+
 <Note>
-A Pro edition with network sync is planned but not released yet. These docs cover the current free release.
+Rep Pro requires a license key in `pro-settings.license-key`. The license product id is `REP_PRO`. Claim your key in the [support Discord](https://discord.com/invite/VQjTVKjs46) after purchase.
 </Note>
 
 ## Quick commands
@@ -32,13 +59,20 @@ A Pro edition with network sync is planned but not released yet. These docs cove
 /rep check
 /rep top
 /rep rewards
+/rep history
 ```
 
 ## Documentation sections
 
 <CardGroup cols={2}>
   <Card title="Installation" icon="download" href="/rep/installation">
-    Install Rep, configure storage, and run your first checks.
+    Install Rep Core or Pro, configure storage, and run your first checks.
+  </Card>
+  <Card title="Core vs Pro" icon="scale-balanced" href="/rep/core-vs-pro">
+    Feature comparison between the free and paid editions.
+  </Card>
+  <Card title="Rep Pro" icon="star" href="/rep/pro">
+    Evidence, anti-farm, trust tiers. Redis and seasons are secondary.
   </Card>
   <Card title="Ranks & thresholds" icon="layer-group" href="/rep/ranks">
     How score thresholds assign ranks, with worked examples.
@@ -50,9 +84,12 @@ A Pro edition with network sync is planned but not released yet. These docs cove
     Player and admin commands with permissions.
   </Card>
   <Card title="Placeholders" icon="brackets-curly" href="/rep/placeholders">
-    PlaceholderAPI values for score, rank, and prefix.
+    PlaceholderAPI values for score, rank, prefix, trust tier, and seasons.
   </Card>
   <Card title="Features" icon="star" href="/rep/features">
-    Gameplay mechanics: GUIs, events, feeding, and rewards.
+    Core gameplay mechanics: GUIs, events, feeding, and rewards.
+  </Card>
+  <Card title="Integrations" icon="puzzle-piece" href="/rep/integrations">
+  InteractiveChat hover tooltips and other third-party plugins.
   </Card>
 </CardGroup>

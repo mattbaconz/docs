@@ -1,9 +1,13 @@
 ---
 title: 'Features'
-description: 'Player-facing reputation mechanics in Rep.'
+description: 'Player-facing reputation mechanics in Rep Core.'
 ---
 
-This page covers how Rep behaves in gameplay. For config keys, see [Configuration](/rep/configuration). For rank tier logic, see [Ranks & thresholds](/rep/ranks).
+This page covers how Rep Core behaves in gameplay. For config keys, see [Configuration](/rep/configuration). For rank tier logic, see [Ranks & thresholds](/rep/ranks).
+
+<Note>
+Rep Pro adds **evidence**, **anti-farm**, and **trust tiers** on top of everything below. Redis, seasons, and an optional dashboard are secondary. See [Rep Pro](/rep/pro) and [Core vs Pro](/rep/core-vs-pro).
+</Note>
 
 ## Giving and receiving reputation
 
@@ -113,10 +117,31 @@ language:
 
 Available locales include `en_US`, `es_ES`, `de_DE`, `fr_FR`, `zh_CN`, `ja_JP`, `pt_BR`, and `ru_RU`.
 
-## MySQL for multi-server setups
+## Shared MySQL for multi-server setups
 
-The free release supports MySQL storage so multiple servers can share one reputation database. Set `storage.method: mysql` on each instance and point them at the same database. See [Installation](/rep/installation) for connection settings.
+Rep Core supports MySQL storage so multiple servers can share one reputation database. Set `storage.method: mysql` on each instance and point them at the same database. See [Installation](/rep/installation) for connection settings.
+
+Shared MySQL keeps reputation **data** consistent across backends. Each server still caches player records locally, so a score change on one server may not show on another until that cache refreshes (`storage.mysql.cache-ttl-seconds`).
+
+For cache-safe live sync — instant invalidation when any server mutates a score — use **Rep Pro Redis sync**. See [Pro Redis sync](/rep/pro-redis).
 
 ## GUIs
 
 Rep includes profile, leaderboard, help, and rewards GUIs. Customize titles, border materials, items, and pagination under the `gui` section in [Configuration](/rep/configuration).
+
+## Rep Pro features
+
+<CardGroup cols={2}>
+  <Card title="Evidence" icon="scroll" href="/rep/pro-evidence">
+    Who changed whom, when, and why — `/rep history`.
+  </Card>
+  <Card title="Anti-farm" icon="shield" href="/rep/pro-anti-farm">
+    Reciprocal +/+ block and hourly unique-receiver cap.
+  </Card>
+  <Card title="Trust tiers" icon="award" href="/rep/pro-trust-tiers">
+    Score bands with console commands on enter.
+  </Card>
+  <Card title="Rep Pro overview" icon="star" href="/rep/pro">
+    License, pricing, Redis, seasons, optional dashboard.
+  </Card>
+</CardGroup>

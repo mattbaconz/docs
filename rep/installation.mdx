@@ -1,24 +1,78 @@
 ---
 title: 'Installation'
-description: 'Install Rep on Paper or Folia and configure storage.'
+description: 'Install Rep Core or Rep Pro on Paper or Folia and configure storage.'
 ---
 
 ## Requirements
 
 - **Server software**: Paper, Purpur, or Folia **1.21–26.x**
 - **Java**: Java 21 or newer
-- **Optional**: PlaceholderAPI for score, rank, and prefix placeholders
+- **Optional**: PlaceholderAPI for score, rank, prefix, and (Pro) trust-tier placeholders
 
-## Install Rep
+## Rep Core vs Rep Pro
+
+Rep ships as two separate JARs. Install **one** edition per server — do not run both at the same time.
+
+| Edition | JAR name | Current version | Download |
+| --- | --- | --- | --- |
+| **Rep Core** (free) | `Rep-1.3.0.jar` | **1.3.0** | [Modrinth](https://modrinth.com/plugin/r3p/versions) or [SpigotMC](https://www.spigotmc.org/resources/rep-the-modern-reputation-system-folia-1-21-support.130238/) |
+| **Rep Pro** (paid) | `Rep-PRO-1.0.0.jar` | **1.0.0** | BuiltByBit (Rep Pro) |
+
+Core and Pro use **independent** version numbers. Pro is not “1.3.0 Pro” — it starts its own 1.x line.
+
+Both editions use the same `plugins/Rep/` data folder and `config.yml`. Rep Pro includes everything in Core plus premium features gated by a valid license key.
+
+<Warning>
+Do not place both `Rep-<version>.jar` and `Rep-PRO-<version>.jar` in the same `plugins` folder. Pick one edition per server instance.
+</Warning>
+
+## Install Rep Core
 
 1. Stop your server.
-2. Place the Rep JAR in the `plugins` folder.
+2. Place `Rep-<version>.jar` in the `plugins` folder.
 3. Start the server once so Rep generates its config files.
 4. Stop the server again.
 5. Open `plugins/Rep/config.yml` and adjust settings (see [Configuration](/rep/configuration)).
 6. Start the server.
 
+## Install Rep Pro
+
+1. Stop your server.
+2. Place `Rep-PRO-<version>.jar` in the `plugins` folder.
+3. Start the server once so Rep generates its config files.
+4. Stop the server again.
+5. Open `plugins/Rep/config.yml`.
+6. Set your license key under `pro-settings.license-key` (see below).
+7. Confirm trust settings (`evidence-enabled`, `anti-farm-enabled`, `trust-tiers-enabled`) — they default **on**.
+8. Optionally enable `redis-sync` or `seasons-enabled`. Leave `web-dashboard-enabled` off unless you want local HTTP ops.
+9. Start the server.
+
 Rep creates `config.yml` and `messages.yml` under `plugins/Rep/`. Language files are stored in `plugins/Rep/lang/`.
+
+## Rep Pro license
+
+Paid Rep Pro builds require a license key in `pro-settings.license-key`. The license product id is `REP_PRO`.
+
+```yaml title="plugins/Rep/config.yml"
+pro-settings:
+  license-key: "MATT-XXXX-XXXX"
+  drm:
+    enabled: true
+```
+
+### Claim your license
+
+1. Purchase Rep Pro on BuiltByBit (Rep Pro).
+2. Join the [support Discord](https://discord.com/invite/VQjTVKjs46).
+3. Claim your `REP_PRO` license key.
+4. Paste the key into `pro-settings.license-key`.
+5. Restart the server.
+
+If Rep cannot verify the key, Pro features stay disabled. Check the console log and confirm the key is present, valid, and claimed for the `REP_PRO` product.
+
+<Card title="Join Discord" icon="discord" href="https://discord.com/invite/VQjTVKjs46">
+  Claim your Rep Pro license key and get support.
+</Card>
 
 ## First-run checklist
 
@@ -43,6 +97,7 @@ ranks:
 - Review `ranks` thresholds — see [Ranks & thresholds](/rep/ranks) for how assignment works.
 - Set `reputation-amounts.plus` and `minus` for player-given rep.
 - Remove example worlds from `world-restrictions.worlds` if you use blacklist mode.
+- **Pro only**: confirm `pro-settings.license-key` is set. Evidence, anti-farm, and trust tiers default on. Redis, seasons, and the dashboard stay off until you enable them.
 
 ## Storage
 
@@ -53,9 +108,9 @@ storage:
   method: yaml
 ```
 
-Reputation data is stored in `plugins/Rep/data/`. This is the simplest option for a single server.
+Reputation data is stored in `plugins/Rep/playerdata/`. Evidence (Pro) is stored in `plugins/Rep/evidence.yml`. This is the simplest option for a single server.
 
-### MySQL (multi-server)
+### MySQL (shared database)
 
 Use MySQL when multiple servers should share the same reputation database:
 
@@ -75,6 +130,10 @@ storage:
 - Point every Rep instance at the same database.
 - `cache-ttl-seconds` controls how often each server refreshes from the database. Use **30–60** on networks; use **0** on a single server for always-fresh reads.
 
+<Note>
+Shared MySQL gives every server the same reputation **data**, but each instance still caches player records locally. For cache-safe live sync across servers — so score changes on one backend are visible on others without waiting for the MySQL TTL — use **Rep Pro Redis sync**. See [Pro Redis sync](/rep/pro-redis).
+</Note>
+
 ## First checks
 
 After startup, run these commands:
@@ -83,6 +142,7 @@ After startup, run these commands:
 /rep info
 /rep check
 /rep top
+/rep history
 ```
 
 If PlaceholderAPI is installed, test a placeholder:
@@ -90,7 +150,3 @@ If PlaceholderAPI is installed, test a placeholder:
 ```text
 /papi parse me %rep_score%
 ```
-
-<Card title="Join Discord" icon="discord" href="https://discord.com/invite/VQjTVKjs46">
-  Get support and plugin updates.
-</Card>

@@ -1,0 +1,52 @@
+---
+title: 'Pro trust tiers'
+description: 'Score bands with consequence commands in Rep Pro.'
+---
+
+**Trust tiers** are score bands, not cosmetics. When a player's score **enters** a tier, Rep runs the console commands you listed (`{player}` is replaced).
+
+The current tier shows on the profile info book and as `%rep_trust_tier%` / `%rep_trust_tier_id%`.
+
+Requires **Rep Pro** with a valid license and `pro-settings.trust.trust-tiers-enabled: true` (default on).
+
+## Default bands
+
+| Id | Name | Min score | Example on-enter |
+| --- | --- | --- | --- |
+| `untrusted` | Untrusted | -50 | `lp user {player} permission set trade.restricted true` |
+| `neutral` | Neutral | 0 | (none) |
+| `trusted` | Trusted | 100 | unset trade.restricted |
+| `vetted` | Vetted | 250 | `lp user {player} permission set trade.priority true` |
+
+LuckPerms lines are **examples**. Edit or delete them. Wrong nodes fail at the console. LuckPerms is not a soft-depend.
+
+## Config
+
+```yaml title="plugins/Rep/config.yml"
+pro-settings:
+  trust:
+    trust-tiers-enabled: true
+    tiers:
+      trusted:
+        name: Trusted
+        min-score: 100
+        on-enter-commands:
+          - "lp user {player} permission unset trade.restricted"
+```
+
+Commands run as console when the player **crosses into** that band.
+
+## Placeholders
+
+| Placeholder | Value |
+| --- | --- |
+| `%rep_trust_tier%` | Display name |
+| `%rep_trust_tier_id%` | Config id (`trusted`, `vetted`, …) |
+
+Empty on Core or when tiers are off.
+
+## Related
+
+- [Placeholders](/rep/placeholders)
+- [Evidence](/rep/pro-evidence)
+- [Configuration](/rep/configuration)

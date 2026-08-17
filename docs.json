@@ -164,6 +164,9 @@
             "group": "Pro",
             "pages": [
               "rep/pro",
+              "rep/pro-evidence",
+              "rep/pro-anti-farm",
+              "rep/pro-trust-tiers",
               "rep/pro-redis",
               "rep/pro-seasons",
               "rep/pro-dashboard"

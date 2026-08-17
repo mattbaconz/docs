@@ -1,0 +1,44 @@
+---
+title: 'Pro anti-farm'
+description: 'Reciprocal +/+ block and hourly unique-receiver cap in Rep Pro.'
+---
+
+Core already has **cooldowns** and **daily caps**. That stops spam. It does not stop two players trading +rep back and forth.
+
+Pro anti-farm sits **on top** of those rules:
+
+1. **Pair block** — if B recently gave +rep to A, A cannot +rep B yet (default 24 hours / `reciprocal-block-seconds: 86400`)
+2. **Hourly cap** — max distinct +rep targets per giver per rolling hour (default 5)
+
+Blocked attempts play the fail sound and send a one-line chat reason.
+
+Requires **Rep Pro** with a valid license and `pro-settings.trust.anti-farm-enabled: true` (default on). Evidence should stay on so pair history exists.
+
+## Chat lines
+
+| Reason | Message |
+| --- | --- |
+| Reciprocal | `Anti-farm blocked that +rep. They recently +repped you.` |
+| Unique hourly | `Anti-farm blocked that +rep. Hourly unique-player cap reached.` |
+
+## Config
+
+```yaml title="plugins/Rep/config.yml"
+pro-settings:
+  trust:
+    anti-farm-enabled: true
+    reciprocal-block-seconds: 86400
+    unique-receivers-per-hour: 5
+```
+
+Set a value to `0` to disable that rule.
+
+## What it is not
+
+Anti-farm does **not** identify alts. Someone can still rotate enough accounts. It blocks the obvious +/+ bounce and caps how many different people you can +rep per hour.
+
+## Related
+
+- [Evidence](/rep/pro-evidence)
+- [Trust tiers](/rep/pro-trust-tiers)
+- [Configuration](/rep/configuration)

@@ -1,0 +1,41 @@
+---
+title: 'Pro evidence'
+description: 'Append-only +/- history in Rep Pro — /rep history GUI.'
+---
+
+**Evidence** is an append-only log of reputation changes. Every qualifying +/- write can store who, whom, amount, reason, and time.
+
+Requires **Rep Pro** with a valid license and `pro-settings.trust.evidence-enabled: true` (default on).
+
+## Open it
+
+| Command | Who |
+| --- | --- |
+| `/rep history` | Your evidence |
+| `/rep history <player>` | Another player's evidence |
+
+Players also get a **History** button on self and target profile GUIs when evidence is on.
+
+Rows are green for + and red for −. Lore shows From, To, Reason, and When.
+
+## Config
+
+```yaml title="plugins/Rep/config.yml"
+pro-settings:
+  trust:
+    evidence-enabled: true
+    evidence-history-limit: 50
+```
+
+| Key | Description |
+| --- | --- |
+| `evidence-enabled` | Append evidence on +/- writes |
+| `evidence-history-limit` | Max rows shown / stored window (default 50) |
+
+Storage uses the same YAML or MySQL provider as Core. YAML writes `plugins/Rep/evidence.yml`.
+
+## Related
+
+- [Anti-farm](/rep/pro-anti-farm) — uses evidence rows to decide reciprocal blocks
+- [Commands](/rep/commands)
+- [Configuration](/rep/configuration)

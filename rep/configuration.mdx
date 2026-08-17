@@ -233,3 +233,97 @@ storage:
 ```
 
 See [Installation](/rep/installation) for MySQL multi-server setup.
+
+## Pro settings
+
+Rep Pro features are configured under `pro-settings`. They require a valid `REP_PRO` license key — see [Rep Pro](/rep/pro) for claiming and activation.
+
+```yaml title="pro-settings"
+pro-settings:
+  license-key: ""
+  drm:
+    enabled: true
+  redis-sync: false
+  redis:
+    host: localhost
+    port: 6379
+    password: ""
+  seasons-enabled: false
+  seasons:
+    auto-start: true
+    duration-days: 30
+    on-end: wipe   # wipe | carry-over
+    carry-over-percent: 0
+    start-score: 0
+    discord-webhook: ""
+  web-dashboard-enabled: false
+  web-dashboard:
+    bind: 127.0.0.1
+    port: 8765
+    token: ""
+    allow-writes: false
+  trust:
+    evidence-enabled: true
+    evidence-history-limit: 50
+    anti-farm-enabled: true
+    reciprocal-block-seconds: 86400
+    unique-receivers-per-hour: 5
+    trust-tiers-enabled: true
+```
+
+### License key
+
+| Key | Description |
+| --- | --- |
+| `license-key` | Your `REP_PRO` license key. Claim via [Discord](https://discord.com/invite/VQjTVKjs46) after purchase. |
+| `drm.enabled` | `true` (production) verifies the key online. `false` unlocks Pro locally — PlugDev / BBB demo only. |
+
+### Trust (evidence / anti-farm / tiers)
+
+| Key | Description |
+| --- | --- |
+| `trust.evidence-enabled` | Append +/- rows for `/rep history` |
+| `trust.evidence-history-limit` | Max evidence rows (default 50) |
+| `trust.anti-farm-enabled` | Reciprocal block + unique hourly cap |
+| `trust.reciprocal-block-seconds` | Window where A cannot +rep B after B +repped A (default 86400) |
+| `trust.unique-receivers-per-hour` | Max distinct +rep targets per hour (default 5; `0` = unlimited) |
+| `trust.trust-tiers-enabled` | Score-band tiers with `on-enter-commands` |
+
+See [Pro evidence](/rep/pro-evidence), [Pro anti-farm](/rep/pro-anti-farm), and [Pro trust tiers](/rep/pro-trust-tiers).
+
+### Redis sync
+
+| Key | Description |
+| --- | --- |
+| `redis-sync` | Enable cross-server cache invalidation via Redis pub/sub. Requires shared MySQL on all backends. |
+| `redis.host` | Redis server hostname |
+| `redis.port` | Redis server port (default `6379`) |
+| `redis.password` | Redis password, or empty string if none |
+
+See [Pro Redis sync](/rep/pro-redis) for architecture and setup.
+
+### Seasons
+
+| Key | Description |
+| --- | --- |
+| `seasons-enabled` | Enable reputation seasons |
+| `seasons.auto-start` | Start the first season automatically on server boot |
+| `seasons.duration-days` | Length of each season in days |
+| `seasons.on-end` | What happens when a season ends: `wipe` (reset scores) or `carry-over` (keep a percentage) |
+| `seasons.carry-over-percent` | Percentage of score kept when `on-end` is `carry-over` (0–100) |
+| `seasons.start-score` | Starting score for players after a wipe or carry-over |
+| `seasons.discord-webhook` | Discord webhook URL for season-end announcements |
+
+See [Pro seasons](/rep/pro-seasons) for lifecycle, commands, and placeholders.
+
+### Web dashboard
+
+| Key | Description |
+| --- | --- |
+| `web-dashboard-enabled` | Start the built-in HTTP dashboard |
+| `web-dashboard.bind` | IP address to bind (default `127.0.0.1` — keep local unless you add a reverse proxy) |
+| `web-dashboard.port` | HTTP port (default `8765`) |
+| `web-dashboard.token` | Bearer token required in the `Authorization` header |
+| `web-dashboard.allow-writes` | Allow score mutations via the API (default `false`) |
+
+See [Pro web dashboard](/rep/pro-dashboard) for pages and security notes.

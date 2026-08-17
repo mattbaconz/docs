@@ -1,9 +1,11 @@
 ---
 title: 'Placeholders'
-description: 'PlaceholderAPI values exposed by Rep.'
+description: 'PlaceholderAPI values exposed by Rep Core and Rep Pro.'
 ---
 
-Rep registers a `rep` PlaceholderAPI expansion when PlaceholderAPI is installed. All placeholders require an online player context.
+Rep registers a `rep` PlaceholderAPI expansion when PlaceholderAPI is installed.
+
+Placeholders resolve against an **online** `Player` when possible. Rep also supports `OfflinePlayer` targets when that player's data is already in the local cache (for example after they have joined the server or been loaded by an admin command). If data is not cached, placeholders return an empty string until the record is loaded.
 
 ## Score placeholders
 
@@ -23,6 +25,30 @@ Rep registers a `rep` PlaceholderAPI expansion when PlaceholderAPI is installed.
 | `%rep_prefix%` | Rank chat prefix with color codes |
 
 Rank values follow the [score threshold rules](/rep/ranks) in config.
+
+## Trust tier placeholders (Pro)
+
+Available when **Rep Pro** is licensed and `pro-settings.trust.trust-tiers-enabled` is true.
+
+| Placeholder | Description |
+| --- | --- |
+| `%rep_trust_tier%` | Current trust tier display name |
+| `%rep_trust_tier_id%` | Current trust tier config id |
+
+See [Pro trust tiers](/rep/pro-trust-tiers).
+
+## Season placeholders (Pro)
+
+Available when **Rep Pro** is licensed and `pro-settings.seasons-enabled` is true.
+
+| Placeholder | Description |
+| --- | --- |
+| `%rep_season%` | Active season display name |
+| `%rep_season_id%` | Active season numeric ID |
+| `%rep_season_score%` | Player's score for the current season |
+| `%rep_season_rank%` | Player's rank position on the current season leaderboard |
+
+See [Pro seasons](/rep/pro-seasons) for season lifecycle and commands.
 
 ## Compact formatting
 
@@ -52,8 +78,16 @@ placeholders:
 /papi parse me %rep_prefix%
 ```
 
+For Pro season placeholders:
+
+```text
+/papi parse me %rep_season%
+/papi parse me %rep_season_score%
+```
+
 ## Common uses
 
 - Scoreboard plugins: `%rep_score%` or `%rep_score_compact%`
 - Chat format plugins: `%rep_prefix%` before the player name
 - Tab list plugins: `%rep_rank%` next to the player name
+- InteractiveChat player hover: `%rep_score%` and `%rep_rank%` — see [Integrations](/rep/integrations)

@@ -1,0 +1,107 @@
+---
+title: 'Rep Pro'
+description: 'Paid Rep edition — evidence, anti-farm, and trust tiers. Redis and seasons for networks.'
+---
+
+**Rep Pro** is the paid edition of Rep. Lead: **reputation you can actually trust**.
+
+The Pro JAR includes everything in [Rep Core](/rep/features). The license unlocks:
+
+1. **Evidence** — who changed whom, when, why
+2. **Anti-farm** — reciprocal +/+ block and hourly unique-receiver cap
+3. **Trust tiers** — score bands with console commands on enter
+
+Redis cache invalidation and reputation seasons are **network proof**, not the reason to buy. The optional web dashboard stays **off by default**.
+
+Current release: **Rep Pro 1.0.0** (Core remains on **1.3.0** with separate versioning).
+
+## Price and download
+
+Rep Pro is **$9.99** on BuiltByBit. Listing URL is added when the resource is live.
+
+<Card title="BuiltByBit (Rep Pro)" icon="download" href="#">
+  Purchase Rep Pro on BuiltByBit.
+</Card>
+
+The Pro JAR is named `Rep-PRO-<version>.jar`. Do not install it alongside the free `Rep-<version>.jar` on the same server.
+
+## License
+
+Rep Pro requires a license key in `pro-settings.license-key`. The product id is **`REP_PRO`**.
+
+```yaml title="plugins/Rep/config.yml"
+pro-settings:
+  license-key: "MATT-XXXX-XXXX"
+  drm:
+    enabled: true
+```
+
+<Note>
+Paid builds require a Rep Pro license key. Verification POSTs to `https://matt-drm.vercel.app/api/verify` with a hardware id (up to 5 servers per key). Network or invalid key **fails closed**: Pro features stay off. Core +/- still loads.
+</Note>
+
+### Claim your key
+
+1. Purchase Rep Pro on BuiltByBit.
+2. Join the [support Discord](https://discord.com/invite/VQjTVKjs46).
+3. Claim your `REP_PRO` license with `/claim`.
+4. Paste the generated key into `pro-settings.license-key`.
+5. Restart the server.
+
+Do **not** ship `drm.enabled: false` on a public server. That flag is for local PlugDev / BBB demo packs only.
+
+## Trust wedge
+
+<CardGroup cols={2}>
+  <Card title="Evidence" icon="scroll" href="/rep/pro-evidence">
+    Append-only +/- history in `/rep history`.
+  </Card>
+  <Card title="Anti-farm" icon="shield" href="/rep/pro-anti-farm">
+    Reciprocal pair block and hourly unique-receiver cap.
+  </Card>
+  <Card title="Trust tiers" icon="award" href="/rep/pro-trust-tiers">
+    Score bands with consequence commands on enter.
+  </Card>
+  <Card title="Core vs Pro" icon="scale-balanced" href="/rep/core-vs-pro">
+    What stays free vs what the license unlocks.
+  </Card>
+</CardGroup>
+
+## Network (secondary)
+
+<CardGroup cols={2}>
+  <Card title="Redis sync" icon="server" href="/rep/pro-redis">
+    Cache invalidation across servers with shared MySQL.
+  </Card>
+  <Card title="Seasons" icon="calendar" href="/rep/pro-seasons">
+    Timed boards, wipe or carry-over, optional Discord webhook.
+  </Card>
+</CardGroup>
+
+## Optional dashboard (off by default)
+
+A local JDK HTTP ops tool exists for staff who want it. Bind defaults to `127.0.0.1:8765`. Empty token refuses all requests. This is **not** a cloud product. See [Pro web dashboard](/rep/pro-dashboard).
+
+## Quick Pro config
+
+```yaml title="pro-settings excerpt"
+pro-settings:
+  license-key: "YOUR_KEY_HERE"
+  drm:
+    enabled: true
+  redis-sync: false
+  seasons-enabled: false
+  web-dashboard-enabled: false
+  trust:
+    evidence-enabled: true
+    anti-farm-enabled: true
+    trust-tiers-enabled: true
+```
+
+See [Configuration](/rep/configuration) for every Pro setting.
+
+## Related pages
+
+- [Installation](/rep/installation) — JAR names, license setup, MySQL
+- [Commands](/rep/commands) — `/rep history`, seasons, Redis flush
+- [Placeholders](/rep/placeholders) — `%rep_trust_tier%` and season values

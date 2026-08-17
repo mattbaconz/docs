@@ -1,0 +1,77 @@
+---
+title: 'Integrations'
+description: 'Third-party plugin integrations for Rep placeholders.'
+---
+
+Rep exposes reputation data through PlaceholderAPI. Most chat and UI plugins that support PAPI can display scores and ranks without a direct Rep dependency.
+
+Rep does **not** need a soft-dependency on third-party plugins. Install PlaceholderAPI and the integration plugin separately; Rep registers its expansion automatically when PAPI is present.
+
+## InteractiveChat
+
+[InteractiveChat](https://hangar.papermc.io/LOOHP/InteractiveChat) parses PlaceholderAPI placeholders in player-name hover tooltips. Add Rep lines to `Player.Hover.Text` in `plugins/InteractiveChat/config.yml`:
+
+```yaml title="plugins/InteractiveChat/config.yml"
+Player:
+  UsePlayerNameInteraction: true
+  Hover:
+    Enable: true
+    Text:
+      - '&aWorld: &7%player_world%'
+      - '&cHealth: %player_health_rounded%&7/%player_max_health_rounded%'
+      - '&6Rep: &f%rep_score% &7(%rep_rank%)'
+```
+
+Placeholders resolve against the **hovered player** (the name being moused over), not the chat viewer.
+
+After editing the config, run `/ic reload` or restart the server.
+
+### Verify
+
+```text
+/papi parse <player> %rep_score%
+/papi parse <player> %rep_rank%
+```
+
+If placeholders show literally (e.g. `%rep_score%`), confirm PlaceholderAPI and Rep are loaded, then run `/papi reload`.
+
+### Notes
+
+- InteractiveChat only matches **online** player names in chat. Offline names do not get hover tooltips.
+- Rep reads **cached** player data. If a hovered player is online but not yet cached, placeholders may return empty until their record loads.
+- InteractiveChat processes chat on async threads. If an expansion misbehaves off-thread, set `Settings.ParsePAPIOnMainThread: true` in the InteractiveChat config.
+
+No Rep code changes or soft-depend on InteractiveChat is required — PAPI is enough.
+
+## DeluxeChat
+
+DeluxeChat supports PlaceholderAPI in chat formats and tooltip fields. Use `%rep_score%`, `%rep_rank%`, or `%rep_prefix%` in any DeluxeChat placeholder slot that passes through PAPI.
+
+For player-name tooltips, check your DeluxeChat format's `name_tooltip` (or equivalent) field and add rep lines the same way you would in InteractiveChat:
+
+```yaml
+name_tooltip:
+  - '&7Reputation: &f%rep_score%'
+  - '&7Rank: %rep_rank%'
+```
+
+Exact key names depend on your DeluxeChat version and format file layout.
+
+## Other PlaceholderAPI consumers
+
+Any plugin that resolves PAPI placeholders works with Rep:
+
+| Use case | Suggested placeholders |
+| --- | --- |
+| Scoreboard | `%rep_score%` or `%rep_score_compact%` |
+| Chat prefix | `%rep_prefix%` |
+| Tab list suffix | `%rep_rank%` |
+| Season display (Pro) | `%rep_season%`, `%rep_season_score%`, `%rep_season_rank%` |
+| Trust tier (Pro) | `%rep_trust_tier%`, `%rep_trust_tier_id%` |
+
+See [Placeholders](/rep/placeholders) for the full list.
+
+## Related pages
+
+- [Placeholders](/rep/placeholders) — every Rep PAPI value
+- [Features](/rep/features) — Core reputation mechanics

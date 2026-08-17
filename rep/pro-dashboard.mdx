@@ -1,0 +1,80 @@
+---
+title: 'Pro web dashboard'
+description: 'Built-in HTTP dashboard for Rep Pro — top players, lookup, season stats, and health.'
+---
+
+Rep Pro includes a lightweight **web dashboard** served by an embedded HTTP server. It is an **optional ops tool**, off by default. Buy Pro for evidence, anti-farm, and trust tiers — not this.
+
+Requires **Rep Pro** with a valid license and `pro-settings.web-dashboard-enabled: true`.
+
+## Configuration
+
+```yaml title="plugins/Rep/config.yml"
+pro-settings:
+  license-key: "YOUR_KEY_HERE"
+  web-dashboard-enabled: true
+  web-dashboard:
+    bind: 127.0.0.1
+    port: 8765
+    token: ""
+    allow-writes: false
+```
+
+| Key | Description |
+| --- | --- |
+| `bind` | IP address the HTTP server listens on |
+| `port` | HTTP port (default `8765`) |
+| `token` | Secret token required in API requests |
+| `allow-writes` | Allow score mutations via the API (default `false`) |
+
+## Security
+
+<Warning>
+Bind to `127.0.0.1` unless you are placing a reverse proxy with authentication in front of the dashboard. Exposing the dashboard on `0.0.0.0` without a proxy lets anyone on the network reach your reputation data.
+</Warning>
+
+- Set a strong `token` before enabling the dashboard in production.
+- Pass the token in the `Authorization` header as `Bearer <token>` on every request.
+- Keep `allow-writes: false` unless you explicitly need remote score edits. Read-only mode is the safe default.
+
+For remote access, run a reverse proxy (nginx, Caddy, etc.) with TLS and authentication, and keep `bind: 127.0.0.1`.
+
+## Pages and endpoints
+
+Open `/` with a valid token for the HTML ops dashboard (Pro version, Redis status, season id, Top 10, season card).
+
+JSON API routes:
+
+| Route | Description |
+| --- | --- |
+| `/api/health` | Server health and plugin status |
+| `/api/top` | Top players by overall reputation score |
+| `/api/player` | Look up a player by `uuid` or `name` query |
+| `/api/season` | Active season info (when seasons are enabled) |
+| `/api/admin/set\|add\|reset` | Write endpoints (only when `allow-writes: true`) |
+
+Exact response shapes may vary by version. Use `/api/health` first to confirm the dashboard is running.
+
+## Example access
+
+With default settings and `token: "my-secret-token"`:
+
+```text
+curl -H "Authorization: Bearer my-secret-token" http://127.0.0.1:8765/api/top
+curl -H "Authorization: Bearer my-secret-token" http://127.0.0.1:8765/api/health
+curl -H "Authorization: Bearer my-secret-token" "http://127.0.0.1:8765/?token=my-secret-token"
+```
+
+Open `http://127.0.0.1:8765/?token=my-secret-token` in a browser for the HTML dashboard.
+
+## Write access
+
+When `allow-writes: true`, the dashboard accepts score mutation requests (set/add) via the API. This is intended for trusted admin tooling only.
+
+Leave `allow-writes: false` on production networks unless you have a specific integration that needs it.
+
+## Related pages
+
+- [Rep Pro](/rep/pro) — license and overview
+- [Pro seasons](/rep/pro-seasons) — season data shown on the dashboard
+- [Configuration](/rep/configuration) — full `pro-settings` reference
