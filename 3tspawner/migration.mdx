@@ -1,0 +1,71 @@
+---
+title: 'Migration'
+description: 'Import vanilla spawners, JSON/CSV plans, and SmartSpawner data into 3TSpawner.'
+---
+
+Migration tools are **beta**. Always run `/3ts backup create` (or let `apply` create its own backup) before you write data.
+
+Permission: `3tspawner.admin.migrate`
+
+## Commands
+
+```text
+/3ts migrate scan [world] [--owner <player>]
+/3ts migrate dryrun <json|csv|scan|smartspawner> [file] [--force] [--owner <player>]
+/3ts migrate apply <json|csv|scan|smartspawner> [file] [--force] [--owner <player>]
+/3ts migrate export
+/3ts migrate rollback <runId> [--confirm]
+/3ts migrate cancel
+```
+
+`dryrun` never writes spawners. `apply` backs up the 3T database first when `migration.require-backup-on-apply` is true.
+
+## Workflow
+
+1. `/3ts backup create`
+2. Dry-run the source
+3. Read the report (warnings, skipped mobs, item-spawners)
+4. `apply` the same source
+5. Check one farm in-game
+6. Keep the run id for `rollback` if needed
+
+`--force` imports unknown mob types. `--owner` sets a fallback owner when a row has none.
+
+## Sources
+
+| Source | What it reads |
+| --- | --- |
+| `scan` | Vanilla `SPAWNER` blocks in loaded chunks that are not already in 3T |
+| `json` / `csv` | A 3T-shaped entry list (path under `plugins/3TSpawner/` unless absolute) |
+| `smartspawner` | SmartSpawner YAML or SQLite (see below) |
+
+CSV columns: `type,mode,owner_uuid,world,x,y,z,count`
+
+```csv
+type,mode,owner_uuid,world,x,y,z,count
+blaze,classic,550e8400-e29b-41d4-a716-446655440000,world,10,64,10,24
+cow,virtual,550e8400-e29b-41d4-a716-446655440000,,,,,50
+```
+
+## SmartSpawner
+
+Disable the SmartSpawner JAR but keep `plugins/SmartSpawner/` so 3T can read its files. Do not run both plugins on the same blocks.
+
+```text
+/3ts migrate dryrun smartspawner
+/3ts migrate apply smartspawner [--force] [--owner <player>]
+```
+
+Auto-detects `plugins/SmartSpawner/`. Pass a folder, `spawners_data.yml`, or `spawners.db` if the data was moved.
+
+Imported as **physical** spawners: location, mob, stack, stored items, XP. Owner comes from `lastInteractedPlayer`, else `--owner`.
+
+Skipped or warned:
+
+- Item-spawners (`EntityType.ITEM`)
+- Damaged tools / tipped arrows (flattened to the base material)
+- Unknown mobs unless `--force`
+- Locations already in the 3T database
+- SmartSpawner MySQL/MariaDB (YAML and SQLite only)
+
+After a successful apply, verify one farm, then remove the SmartSpawner data folder.

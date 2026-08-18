@@ -1,6 +1,6 @@
 ---
 title: 'FAQ'
-description: 'License, Folia, migration, performance claims, and common questions.'
+description: 'License, Folia, shop toggle, SmartSpawner import, and common questions.'
 ---
 
 ## License
@@ -45,9 +45,17 @@ A **5% sell payout bonus**. It does **not** automatically sell storage.
 
 Yes — `commands.primary` and `aliases` in `config.yml`, then **full restart**.
 
+### Can I turn the shop off?
+
+Yes. Set `shop.enabled: false` in `config.yml`. The shop GUI, `/3ts shop`, `/spawnershop`, and purchases are blocked. Give spawners with `/3ts give` / `/3ts givevirtual` from a quest or crate plugin. See [Shop](/3tspawner/shop).
+
 ### Why does migration say beta?
 
-Migration tools (`/3ts migrate …`) are labeled **beta**. Always `/3ts backup create` before `apply`. Perfect imports depend on the source plugin.
+Migration tools (`/3ts migrate …`) are labeled **beta**. Always `/3ts backup create` before `apply`. See [Migration](/3tspawner/migration).
+
+### Can I import SmartSpawner?
+
+Yes. Disable the SmartSpawner JAR, keep `plugins/SmartSpawner/`, then `/3ts migrate dryrun smartspawner` and `apply`. YAML and SQLite are supported. MySQL SmartSpawner stores are not.
 
 ## Performance
 

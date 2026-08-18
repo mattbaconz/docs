@@ -1,6 +1,6 @@
 ---
 title: 'Shop'
-description: 'Dual physical and virtual catalog, search, sort, and auto-fill.'
+description: 'Dual physical and virtual catalog, auto-fill, or disable the shop for quest servers.'
 ---
 
 The shop sells spawner units for Vault currency. Open with:
@@ -10,7 +10,35 @@ The shop sells spawner units for Vault currency. Open with:
 /spawnershop
 ```
 
-Permission: `3tspawner.shop`
+Permission: `3tspawner.shop`. Also requires `shop.enabled: true` in `config.yml` (default).
+
+## Disable the shop
+
+Quest, crate, or key servers can turn the catalog off and give spawners from another plugin:
+
+```yaml title="config.yml"
+shop:
+  enabled: false
+```
+
+When `false`:
+
+- The main-menu Shop button is hidden
+- `/3ts shop` and purchases are blocked
+- `/spawnershop` is not registered (restart required after changing this)
+
+Give spawners from a quest plugin with console:
+
+```text
+/3ts give <player> zombie 1
+/3ts givevirtual <player> blaze 1
+```
+
+Requires `3tspawner.admin.give`.
+
+Changing `shop.enabled` or `commands.gui-roots` needs a **full restart** to unregister `/spawnershop`. `/3ts shop` is blocked after `/3ts reload`.
+
+You can keep `/3ts shop` and disable only `/spawnershop` with `commands.gui-roots.shop: []`. Empty shop roots stay empty.
 
 ## Default catalog
 
@@ -20,6 +48,7 @@ Shipped `shop.yml` lists **vanilla mobs only**, each with a **physical** and **v
 
 ```yaml title="config.yml"
 shop:
+  enabled: true
   auto-fill-mobs: true
   auto-fill-modes: [physical, virtual]
   hide-disabled-modes: true

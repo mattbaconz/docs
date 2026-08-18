@@ -3,7 +3,7 @@ title: 'Configuration'
 description: 'Overview of config.yml and split YAML files shipped with 3TSpawner.'
 ---
 
-On first boot, 3TSpawner writes files under `plugins/3TSpawner/`. Most edits apply after `/3ts reload`. **Command root changes** (`commands.primary`, `aliases`, `gui-roots`) need a full server restart.
+On first boot, 3TSpawner writes files under `plugins/3TSpawner/`. Most edits apply after `/3ts reload`. **Command root changes** (`commands.primary`, `aliases`, `gui-roots`) and toggling `shop.enabled` need a full server restart to register or unregister dedicated roots.
 
 ## Core files
 
@@ -75,6 +75,19 @@ Default is SQLite (`data.db`). Switch `database.type` to `mysql` and fill host/c
 ## Localization
 
 Set `locale.default` or force one language with `locale.force` in `config.yml`. Client language is auto-detected when `force` is blank.
+
+## Shop
+
+```yaml title="config.yml"
+shop:
+  enabled: true   # false: hide shop, block /3ts shop, skip /spawnershop
+  auto-fill-mobs: true
+  auto-fill-modes: [physical, virtual]
+  hide-disabled-modes: true
+  max-purchase-amount: 64
+```
+
+Set `enabled: false` when spawners come from quests or crates. See [Shop](/3tspawner/shop).
 
 ## White-label tips
 

@@ -15,7 +15,7 @@ Root command defaults to `/3ts` with aliases `3tspawner`, `tspawner`, and `spawn
 | `/3ts storage` | `3tspawner.storage` | Open storage browser. |
 | `/3ts sell [confirm]` | `3tspawner.sell` | Sell stored loot. |
 | `/3ts collect` | `3tspawner.collect` | Collect stored loot into inventory. |
-| `/3ts shop` | `3tspawner.shop` | Open the spawner shop. |
+| `/3ts shop` | `3tspawner.shop` | Open the spawner shop (`shop.enabled` must be true). |
 | `/3ts settings` | `3tspawner.settings` | Player preferences (sell confirm, labels). |
 | `/3ts cluster` | `3tspawner.cluster.use` | Open cluster menus. |
 | `/3ts friends` | `3tspawner.friends` | Manage trusted friends (USE / MANAGE). |
@@ -28,20 +28,20 @@ Configured under `commands.gui-roots` (restart required to change):
 | --- | --- |
 | `/vspawners`, `/vspawner` | Virtual spawners |
 | `/clusters`, `/spawnerclusters` | Clusters |
-| `/spawnershop` | Spawner shop |
+| `/spawnershop` | Spawner shop (`shop.enabled` and a non-empty `gui-roots.shop` list) |
 
-Set any root list to `[]` to disable it.
+Set any root list to `[]` to disable that dedicated command. Empty `shop` roots stay empty (they are not restored to `/spawnershop`). `shop.enabled: false` also skips `/spawnershop` even if roots are listed.
 
 ## Admin commands
 
 | Command | Permission | Description |
 | --- | --- | --- |
 | `/3ts reload` | `3tspawner.admin.reload` | Reload safe config sections. |
-| `/3ts give <player> <mob> [amount]` | `3tspawner.admin.give` | Give physical spawner items. |
+| `/3ts give <player> <mob> [amount]` | `3tspawner.admin.give` | Give physical spawner items (quest/crate rewards). |
 | `/3ts givevirtual <player> <mob> [amount]` | `3tspawner.admin.give` | Give virtual spawner counts. |
 | `/3ts inspect [player\|location\|id]` | `3tspawner.admin.inspect` | Inspect spawners. |
 | `/3ts backup create` | `3tspawner.admin.backup` | Create a backup. |
-| `/3ts migrate …` | `3tspawner.admin.migrate` | Migration tools (**beta**). |
+| `/3ts migrate …` | `3tspawner.admin.migrate` | Migration tools (**beta**). See [Migration](/3tspawner/migration). |
 | `/3ts benchmark production\|storage\|cluster` | `3tspawner.admin.benchmark` | Run benchmarks. |
 | `/3ts doctor` | `3tspawner.admin.doctor` | Diagnostics. |
 | `/3ts integrations` | `3tspawner.admin.integrations` | Integration status. |
@@ -49,7 +49,7 @@ Set any root list to `[]` to disable it.
 | `/3ts admin` / `/3ts admin menu` | `3tspawner.admin` | Admin hub. |
 | `/3ts admin preset list\|apply <name>` | `3tspawner.admin.preset` | List or apply balance presets. |
 
-Migration subcommands: `scan`, `dryrun <source>`, `apply <source>`, `export`, `rollback`, `cancel`.
+Migration subcommands: `scan`, `dryrun <json|csv|scan|smartspawner> [file]`, `apply <json|csv|scan|smartspawner> [file]`, `export`, `rollback`, `cancel`. Optional `--force` and `--owner <player>` on dryrun/apply.
 
 ## Permissions
 

@@ -190,6 +190,7 @@
             "pages": [
               "3tspawner/commands",
               "3tspawner/configuration",
+              "3tspawner/migration",
               "3tspawner/placeholders",
               "3tspawner/integrations"
             ]
