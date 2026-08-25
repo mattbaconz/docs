@@ -1,0 +1,129 @@
+---
+title: 'Configuration'
+description: 'Where Smply YAML lives, module flags, license, storage, and reload behavior.'
+---
+
+On first boot, Smply writes files under `plugins/Smply/`. Most edits apply after `/smply reload`. Storage engine and database credentials need a **full restart**.
+
+## Core files
+
+| File | Purpose |
+| --- | --- |
+| `config.yml` | License, `server_name`, active preset, module flags, storage |
+| `base.yml` | Spawn, homes, warps, TPA, RTP, rules, MOTD |
+| `heart.yml` | Starting / min / max hearts, withdraw, send, revive, death ban |
+| `economy.yml` | Vault provider, sell mode, prices, multipliers |
+| `combat.yml` | Tag, blocked commands, logout, bounties, PvP restrictions |
+| `auction.yml` | Listing fee, caps, duration, GUI title |
+| `shop.yml` | Categories and buy catalog |
+| `kits.yml` | Kit items, cooldowns, LuckPerms `group:` |
+| `quests.yml` | Daily / weekly objectives and reward commands |
+| `rewards.yml` | Daily, weekly, monthly, playtime, vote, streaks |
+| `hud.yml` | Sidebar lines and built-in tablist |
+| `gui.yml` | Style pack, catalog chrome slots, sell chest geometry, input mode |
+| `menus.yml` | Hub layout, aliases (`/hub`, `/menu`), travel GUIs |
+| `messages.yml` | MiniMessage chat and GUI strings |
+| `teleport.yml` | Warmup titles, action bars, bossbars, particles |
+| `integrations.yml` | Pledge broadcasts, season reset, Discord webhook |
+| `settings.yml` | Server Settings GUI pages |
+| `presets.yml` | Preset families and module lists |
+| `runtime-overrides.yml` | Live toggles from Server Settings (generated) |
+
+## Modules and license
+
+```yaml title="plugins/Smply/config.yml"
+version: 1
+locale: en_us
+active_preset: vanilla_plus
+server_name: "Smply"
+license_key: "YOUR_KEY_HERE"
+
+modules:
+  base: true
+  heart: false
+  market: false
+  combat: false
+  rewards: true
+  presets: true
+  profile: true
+  kits: false
+  leaderboards: true
+  hud: true
+  auction: false
+  shop: false
+  quests: false
+  chat: false
+```
+
+`server_name` is plain text, 1–32 characters. It shows in the hub title, HUD, and tablist (`{server_name}` / `%smply_server_name%`). Admins can set it from the admin GUI (Name Tag).
+
+Paid jars require `license_key`. Claim product id `SMPLY` in Discord. See [Installation](/smply/installation).
+
+Turning a module off in `config.yml` or Server Settings skips that feature. Listeners stay registered; they do not unregister. See [Troubleshooting](/smply/doctor).
+
+## Storage
+
+```yaml title="config.yml"
+storage:
+  type: sqlite
+  sqlite:
+    file: smply.db
+  mysql:
+    host: 127.0.0.1
+    port: 3306
+    database: smply
+    username: smply
+    password: ""
+```
+
+Set `storage.type` to `mysql` or `mariadb` for MySQL/MariaDB. Changing type or credentials requires a restart.
+
+## GUI chrome
+
+54-slot catalogs (auction, shop items, kits overflow, bounties, quests, leaderboard pages) share one control row from `gui.yml`:
+
+| Control | Default slot |
+| --- | --- |
+| Search | 0 (right-click clears) |
+| Sort | 2 |
+| Info | 4 |
+| Filter | 6 |
+| Reset | 8 |
+| Previous page | 45 |
+| Action (list / place) | 46 |
+| Back | 47 |
+| Next page | 53 |
+
+27-slot pickers (hub, shop categories, kit picker, leaderboard categories) keep **Back at slot 22**. They do not get search chrome.
+
+`gui.yml` `style` picks a pack: `mint`, `slate`, `lifesteal`, `economy`. Applying a preset with `gui_style` writes this once; your later `/smply reload` or edit wins.
+
+Search input is `gui.yml` `input.search`: `chat`, `anvil`, or `sign`. Floodgate Bedrock players use `input.bedrock` (default `sign`).
+
+## Homes and RTP (excerpt)
+
+```yaml title="base.yml"
+homes:
+  enabled: true
+  default_limit: 3
+  limits:
+    smply.homes.5: 5
+    smply.homes.10: 10
+
+rtp:
+  enabled: true
+  worlds:
+    world:
+      min_radius: 500
+      max_radius: 5000
+      cost: 0
+      cooldown_seconds: 300
+```
+
+## Reload vs restart
+
+Safe to reload: messages, GUI chrome, most thresholds, module flags, spawn/home/warp/RTP delays, `teleport.yml` presentation.
+
+Needs a restart: storage engine, database credentials, and deep integration startup.
+
+Command-mutating plugins (Essentials travel overlap) still need their own reload or restart after you disable those commands.

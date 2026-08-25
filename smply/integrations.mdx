@@ -1,0 +1,100 @@
+---
+title: 'Integrations'
+description: 'Vault, LuckPerms, TAB, PlaceholderAPI, claims, Stonkz, and Essentials coexistence.'
+---
+
+Smply boots without sibling plugins. Missing optionals show up in `/smply doctor` and `/smply status`. They do not crash the server.
+
+## Economy
+
+| Plugin | Role |
+| --- | --- |
+| Vault + an economy plugin | Paid `/sell`, shop, auction checkout, bounty charges, kill-reward money |
+| Stonkz | Live `/sell` and `/shop` prices when `market.price_source` is `stonkz` or `stonkz_then_yaml` |
+
+Without Vault, sell reports that no economy is available. Auction and shop cannot move money. Bounty **set is free**. With Vault, `/bounty set` withdraws first; cancel refunds unclaimed rows.
+
+`market.price_source` in `economy.yml`:
+
+| Value | Behavior |
+| --- | --- |
+| `yaml` | Static prices in `economy.yml` / `shop.yml` (default) |
+| `stonkz` | Live Stonkz prices for sell and shop |
+| `stonkz_then_yaml` | Stonkz when the item is tradeable, otherwise YAML |
+
+Auction listings keep the seller's ask. When Stonkz is present, listing lore can show market worth.
+
+## Permissions and kits
+
+| Plugin | Role |
+| --- | --- |
+| LuckPerms | Groups for rank kits (`group: vip` in `kits.yml`), home-limit nodes, chat ranks |
+
+Smply does not create LuckPerms groups. After a Lifesteal or Economy preset, set groups yourself. Example:
+
+```text
+/lp creategroup member
+/lp creategroup vip
+/lp group default parent add member
+/lp group member permission set smply.kit.starter true
+/lp group vip permission set smply.kit.vip true
+/lp group vip permission set smply.homes.5 true
+```
+
+When LuckPerms is installed, putting a player in `vip` is enough for the VIP kit. `smply.kit.vip` is the fallback when LuckPerms is missing. `/smply doctor` warns if LuckPerms is absent.
+
+## TAB and PlaceholderAPI
+
+| Plugin | Role |
+| --- | --- |
+| PlaceholderAPI | `%smply_*%` for TAB, chat, and scoreboards |
+| TAB | Full tablist. Smply skips its own header/footer when `tablist.defer_to_tab: true` (default) |
+
+Do not enable TAB's scoreboard if you want Smply's sidebar. Copy header/footer designs that use `%smply_server_name%` and `%smply_tab_stats%`. See [Placeholders](/smply/placeholders) and [HUD](/smply/hud).
+
+## Protection
+
+| Plugin | Role |
+| --- | --- |
+| WorldGuard, GriefPrevention, SimpleClaimSystem, Lands | Softdetect only. Doctor reports land protection. Smply does not install flags or make RTP claim-aware |
+| CoreProtect | Softdetect only. Smply does not write rollback logs |
+
+Missing claims is informational (`○ Land protection: none detected`). Griefable Lifesteal is a valid setup.
+
+## Essentials / CMI (economy only)
+
+Smply owns travel: `/spawn`, `/home`, `/warp`, `/rtp`, `/tpa`. Keep Essentials or CMI for **economy** if you want. There is no spawn/home/warp import.
+
+In `plugins/Essentials/config.yml`:
+
+```yaml
+disabled-commands:
+  - spawn
+  - setspawn
+  - home
+  - homes
+  - sethome
+  - delhome
+  - warp
+  - setwarp
+  - delwarp
+  - rtp
+  - tpa
+  - tpaccept
+  - tpdeny
+```
+
+Then `/essentials reload` (or restart).
+
+## SeasonManager and Pledge
+
+| Plugin | Role |
+| --- | --- |
+| SeasonManager | Optional season pairing. Run `/smply season reset` after a wipe. Smply is not the wipe plugin. `integrations.yml` can auto-run that reset when the season number changes |
+| Pledge | Hub **Goals** slot runs `/goals` when Pledge is installed. Optional broadcasts in `integrations.yml` |
+
+Glyph and Halt are detected for later suite work. They are **not released**. Do not install them for Smply.
+
+## Discord webhook
+
+Set `integrations.yml` `discord.webhook_url` for auction sold, bounty claimed, and doctor-fail pings. DiscordSRV is not required. Blank URL skips posts.

@@ -1,0 +1,44 @@
+---
+title: 'HUD'
+description: 'Sidebar scoreboard, built-in tablist, and TAB deferral.'
+---
+
+Smply can show a right-side sidebar and a built-in player-list header/footer. Both live in `hud.yml`. Players can toggle the sidebar from profile settings.
+
+<Frame>
+  <img src="/images/smply/thumb-hud.png" alt="Player HUD gallery card" />
+</Frame>
+
+## Sidebar
+
+The HUD module must be enabled (Vanilla+, Lifesteal, and Economy presets turn it on).
+
+- Lifesteal blueprint: hearts-first lines, no `$`
+- Economy blueprint: balance-first, farm → sell → shop
+- Vanilla+: mint `{server_name}`, no hearts
+
+Tokens in `hud.yml` lines include `{player}`, `{server_name}`, `{hearts}`, `{balance}`, `{bounty}`, `{daily_streak}`, `{kills}`, `{deaths}`, `{playtime_minutes}`, `{preset}`.
+
+Set `hud.use_placeholderapi: true` to mix `%placeholders%` after those tokens. Lines that mention `{hearts}`, `{bounty}`, or `{balance}` are omitted when that module or economy is off.
+
+Vanilla score numbers on the sidebar are hidden. Body labels use `<gray>` so they stay readable on the dark sidebar.
+
+Do not enable TAB's own scoreboard if you want this sidebar.
+
+## Tablist
+
+Without TAB, Smply draws MiniMessage header/footer from `hud.yml` → `tablist:`.
+
+With **TAB** installed, leave `tablist.defer_to_tab: true` (default). Smply skips its header/footer and you wire `%smply_*%` in TAB instead.
+
+Example footer line:
+
+```text
+%smply_tab_stats%
+```
+
+Use TAB's `%player%` for the viewer name. See [Placeholders](/smply/placeholders).
+
+## Profile toggles
+
+`/profile` (permission `smply.profile.settings`) lets each player turn the sidebar off, and can disable teleport titles/bossbar when `teleport.yml` `allow_player_disable` is true.

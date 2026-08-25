@@ -1,0 +1,60 @@
+---
+title: 'Hub and GUIs'
+description: 'Player hub, catalog chrome, and 27-slot pickers.'
+---
+
+Every player loop opens from one hub. After a preset, `/hub` (or `/smply menu`) is the menu players learn first.
+
+<Frame>
+  <img src="/images/smply/hub-hover.gif" alt="Hovering kits and warps on the Smply hub" />
+</Frame>
+
+The hub is 27 slots. Title uses `server_name` from `config.yml`. Hearts, sell, shop, auction, bounties, and quests hide when their modules are off.
+
+## What sits on the hub
+
+Typical tiles after Lifesteal or Economy:
+
+- Profile and personal settings (TPA, HUD)
+- Kits, rewards, quests, leaderboards
+- Travel: spawn, homes, warps, RTP, TPA
+- Market: sell, shop, auction
+- Hearts and bounties when those modules are on
+- Rules and help
+
+`/help` is a 27-slot command list. `/rules` is a 27-slot rules desk. `/profile` is stats plus toggles.
+
+## Catalog chrome (54-slot desks)
+
+Auction, shop items, kit overflow, bounties, quests, and leaderboard **pages** share the same controls:
+
+| Control | Slot | What it does |
+| --- | --- | --- |
+| Search | 0 | Type a query. Right-click clears. |
+| Sort | 2 | Cycle sort (name, price, newest, progress, depending on the desk). |
+| Info | 4 | Short how-to for that menu. |
+| Filter | 6 | Cycle filter (for example ALL / MINE / OTHERS on auction). |
+| Reset | 8 | Clear search, filter, and sort. |
+| Previous / next | 45 / 53 | Pages. Auction shows 28 listings per page. |
+| Action | 46 | List held item (auction) or Place bounty. Hidden on quests. |
+| Back | 47 | Return toward the hub. |
+
+Search matches material name, listing id, quest display/id, or bounty target name.
+
+## 27-slot pickers
+
+Shop categories, the kit picker, and leaderboard **categories** stay small: content on the middle row, **Back at slot 22**. They do not get search chrome.
+
+<Frame>
+  <img src="/images/smply/tpa.gif" alt="TPA player picker" />
+</Frame>
+
+Travel GUIs (`/homes`, `/warps`, `/rtp`, `/tpa`) row-center their content. Incoming TPA can open an accept/deny menu for the target.
+
+## Style
+
+`gui.yml` `style` picks `mint`, `slate`, `lifesteal`, or `economy`. Lifesteal and Economy presets set this once. Change it in Server Settings (Display page) or YAML, then `/smply reload`.
+
+Search capture is chat, anvil, or sign (`gui.yml` `input.search`). Bedrock players use `input.bedrock` (default sign). Type `cancel` or leave empty to abort.
+
+Layout lives in `menus.yml`. See [Configuration](/smply/configuration) for slot maps.

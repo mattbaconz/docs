@@ -209,6 +209,41 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Smply",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "smply/index",
+              "smply/installation",
+              "smply/faq"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "smply/commands",
+              "smply/configuration",
+              "smply/placeholders",
+              "smply/integrations"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "smply/presets",
+              "smply/hub-and-guis",
+              "smply/lifesteal",
+              "smply/combat-and-bounties",
+              "smply/economy",
+              "smply/quests-and-rewards",
+              "smply/hud",
+              "smply/doctor"
+            ]
+          }
+        ]
       }
     ]
   }

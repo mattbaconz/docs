@@ -1,0 +1,61 @@
+---
+title: 'Presets'
+description: 'Vanilla+, Lifesteal, Economy, and how blueprint overlays merge.'
+---
+
+Fresh jars boot **Vanilla+** so you choose a niche instead of inheriting every module. Lifesteal and Economy merge an opinionated blueprint (HUD, combat, kits, prices), not only module toggles.
+
+<Frame>
+  <img src="/images/smply/thumb-preset-setup.png" alt="Preset setup gallery card" />
+</Frame>
+
+Apply from chat, console, `/smply setup`, or the admin desk:
+
+```text
+/smply preset lifesteal
+/smply preset economy_smp
+```
+
+Permission: `smply.preset.apply`
+
+## How apply works
+
+- **First apply** (or switching to a different blueprint) writes overlay keys.
+- **Reapply** of the same blueprint fills missing keys only. Your max hearts, HUD, kits, and shop edits stay.
+- `--modules-only` changes enabled modules and touches no YAML.
+- `--reset` restores official overlay values.
+
+```text
+/smply preset lifesteal --modules-only
+/smply preset lifesteal --reset
+```
+
+## Shipped presets
+
+| Preset | What you get |
+| --- | --- |
+| `vanilla_plus` | Default. Travel, rewards, profile, leaderboards, HUD. No hearts or market. |
+| `lifesteal` | Hearts, combat, kits, quests, hearts-first HUD. Crystal/totem/mace bans stay off. |
+| `lifesteal_hardcore` | Max 10 hearts, death ban on, crystals/totems/maces banned. |
+| `lifesteal_casual` | Withdraw on, shorter combat tag, logout-kill off. |
+| `economy_smp` | Sell, auction, shop, kits, quests, balance-first HUD. **Vault required** for money. |
+| `economy_shop` | Market without full PvP combat. |
+| `economy_pvp` | Market + combat, no auction. |
+| `boxsmp` | Same module set as Economy. Needs Vault. |
+| `creator_smp` | Lighter creator-facing set. Sibling plugins are optional. |
+| `full_suite` | Turns on every shipped module. Listed under Other in `/smply setup`. |
+
+`/smply setup` is a searchable 54-slot browser: family filter Vanilla / Lifesteal / Economy / Other, tag search, recommended sort.
+
+## Blueprint files
+
+| Preset | Overlay files | Opinionated defaults |
+| --- | --- | --- |
+| `lifesteal` | `heart.yml`, `combat.yml`, `hud.yml`, `kits.yml`, `quests.yml` | 10 starting / 20 max hearts; withdraw/send/revive on; death ban off; combat tag + logout-kill + bounties; hearts-first HUD; Lifesteal starter kit |
+| `economy_smp` | `economy.yml`, `combat.yml`, `hud.yml`, `shop.yml`, `auction.yml`, `kits.yml`, `quests.yml` | Crop sell prices; shop categories; 3% auction fee, 6 listings, 24h; farm → sell → shop HUD; hoe/seeds starter kit |
+
+Vanilla+ and Creator rewrite `hud.yml` (mint `{server_name}`, no hearts). BoxSMP and `full_suite` stay module-set only until they ship fuller overlays.
+
+Applying a preset with `gui_style` writes `gui.yml` `style` once. Your later edit or `/smply reload` wins.
+
+Smply does not write LuckPerms groups. Copy the snippet on [Integrations](/smply/integrations). `/smply doctor` warns if LuckPerms or Vault is missing for that preset.

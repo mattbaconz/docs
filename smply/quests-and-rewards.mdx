@@ -1,0 +1,62 @@
+---
+title: 'Quests and rewards'
+description: 'YAML quests, daily claims, playtime, and vote hooks.'
+---
+
+Retention is two layers: lightweight quests (`/quest`) and timed rewards (`/daily`, `/weekly`, `/monthly`, `/playtime`). Lifesteal and Economy presets turn quests on.
+
+## Quests
+
+```text
+/quest
+/quest claim <id>
+```
+
+The 54-slot desk uses catalog chrome. Filter ALL / READY / ACTIVE / CLAIMED. Sort by name or progress. Click a **ready** tile to claim. There is no slot-46 action button.
+
+<Frame>
+  <img src="/images/smply/thumb-quests.png" alt="Quests gallery card" />
+</Frame>
+
+Shipped types: `kill_players`, `break_blocks`, `play_minutes`. Economy quests include harvest / sell / auction style objectives. Configure ids, amounts, reset period, and reward commands in `quests.yml`.
+
+Permission: `smply.quest.use`. This is not a full quest-suite replacement.
+
+## Daily, weekly, monthly, playtime
+
+```text
+/daily
+/weekly
+/monthly
+/playtime
+```
+
+Each reward runs console commands from `rewards.yml`. Defaults use vanilla `give` so a fresh install does not need crates or Vault.
+
+Placeholders in those commands: `{player}`, `{claim_count}`, `{streak}`.
+
+Daily streaks reset after `streaks.reset_after_hours` (default 48). Milestone commands fire at 3 / 7 / 30 day streaks in the shipped file.
+
+Vote plugins should call from console:
+
+```text
+/smply reward vote <player>
+```
+
+Permission: `smply.reward.grant`. Same command grants `daily`, `weekly`, or `monthly` for testing.
+
+<Frame>
+  <img src="/images/smply/thumb-rewards.png" alt="Daily rewards gallery card" />
+</Frame>
+
+## Leaderboards
+
+```text
+/leaderboards
+```
+
+Category picker is 27 slots (Back at 22). Opening a board uses the 54-slot catalog chrome. Categories include hearts, Vault balance, kills, and deaths when those modules or Vault are on.
+
+<Frame>
+  <img src="/images/smply/thumb-leaderboards.png" alt="Leaderboards gallery card" />
+</Frame>

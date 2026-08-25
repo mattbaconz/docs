@@ -1,0 +1,143 @@
+---
+title: 'Commands'
+description: 'Smply player commands, staff commands, and permissions.'
+---
+
+Combat-tagged players cannot open travel GUIs or run blocked travel commands (`spawn`, `home`, `warp`, `rtp`, `tpa` by default). Permission errors are short. Disabled modules return the configured module-disabled message.
+
+## Players
+
+### Hub and help
+
+| Command | Permission | Description |
+| --- | --- | --- |
+| `/hub`, `/menu`, `/smplyhub` | `smply.profile` | Open the player hub. Aliases are configurable in `menus.yml`. |
+| `/smply menu` | none | Open the player menu. |
+| `/profile` | `smply.profile` | Open your profile and personal settings. |
+| `/help` | `smply.help.use` | Open the help menu. Same as `/smply help`. |
+| `/rules` | `smply.rules.use` | Open the server rules GUI. |
+| `/motd` | `smply.motd.use` | View the configured MOTD. |
+
+### Travel
+
+| Command | Permission | Description |
+| --- | --- | --- |
+| `/spawn` | `smply.spawn.use` | Teleport to spawn. Hints if `/setspawn` has not been run. |
+| `/home [name]` | `smply.home.use` | No args opens the homes GUI. `/home <name>` teleports. |
+| `/sethome <name>` | `smply.home.set` | Set a home. |
+| `/delhome <name>` | `smply.home.set` | Delete a home. |
+| `/homes` | `smply.home.use` | Open the homes GUI. |
+| `/warp [name]` | `smply.warp.use` | No args opens the warps GUI. `/warp <name>` teleports. |
+| `/rtp` | `smply.rtp.use` | Open the RTP GUI. `/rtp go [world]` starts the search. |
+| `/tpa [player]` | `smply.tpa.use` | No args opens an online-player picker. `/tpa <player>` sends a request. |
+| `/tpaccept` | `smply.tpa.use` | Accept a teleport request. |
+| `/tpdeny` | `smply.tpa.use` | Deny a teleport request. |
+
+<Frame>
+  <img src="/images/smply/rtp.gif" alt="Random teleport world picker" />
+</Frame>
+
+### Hearts and combat
+
+| Command | Permission | Description |
+| --- | --- | --- |
+| `/heart` | `smply.heart.withdraw` | Open Heart Core. |
+| `/heart withdraw <amount>` | `smply.heart.withdraw` | Withdraw a heart item. |
+| `/heart send <player> <amount>` | `smply.heart.withdraw` | Send hearts to another player. |
+| `/heart top` | `smply.heart.withdraw` | Chat dump of heart ranks. The Hearts menu also opens the hearts leaderboard. |
+| `/bounty` | `smply.bounty.use` | Open the bounty desk. `/bounty top` is the same. |
+| `/bounty set <player> <amount>` | `smply.bounty.use` | Place a bounty on an online player. Vault withdraws when an economy is present; otherwise placing is free. Claim is kill-only. |
+| `/bounty cancel <player>` | `smply.bounty.use` | Cancel your unclaimed bounty on that player and refund the Vault charge. In the GUI, click a tile you placed. |
+
+### Economy, kits, quests, rewards
+
+| Command | Permission | Description |
+| --- | --- | --- |
+| `/sell` | `smply.sell.use` | Open the deposit sell chest. Place items, Confirm sells, Cancel refunds. |
+| `/auction` | `smply.auction.use` | Open the auction catalog. |
+| `/auction sell <price>` | `smply.auction.sell` | List the item in your main hand. |
+| `/auction cancel <id>` | `smply.auction.use` | Cancel your listing and return items. |
+| `/shop` | `smply.shop.use` | Open the shop category picker, then the item catalog. |
+| `/kit [name]` | `smply.kit.use` | No args opens the kit picker. `/kit <name>` claims. |
+| `/quest` | `smply.quest.use` | Open the quests desk. Click a ready tile to claim. |
+| `/quest claim <id>` | `smply.quest.use` | Claim a completed quest from chat. |
+| `/daily` | `smply.reward.daily` | Claim the daily reward. |
+| `/weekly` | `smply.reward.weekly` | Claim the weekly reward. |
+| `/monthly` | `smply.reward.monthly` | Claim the monthly reward. |
+| `/playtime` | `smply.reward.playtime` | Claim the playtime reward. |
+| `/leaderboards` | `smply.leaderboards` | Open leaderboard categories. |
+
+## Staff / owners
+
+| Command | Permission | Console | Description |
+| --- | --- | --- | --- |
+| `/smply` | `smply.admin` | Yes | Help / admin GUI. |
+| `/smply admin` (alias `tools`) | `smply.admin` | Player | Open the ops desk: doctor, validate, status paste, settings, presets, reload, setspawn, warps, revive, bounty, quests, kits. |
+| `/smply doctor` | `smply.admin` or `smply.setup` | Yes | Launch checklist. Players without those permissions get a short `/hub` pointer. Aliases: `/smply checklist`, `/smply status doctor`. |
+| `/smply validate` | `smply.admin` | Yes | Schema validation only. Does not replace doctor. |
+| `/smply status` | `smply.admin` | Yes | Modules, economy, and integration status. |
+| `/smply status paste` | `smply.admin` | Yes | Discord-ready support dump, then the foundation check. |
+| `/smply setup` | `smply.setup` | Yes | Searchable preset browser. |
+| `/smply preset <name> [--modules-only\|--reset]` | `smply.preset.apply` | Yes | Apply a preset. See [Presets](/smply/presets). |
+| `/smply reload` | `smply.reload` | Yes | Reload safe configs. |
+| `/setspawn [world x y z [yaw pitch]]` | `smply.spawn.set` | Yes | Set spawn from your location or console coordinates. |
+| `/setwarp <name> [...]` | `smply.warp.set` | Yes | Set a warp. |
+| `/delwarp <name>` | `smply.warp.set` | Yes | Delete a warp. |
+| `/heart revive <player>` | `smply.heart.admin` | Yes | Clear a death ban and restore hearts. |
+| `/smply kit give <player> <kit>` | `smply.admin` | Yes | Grant a kit, bypassing cooldown. |
+| `/smply reward <daily\|weekly\|monthly\|vote> <player>` | `smply.reward.grant` | Yes | Grant a configured reward. Vote plugins call this from console. |
+| `/smply season reset` | `smply.admin` | Yes | Wipe-safe Smply data after a SeasonManager reset. Pair with SeasonManager `on-end-commands`. |
+
+## Permissions
+
+### Players
+
+| Permission | Default | Description |
+| --- | --- | --- |
+| `smply.spawn.use` | true | Use spawn. |
+| `smply.home.use` | true | Use homes. |
+| `smply.home.set` | true | Set and delete homes. |
+| `smply.homes.5` | false | Raise home limit to 5. |
+| `smply.homes.10` | false | Raise home limit to 10. |
+| `smply.warp.use` | true | Use warps. |
+| `smply.rtp.use` | true | Use RTP. |
+| `smply.tpa.use` | true | Use TPA. |
+| `smply.profile` | true | Open the hub and profile. |
+| `smply.profile.settings` | true | Open TPA / HUD settings from profile or hub. |
+| `smply.help.use` | true | Open help. |
+| `smply.rules.use` | true | View rules. |
+| `smply.motd.use` | true | View MOTD. |
+| `smply.heart.withdraw` | true | Withdraw and send hearts. |
+| `smply.bounty.use` | true | Create, view, and cancel your bounties. |
+| `smply.sell.use` | true | Use `/sell`. |
+| `smply.auction.use` | true | Browse and buy auctions; cancel your listings. |
+| `smply.auction.sell` | true | List items on the auction house. |
+| `smply.shop.use` | true | Buy from the shop. |
+| `smply.kit.use` | true | Open kits and claim kits you are allowed. |
+| `smply.kit.starter` | true | Claim the starter kit. |
+| `smply.kit.daily` | true | Claim the daily kit. |
+| `smply.kit.economy` | false | Claim the economy kit. |
+| `smply.kit.lifesteal` | false | Claim the lifesteal kit. |
+| `smply.kit.vip` | false | Claim the VIP kit. |
+| `smply.quest.use` | true | View and claim quests. |
+| `smply.reward.daily` | true | Claim daily. |
+| `smply.reward.weekly` | true | Claim weekly. |
+| `smply.reward.monthly` | true | Claim monthly. |
+| `smply.reward.playtime` | true | Claim playtime. |
+| `smply.leaderboards` | true | Open leaderboards. |
+
+### Staff and bypass
+
+| Permission | Default | Description |
+| --- | --- | --- |
+| `smply.admin` | op | Full admin access. |
+| `smply.setup` | op | Open the preset browser. |
+| `smply.reload` | op | Reload config. |
+| `smply.preset.apply` | op | Apply presets. |
+| `smply.spawn.set` | op | Set spawn. |
+| `smply.warp.set` | op | Set and delete warps. |
+| `smply.heart.admin` | op | Revive and admin heart changes. |
+| `smply.reward.grant` | op | Grant rewards to players. |
+| `smply.bypass.cooldown` | false | Bypass cooldowns. |
+| `smply.bypass.combattag` | false | Bypass combat-tag restrictions. |
+| `smply.bypass.restrictions` | false | Bypass combat item and PvP feature bans. |

@@ -1,0 +1,77 @@
+---
+title: 'Economy'
+description: 'Sell chest, auction house, server shop, and kits.'
+---
+
+Economy is sell, auction, shop, and kits on one Vault loop. Apply the blueprint:
+
+```text
+/smply preset economy_smp
+```
+
+Without Vault, you can still browse. Money does not move. Bounty set is free until Vault is hooked. See [Integrations](/smply/integrations).
+
+## Sell
+
+```text
+/sell
+```
+
+Default `mode: menu` (same as `deposit`) opens a deposit chest. Place items in the inner grid. **Confirm** sells. **Cancel** refunds. ESC/quit refunds unless `market.sell.auto_sell_on_close` is true. Unpriced stacks bounce back.
+
+`mode: inventory` sells the whole player inventory instead.
+
+<Frame>
+  <img src="/images/smply/sell-hover.gif" alt="Sell deposit chest with total tooltip" />
+</Frame>
+
+Prices live under `economy.yml` `market.sell.prices`. `market.price_source` can follow Stonkz. Permission: `smply.sell.use`.
+
+## Auction
+
+```text
+/auction
+/auction sell <price>
+/auction cancel <id>
+```
+
+54-slot catalog with search, filter ALL / MINE / OTHERS, sort newest / price / name. List held item is slot 46. Empty house still shows chrome plus a gold empty card.
+
+Listed stacks overlay real item data in the GUI. Without a price, chat can show Stonkz market worth when Stonkz is installed.
+
+<Frame>
+  <img src="/images/smply/auction-browse.gif" alt="Auction house catalog" />
+</Frame>
+
+`auction.yml` controls listing fee percent, max listings per player, and duration (Economy default: 3% fee, 6 listings, 24 hours). Needs Vault to check out.
+
+## Shop
+
+```text
+/shop
+```
+
+27-slot category picker (Back at 22), then a 54-slot item desk with the same chrome as auction minus List. Filter cycles `shop.yml` categories.
+
+<Frame>
+  <img src="/images/smply/shop-browse.gif" alt="Server shop item catalog" />
+</Frame>
+
+Each item has material, amount, price, stock (`-1` = unlimited), and optional permission. Needs Vault to buy.
+
+## Kits
+
+```text
+/kit
+/kit <name>
+```
+
+27-slot picker: starter row, rank plaques below, Back at 22. Overflow opens the 54 catalog. Locked rank kits show as named plaques.
+
+Rank kits use LuckPerms `group:` when LuckPerms is installed, otherwise the Bukkit `permission`. Staff: `/smply kit give <player> <kit>` bypasses cooldown.
+
+<Frame>
+  <img src="/images/smply/kits-claim.gif" alt="Claiming a kit from the picker" />
+</Frame>
+
+Permissions: `smply.kit.use`, plus `smply.kit.starter`, `smply.kit.daily`, `smply.kit.vip`, and similar nodes per kit.

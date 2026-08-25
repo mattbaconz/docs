@@ -1,0 +1,61 @@
+---
+title: 'Combat and bounties'
+description: 'Combat tags, logout, PvP bans, and Vault-backed bounties.'
+---
+
+Combat tags players after PvP, blocks travel while tagged, and optionally kills them if they log out. Bounties sit on the same module.
+
+<Frame>
+  <img src="/images/smply/thumb-combat.png" alt="Combat and bounty gallery card" />
+</Frame>
+
+## Combat tag
+
+Default: 20 seconds. Blocked commands: `spawn`, `home`, `warp`, `rtp`, `tpa`. Tagged players cannot open those travel GUIs either.
+
+`logout_action: kill` (Lifesteal default) kills the player if they disconnect while tagged.
+
+Kill rewards can pay Vault money and run extra commands. Anti-farm limits how often the same pair pays out.
+
+Permission `smply.bypass.combattag` skips tag restrictions.
+
+## Bounties
+
+```text
+/bounty
+/bounty set <player> <amount>
+/bounty cancel <player>
+```
+
+The 54-slot desk uses catalog chrome. Filter ALL / MINE / ON_ME / OTHERS. Sort by name or amount. One tile per target (summed amount). Place bounty is slot 46.
+
+**Vault on:** `/bounty set` withdraws the amount before the bounty is stored. `/bounty cancel` (or clicking a tile you placed) deletes your unclaimed rows and refunds you. The killer still receives whatever remains on claim.
+
+**Vault off:** placing is free. Claim is still kill-only.
+
+Bounds: `combat.yml` `bounties.min_amount` / `max_amount` (default 100–10000).
+
+Permission: `smply.bounty.use`.
+
+## PvP restrictions
+
+`combat.yml` `restrictions.features` defaults are all **false** (allowed). Set a feature to `true` to ban it on every path (place, use, craft, pickup, equip, damage).
+
+Examples: shields, end crystals, respawn anchors, maces, totems, elytra firework boost, tipped arrows, strength potions, wind charges, beds in Nether/End, boat PvP, trident riptide/channeling, chorus fruit, pearl cooldown.
+
+`banned_materials` is a free-form material list. `strip_mode` is `drop` (default) or `destroy`.
+
+Admin Settings includes a **PvP Bans** page with live toggles. `smply.bypass.restrictions` is the only escape hatch.
+
+## Config excerpt
+
+```yaml title="combat.yml"
+combat:
+  tag_seconds: 20
+  blocked_commands: [spawn, home, warp, rtp, tpa]
+  logout_action: kill
+  bounties:
+    enabled: true
+    min_amount: 100
+    max_amount: 10000
+```

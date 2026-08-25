@@ -1,0 +1,65 @@
+---
+title: 'Placeholders'
+description: 'PlaceholderAPI values for Smply HUDs, TAB, and chat.'
+---
+
+Requires [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/). Smply registers the `smply` expansion when PlaceholderAPI is present.
+
+Identifier: `smply`
+
+## Player stats
+
+| Placeholder | Description |
+| --- | --- |
+| `%smply_hearts%` | Current hearts (empty when the heart module is off) |
+| `%smply_min_hearts%` / `%smply_max_hearts%` | Configured bounds |
+| `%smply_balance%` / `%smply_balance_short%` | Vault balance |
+| `%smply_bounty%` / `%smply_bounty_short%` | Active bounty amount |
+| `%smply_kills%` / `%smply_deaths%` / `%smply_kdr%` | Combat stats |
+| `%smply_playtime_minutes%` | Playtime in minutes |
+| `%smply_combat_tagged%` | Whether the player is combat tagged |
+| `%smply_tpa_enabled%` | Whether the player accepts TPA |
+
+## Server and rewards
+
+| Placeholder | Description |
+| --- | --- |
+| `%smply_server_name%` | Public SMP name from `config.yml` |
+| `%smply_preset%` | Active preset id |
+| `%smply_tab_stats%` | Enabled stats on one MiniMessage line |
+| `%smply_daily_streak%` | Daily claim streak |
+| `%smply_daily_available%` | `true` / `false` if daily is claimable |
+| `%smply_daily_cooldown%` | Time until daily (humanized) |
+| `%smply_weekly_cooldown%` | Weekly cooldown |
+| `%smply_monthly_cooldown%` | Monthly cooldown |
+| `%smply_reward_summary%` | Compact reward status |
+| `%smply_version%` | Plugin version |
+
+Reward ids also support `%smply_<id>_claims%`, `%smply_<id>_available%`, `%smply_<id>_cooldown%` for `daily`, `weekly`, `monthly`, and `vote`.
+
+## Status (staff scoreboards)
+
+| Placeholder | Description |
+| --- | --- |
+| `%smply_economy%` | Economy adapter status |
+| `%smply_integrations%` | Optional plugin detection |
+| `%smply_modules%` | Enabled module summary |
+| `%smply_tablist_deferred%` | `true` when Smply yielded the tablist to TAB |
+
+## Built-in HUD tokens
+
+When the HUD module is on, `hud.yml` lines can mix Smply tokens with PlaceholderAPI. Set `hud.use_placeholderapi: true` to pass `%placeholders%` through after `{player}`, `{server_name}`, `{hearts}`, `{balance}`, `{bounty}`, `{daily_streak}`, and similar tokens.
+
+Lines that still mention `{hearts}`, `{bounty}`, or `{balance}` are omitted when that module or economy is off.
+
+Example TAB or scoreboard lines:
+
+```text
+&c❤ &f%player% &7│ &cHearts &f%smply_hearts%&7/&f%smply_max_hearts%
+&6Bounty &f$%smply_bounty%
+&eDaily streak &f%smply_daily_streak%
+```
+
+Use TAB's built-in `%player%` for the viewer name. `%player_name%` needs the PlaceholderAPI Player expansion.
+
+With TAB installed, leave `tablist.defer_to_tab: true` so Smply does not fight TAB for the player list. See [HUD](/smply/hud).

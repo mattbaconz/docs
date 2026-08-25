@@ -1,0 +1,83 @@
+---
+title: 'Troubleshooting'
+description: 'Doctor, validate, status paste, and Server Settings.'
+sidebarTitle: 'Doctor'
+---
+
+Use `/smply doctor` before you invite players. Use `/smply status paste` when you open a support ticket.
+
+<Frame>
+  <img src="/images/smply/thumb-doctor.png" alt="Launch doctor gallery card" />
+</Frame>
+
+## Doctor
+
+```text
+/smply doctor
+```
+
+Aliases: `/smply checklist`, `/smply status doctor`.
+
+Staff (`smply.admin` or `smply.setup`) get a readable launch list: `✓` ready, `!` problem, `○` optional. Players without those permissions get a short `/hub` / `/help` pointer. The full Doctor GUI stays on `/smply admin`.
+
+Always checked: spawn set, config validates.
+
+Lifesteal also checks heart rules, HUD `{hearts}`, combat tag, and logout. Economy checks Vault, sell prices, auction/shop on.
+
+`!` LuckPerms missing is a likely problem for rank kits. `○ Land protection: none detected` is optional. Griefable Lifesteal is valid.
+
+## Validate vs doctor
+
+```text
+/smply validate
+```
+
+Schema-only. It does not replace doctor. Passing validate does not mean spawn is set or Vault is hooked.
+
+## Status paste
+
+```text
+/smply status paste
+```
+
+Prints a Discord-ready dump (modules, economy, integrations), then the foundation check. Paste that in tickets with your Paper/Folia version, Java 21 build, Smply version, and active preset.
+
+```text
+/smply status
+```
+
+Shorter live status without the paste block.
+
+## Server Settings
+
+`/smply admin` → Settings is a live ON/OFF desk (modules, travel, hearts, combat, PvP bans, rewards, HUD, extras).
+
+When you turn a module **off**, that feature stops doing work on the next events. Listeners stay loaded; they skip the disabled module. They do not unregister. Custom recipes unregister. HUD and tablist stop. You do not need Bukkit `/reload`.
+
+Overrides write to `runtime-overrides.yml` and merge over bundled YAML.
+
+## Season reset
+
+After a SeasonManager wipe:
+
+```text
+/smply season reset
+```
+
+Clears Smply auctions, homes, hearts, death bans, bounties, and non-stash-safe kit claims. Pair it with SeasonManager `on-end-commands`, or set `integrations.yml` `season.reset_on_new_season`.
+
+## Common fixes
+
+| Symptom | What to check |
+| --- | --- |
+| Plugin disabled on boot | `license_key` in `config.yml`. `/smply reload` does not re-check the key. Restart. |
+| `/heart` does nothing | Heart module off. Apply `lifesteal` or turn Heart ON in Settings, then `/smply reload`. |
+| Sell / shop / auction take no money | Vault + economy plugin. `/smply doctor`. |
+| Bounty set is free | Expected without Vault. With Vault it should withdraw. |
+| TAB and Smply both drawing the list | `tablist.defer_to_tab: true` and do not enable TAB scoreboard if you want Smply's sidebar. |
+| Essentials wins `/spawn` | Disable overlapping Essentials travel commands. See [Integrations](/smply/integrations). |
+| Folia not listed as supported forever | Live-tested through **26.1.2**. Do not assume 26.2 until it is listed here. |
+
+<Card title="Discord support" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Send `/smply status paste` with your ticket.
+</Card>

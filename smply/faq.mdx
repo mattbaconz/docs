@@ -1,0 +1,77 @@
+---
+title: 'FAQ'
+description: 'License, Essentials, Vault, Folia, Settings, and what Smply does not include.'
+---
+
+## What is Smply?
+
+Smply is a preset-first SMP launch kit for a fresh **Lifesteal** or **Economy** relaunch: spawn, homes, warps, RTP, hearts, combat tags, market sell, rewards, quests, and one hub GUI.
+
+Brand line: `"Set up your SMP."` Proof: `/smply preset lifesteal` then `/setspawn` then `/hub`.
+
+## License
+
+### Do I need a license key?
+
+Yes for paid builds. Set `license_key` in `config.yml`. Claim product id **`SMPLY`** in Discord (`/claim SMPLY`), then paste the key. Verification runs on startup. `/smply reload` does not re-check it.
+
+<Card title="Discord support" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  License claims and troubleshooting.
+</Card>
+
+## Platforms
+
+### Does Smply support Folia?
+
+Yes. `folia-supported: true` and a region-safe scheduler. Live-tested targets are Paper **1.20.6**, **1.21.11**, **26.1.2**, and Folia **26.1.2** (Java 21). That is not a claim for every Folia fork or untested future build, including 26.2.
+
+## Economy
+
+### Is Vault required?
+
+No. Sell reports when no economy provider is available. Auction and shop need Vault to move money. Bounty placement is **free** until Vault is hooked. With Vault, `/bounty set` charges the issuer and `/bounty cancel` refunds unclaimed rows.
+
+Install Vault plus an economy plugin when you want paid sell, auction, shop, and bounty charges.
+
+## Modules and Settings
+
+### Can I disable modules?
+
+Yes. `config.yml` module flags and the Server Settings GUI both write live overrides. When a module is off, that feature skips work. Listeners stay registered; they do not unregister. Custom recipes unregister. HUD and tablist stop. You do not need Bukkit `/reload`.
+
+Disabled commands return a clear module-disabled message.
+
+## Smply vs other plugins
+
+### vs EssentialsX
+
+Essentials is a broad command suite. Smply is opinionated SMP launch profiles: `/smply preset <name>` plus `/setspawn`. Hearts, combat, and market sell are first-class. Smply does not match 200 Essentials commands and does not import Essentials homes, warps, or economy data.
+
+Keep Essentials (or CMI) for **economy** if you want. Disable its overlapping travel commands so Smply owns `/spawn`, `/home`, `/warp`, `/rtp`, and `/tpa`. See [Integrations](/smply/integrations).
+
+### vs CMI
+
+CMI is a large, feature-dense suite. Smply is lighter: Lifesteal and Economy presets out of the box, Vanilla+ on first boot. Pair it with WorldGuard, LuckPerms, and your economy plugin rather than expecting one jar to replace every admin tool.
+
+### vs TAB
+
+Smply ships a built-in tablist so a solo install looks finished. If you already run **TAB**, keep it. Leave `tablist.defer_to_tab: true` and wire `%smply_hearts%` / `%smply_balance_short%`. See [HUD](/smply/hud) and [Placeholders](/smply/placeholders).
+
+## Migration
+
+There is **no automatic import** of homes, warps, or economy data from Essentials or CMI. Apply a preset, set spawn, run `/smply doctor`, then invite players. Move legacy homes by hand if you need them.
+
+## Storage
+
+- **SQLite** is the default. No external database required.
+- **MySQL / MariaDB** is supported. Test on staging first. Changing storage type needs a **full restart**.
+
+## Honest limits
+
+Smply is not a land-claim plugin, not mcMMO-style skills, and not a clan plugin. Built-in quests are lightweight YAML dailies, not a full quest suite. Auction and shop are lightweight economy helpers, not a dedicated auction-house product. Kits cover starter and rank drops, not a 50-kit CMI replacement.
+
+Use WorldGuard or a claims plugin, LuckPerms, and CoreProtect alongside Smply.
+
+## Support tickets
+
+Include server software and version, Java version, Smply version, active preset, plugin list, `/smply status paste` output, a console snippet, and steps to reproduce. Attach the `modules` section of `config.yml` plus the relevant module file (`heart.yml`, `economy.yml`, and so on).

@@ -1,0 +1,69 @@
+---
+title: 'Lifesteal'
+description: 'Hearts, withdraw, send, revive, and Heart Core.'
+---
+
+The heart module is the Lifesteal loop: kill players to gain hearts, die to lose them, withdraw hearts as items, send them, and revive banned players.
+
+Apply the blueprint first:
+
+```text
+/smply preset lifesteal
+```
+
+Then `/heart` must open Heart Core (after reload if you only flipped the module in Settings).
+
+<Frame>
+  <img src="/images/smply/hearts-core.gif" alt="Heart Core GUI" />
+</Frame>
+
+## Players
+
+| Command | What it does |
+| --- | --- |
+| `/heart` | Open Heart Core. |
+| `/heart withdraw <amount>` | Take hearts out as items (default `RED_DYE`). |
+| `/heart send <player> <amount>` | Send hearts to another player. |
+| `/heart top` | Chat ranks. The Hearts menu Heart Top tile opens the hearts leaderboard. |
+
+Permission: `smply.heart.withdraw` (default true).
+
+## Defaults after the Lifesteal preset
+
+```yaml title="heart.yml (excerpt)"
+heart:
+  starting_hearts: 10
+  min_hearts: 1
+  max_hearts: 20
+  gain_on_player_kill: 1
+  lose_on_death: 1
+  death_ban:
+    enabled: false
+    duration_minutes: 1440
+  withdraw:
+    enabled: true
+  send:
+    enabled: true
+  revive:
+    enabled: true
+    cost_hearts: 2
+    restore_hearts: 8
+```
+
+Hardcore variant: max 10 hearts, death ban on. Casual: shorter combat tag, logout-kill off. See [Presets](/smply/presets).
+
+## Staff
+
+```text
+/heart revive <player>
+```
+
+Permission: `smply.heart.admin`. Clears a death ban and restores hearts. Also available from the admin desk.
+
+## HUD
+
+The Lifesteal blueprint is hearts-first (no `$` on the sidebar). Tokens: `{hearts}` in `hud.yml`, `%smply_hearts%` for TAB. Lines that mention hearts hide when the module is off.
+
+## Leaderboards
+
+`/leaderboards` includes a hearts category when the module is on. Empty boards show a named plaque plus Back, not a blank barrier chest.
