@@ -1,0 +1,75 @@
+---
+title: '/why'
+description: 'Death, deny, inspect, empty CoreProtect copy, and staff vs player chat.'
+---
+
+`/why` is the player-facing command. Answers are Adventure chat (clickable actions, no inventory GUI). Console uses `/cc why` instead — see [Commands](/causechain/commands).
+
+## `/why` — last death
+
+After you die, `/why` (or `/why death`) prints **HOW DID YOU DIE?** and the captured chain, effect-first.
+
+No death recorded yet:
+
+```text
+No death recorded yet. After you die, /why explains how.
+```
+
+Permission: `causechain.why.self` (default true).
+
+With `hints.on-death: true` (default), CauseChain can hint you to run `/why` after a death. Hints do not change the graph.
+
+## `/why deny` — last cancelled build
+
+After WorldGuard or GriefPrevention cancels a place or break, `/why deny` prints **WHY CAN'T YOU BUILD?** and names the plugin plus region or claim, for example:
+
+- `WorldGuard spawn (visitor) / flag block-place deny`
+- `GriefPrevention Owner (visitor) / claim build permission`
+
+If two protection plugins both deny, both are listed. CauseChain does not invent a canceller.
+
+No deny recorded:
+
+```text
+No denied build recorded. After WorldGuard or GriefPrevention blocks you, /why deny explains why.
+```
+
+Wilderness with no claim is not a named GriefPrevention deny. Lands is not named. Permission: `causechain.why.self`.
+
+## `/why inspect` and `/why here`
+
+**Inspect** looks at the block you target for **captured chains** inside land you can build in (`causechain.why.claim`, default true). Staff with `causechain.why` can inspect anywhere.
+
+| Command | What it does |
+| --- | --- |
+| `/why inspect` | Turns inspect mode on. Punch or look at a block. Claim members see a claim-scoped message; staff see global inspect. |
+| `/why here` | Explains the block you are looking at (reach 8). |
+
+Bare `/why` with **no args**: players get last death; **staff** (`causechain.why`) toggle inspect mode on/off instead.
+
+### Empty inspect
+
+When CauseChain has no chain at that block, chat names the land when it can, then sends you to CoreProtect:
+
+```text
+WorldGuard spawn - CauseChain has no causal chain here. Use CoreProtect /co i for who placed this block.
+```
+
+Inspect is **not** `/co i`. It will not invent a placer from CoreProtect or from “someone was here.”
+
+If you are not in your own claim or region, claim inspect replies that the land is not yours.
+
+## Audience: players vs staff
+
+CauseChain **shows less** to players; it does **not** capture less.
+
+| | Death / deny (player) | Claim inspect | Staff |
+| --- | --- | --- | --- |
+| Chain in chat | Yes | Yes | Yes |
+| Blast counts | No | Yes | Yes |
+| `[Share]` Discord copy | Yes | Yes | Yes |
+| `[Trace]` `[Chain]` `[Evidence]` `[Copy ID]` | No | No | Yes |
+
+Unknown roots still print: `Unknown is a valid answer. No parent was recorded.`
+
+Staff lookups: `/why player <name>`, `/why entity <uuid>`, `/why chain <id>` require `causechain.why`.

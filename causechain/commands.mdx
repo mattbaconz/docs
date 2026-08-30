@@ -1,0 +1,71 @@
+---
+title: 'Commands'
+description: '/why, /chain, /cc admin commands, and console /cc why.'
+---
+
+All answers are chat (MiniMessage / Adventure). There is no chest GUI. `/causechain` is aliased as `/cc`.
+
+## `/why`
+
+Players use this after a death, a deny, or to inspect a captured chain in their land. Staff use the same command for global inspect.
+
+| Command | Permission | Default | Purpose |
+| --- | --- | --- | --- |
+| `/why` | `causechain.why.self` | true | Last death (players). Staff with `causechain.why` toggle inspect mode. |
+| `/why death` / `/why self` | `causechain.why.self` | true | Last death chain |
+| `/why deny` / `/why denied` | `causechain.why.self` | true | Last cancelled place/break |
+| `/why inspect` | `causechain.why.claim` | true | Enable inspect (claim-scoped unless staff) |
+| `/why here` | `causechain.why.claim` | true | Explain the targeted block |
+| `/why player <name>` | `causechain.why` | op | Staff: living player entity |
+| `/why entity <uuid>` | `causechain.why` | op | Staff: entity UUID |
+| `/why chain <id>` | `causechain.why` | op | Staff: stored chain / trace id |
+
+Players without `causechain.why` cannot run `player`, `entity`, or `chain`. Console cannot run player `/why` death/deny; use `/cc why` below.
+
+## `/chain`
+
+| Command | Permission | Default | Purpose |
+| --- | --- | --- | --- |
+| `/chain <id>` | `causechain.chain` | op | Neighborhood around a node or trace |
+| `/chain <id> --up` | `causechain.chain` | op | Parents / causes |
+| `/chain <id> --down` | `causechain.chain` | op | Children / effects |
+
+`<id>` is a display id from `/why` (copy with staff **[Copy ID]**). Missing ids reply with no causal record.
+
+## `/cc` (alias of `/causechain`)
+
+Root permission for status/help is `causechain.status` (default op). Subcommands have their own nodes.
+
+| Command | Permission | Default | Purpose |
+| --- | --- | --- | --- |
+| `/cc` / `/cc status` | `causechain.status` | op | Version, scheduler mode, schema, DB size, queue pressure, node/edge counts |
+| `/cc adapters` | `causechain.status` | op | Soft-depend detection (WorldGuard, GriefPrevention, WorldEdit, CoreProtect, …) |
+| `/cc help` | `causechain.status` | op | Usage |
+| `/cc explain <edge-id>` | `causechain.evidence` | op | Why an edge is believed (confidence + evidence) |
+| `/cc export <id>` | `causechain.export` | op | Write a local JSON file (support-safe; no chat/command text) |
+| `/cc trace <id>` | `causechain.visual.trace` | op | Optional particle trace for the investigating player |
+| `/cc trace cancel` | `causechain.visual.trace` | op | Stop your world trace |
+| `/cc reload` | `causechain.admin.reload` | op | Reload safe config. Invalid privacy keys keep the last good config |
+
+World traces are disabled from console (`World traces are disabled from console.`). Visuals honor `visuals.enabled` and `visuals.particles` in [Configuration](/causechain/configuration).
+
+## Console `/cc why`
+
+Operators and scripts without a player:
+
+| Command | Purpose |
+| --- | --- |
+| `/cc why block <world> <x> <y> <z>` | Explain a block (world name as Bukkit knows it, e.g. `world`) |
+| `/cc why entity <uuid>` | Explain an entity |
+| `/cc why trace <id>` | Explain a stored trace (same as `/why chain <id>`) |
+
+These require `causechain.why`. World names are the server's world name, not `minecraft:overworld`.
+
+## Chat actions on `/why`
+
+When you run `/why` in-game, clickable bits can include:
+
+- **[Share]** — copy a Discord-ready trace (players and staff)
+- **[Trace]** **[Chain]** **[Evidence]** **[Copy ID]** — staff only
+
+See [Permissions](/causechain/permissions) for the full node list.

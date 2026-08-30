@@ -1,0 +1,65 @@
+---
+title: 'Permissions'
+description: 'Player why.self / why.claim, staff why, and causechain.admin children.'
+---
+
+CauseChain is usable for players out of the box. Death and claim inspect default **true**. Global inspect and graph tools default **op**.
+
+## Player
+
+| Permission | Default | Description |
+| --- | --- | --- |
+| `causechain.why.self` | true | Your last death (`/why`) and last denied build (`/why deny`). Also required for on-deny hints. |
+| `causechain.why.claim` | true | Inspect captured chains inside a claim or region you can build in. Empty inspect points at CoreProtect `/co i`. |
+
+A player needs at least one of `why.self`, `why.claim`, or `why` to run `/why` at all.
+
+## Staff
+
+| Permission | Default | Description |
+| --- | --- | --- |
+| `causechain.why` | op | Global inspect: toggle inspect on bare `/why`, inspect anywhere, `/why player`, `/why entity`, `/why chain`, `/cc why`. |
+| `causechain.chain` | op | `/chain <id> [--up\|--down]` |
+| `causechain.evidence` | op | `/cc explain <edge-id>` |
+| `causechain.status` | op | `/cc`, `/cc status`, `/cc adapters`, `/cc help` |
+| `causechain.export` | op | `/cc export <id>` |
+| `causechain.visual.trace` | op | `/cc trace` / `/cc trace cancel` |
+| `causechain.admin.reload` | op | `/cc reload` |
+
+Staff with `causechain.why` can also use player death/deny and claim inspect (those checks treat `why` as sufficient).
+
+## `causechain.admin`
+
+Default **op**. Grants every investigation and admin child:
+
+| Child | Included |
+| --- | --- |
+| `causechain.why.self` | true |
+| `causechain.why.claim` | true |
+| `causechain.why` | true |
+| `causechain.chain` | true |
+| `causechain.evidence` | true |
+| `causechain.status` | true |
+| `causechain.export` | true |
+| `causechain.visual.trace` | true |
+| `causechain.admin.reload` | true |
+
+Give `causechain.admin` to senior staff. Give `causechain.why` without `export` if you want inspect without JSON dumps.
+
+## Typical LuckPerms groups
+
+```text
+# Members — already default true; only needed if you negated defaults
+lp group default permission set causechain.why.self true
+lp group default permission set causechain.why.claim true
+
+# Moderators
+lp group mod permission set causechain.why true
+lp group mod permission set causechain.chain true
+lp group mod permission set causechain.evidence true
+lp group mod permission set causechain.status true
+lp group mod permission set causechain.visual.trace true
+
+# Admins
+lp group admin permission set causechain.admin true
+```

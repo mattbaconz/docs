@@ -244,6 +244,30 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "CauseChain",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "causechain/index",
+              "causechain/installation",
+              "causechain/faq"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "causechain/how-it-works",
+              "causechain/why",
+              "causechain/commands",
+              "causechain/permissions",
+              "causechain/configuration",
+              "causechain/integrations"
+            ]
+          }
+        ]
       }
     ]
   }

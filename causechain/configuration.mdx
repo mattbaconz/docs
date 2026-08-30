@@ -1,0 +1,139 @@
+---
+title: 'Configuration'
+description: 'Capture flags, retention, queue, visuals, privacy, integrations, hints, and ignored rewind.'
+---
+
+On first boot, CauseChain writes `plugins/CauseChain/config.yml` and `messages.yml`. Most keys apply after `/cc reload`. Invalid `privacy.telemetry`, `privacy.store-chat-content`, or `privacy.store-command-arguments` set to `true` are **rejected**; the last known-good config stays active.
+
+Do not use Bukkit `/reload`. Use `/cc reload` or a full restart.
+
+## Capture
+
+```yaml title="plugins/CauseChain/config.yml"
+capture:
+  tnt: true
+  explosions: true
+  projectiles: true
+  damage: true
+  fire: true
+  falling-blocks: true
+  worldedit: true
+  deaths: true
+  denied-actions: true
+```
+
+Set a flag `false` to skip that listener family. `denied-actions` is WorldGuard / GriefPrevention cancellations. `worldedit` is WorldEdit / FAWE as one semantic node.
+
+## Retention
+
+```yaml
+retention:
+  days: 14
+  max-database-size-mb: 2048
+  purge-interval: 6h
+  # If both time and size limits are hit, size wins: oldest complete traces are purged first.
+```
+
+Storage is local SQLite. When both limits apply, **size wins**. Oldest complete traces go first. `/cc status` reports database size.
+
+## Performance (ingest queue)
+
+```yaml
+performance:
+  queue-capacity: 50000
+  writer-batch-size: 512
+  # When the ingest queue is under pressure, skip fire spread / falling / extra projectile hits.
+  degraded-mode: true
+  context-registry-max: 20000
+  context-ttl-seconds: 120
+```
+
+The queue is bounded. Overload drops low-value extras when `degraded-mode` is true; it does not block the tick. Context TTL bounds in-memory parent maps for TNT/fire/projectiles.
+
+## Queries
+
+```yaml
+queries:
+  max-depth: 64
+  max-nodes: 5000
+  min-confidence: inferred-strong
+```
+
+Walks stop at depth/node caps. `min-confidence` is `explicit`, `deterministic`, `inferred-strong`, `inferred-weak`, or `unknown`. Default hides weak inference from `/why` paths.
+
+## Visuals
+
+```yaml
+visuals:
+  enabled: true
+  particles: true
+  sounds: false
+  speed: normal
+  reduced-motion: false
+  max-steps: 12
+  auto-play: false
+```
+
+Optional particle traces for the investigating viewer (`/cc trace`). Scoped, cancellable, bounded by `max-steps`. Console cannot play traces. `auto-play: false` means `/why` does not start a world trace by itself.
+
+## Privacy and metrics
+
+```yaml
+privacy:
+  # Chat and command text are never stored. Setting these true is rejected.
+  store-chat-content: false
+  store-command-arguments: false
+  # Remote upload of traces is not implemented. Setting this true is rejected.
+  telemetry: false
+  # Anonymous server counts via bStats (https://bstats.org/plugin/bukkit/CauseChain/33693).
+  # Opt out with false, or in plugins/bStats/config.yml. Does not upload traces.
+  bstats: true
+  bstats-plugin-id: 33693
+```
+
+Leave `telemetry`, `store-chat-content`, and `store-command-arguments` **false**. bStats is anonymous server counts only ([plugin 33693](https://bstats.org/plugin/bukkit/CauseChain/33693)). Opt out with `privacy.bstats: false` or `plugins/bStats/config.yml`.
+
+There is **no remote upload in Core**. Modrinth-style disclosure: this software is not designed to upload traces to a server you did not choose.
+
+## Integrations
+
+```yaml
+integrations:
+  # auto | off | force
+  coreprotect: auto
+  worldedit: auto
+  worldguard: auto
+  griefprevention: auto
+```
+
+| Value | Behavior |
+| --- | --- |
+| `auto` | Hook if the plugin is present |
+| `off` | Never hook |
+| `force` | Expect the plugin; `/cc adapters` reports failure if missing |
+
+CoreProtect `auto` is detection/coexistence only. CauseChain does not query CoreProtect lookup. See [Integrations](/causechain/integrations).
+
+## Hints
+
+```yaml
+hints:
+  on-death: true
+  on-deny: true
+```
+
+Chat hints after death or a named deny. `on-deny` still requires `causechain.why.self`. Hints do not write extra graph edges.
+
+## Remediation (ignored)
+
+```yaml
+# /rewind is not implemented. If enabled, CauseChain logs a warning and ignores it.
+remediation:
+  enabled: false
+```
+
+Setting `enabled: true` does **not** turn on rewind. CauseChain logs a warning and ignores it. There is no `/rewind` command.
+
+## Messages
+
+Edit `plugins/CauseChain/messages.yml` for MiniMessage strings (prefix, `/why` headers, empty inspect copy). Reload with `/cc reload`.

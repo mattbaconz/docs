@@ -1,0 +1,74 @@
+---
+title: 'Integrations'
+description: 'WorldGuard and GriefPrevention named deny, WorldEdit one node, CoreProtect coexistence, PlaceholderAPI.'
+---
+
+Soft-depends never crash CauseChain when missing. Check live status with:
+
+```text
+/cc adapters
+```
+
+Each adapter is `auto` | `off` | `force` in `config.yml` under `integrations.*`. See [Configuration](/causechain/configuration).
+
+## WorldGuard
+
+Named **deny** for cancelled place/break (including buckets treated as place), using region id and relation (for example visitor) plus the flag that denied (`block-place`, `block-break`, `build`).
+
+`/why deny` can read like `WorldGuard spawn (visitor) / flag block-place deny`.
+
+Inspect uses the same region for “is this your land?” Empty inspect can prefix `WorldGuard <region>`.
+
+CauseChain does not replace WorldGuard flags or `/rg`.
+
+## GriefPrevention
+
+Named deny for cancelled build in a **claim**. Labels include owner and relation, for example `GriefPrevention Owner (visitor) / claim build permission`.
+
+Wilderness with no claim is not a named GP deny — `/why deny` stays empty until a claim actually cancelled you.
+
+Inspect: members who can build in the claim can `/why inspect` / `/why here` there.
+
+## WorldEdit / FastAsyncWorldEdit
+
+When `capture.worldedit` is true and the plugin is present, a `//set` (or similar) is stored as **one semantic node** plus an effect set — not thousands of fake player breaks.
+
+Staff `/why` and `/chain` can walk that node. Players inspecting their claim see it only if the operation landed in land they can build in.
+
+WorldEdit and FAWE share this path; you do not install two CauseChain adapters.
+
+## CoreProtect
+
+**Coexistence only.** If CoreProtect is installed, `/cc adapters` reports it was detected.
+
+CauseChain does **not**:
+
+- Query CoreProtect history
+- Corroborate edges against `/co l`
+- Roll back blocks
+- Replace `/co i`
+
+Empty inspect tells the player to use CoreProtect `/co i` for who placed the block. Keep CoreProtect (or Prism / Ledger) for lookup and rollback.
+
+`integrations.coreprotect: off` hides detection; it does not make CauseChain start logging every place/break.
+
+## PlaceholderAPI
+
+If PlaceholderAPI is present, CauseChain registers:
+
+| Placeholder | Value |
+| --- | --- |
+| `%causechain_last_death%` | One-line last death chain, or empty |
+| `%causechain_last_deny%` | One-line last deny chain, or empty |
+
+Use them in TAB, scoreboards, or Discord bots. Empty string means no captured death/deny yet — not “unknown cause.”
+
+## Not hooked
+
+| Plugin | Behavior |
+| --- | --- |
+| **Lands** | Not named. Denies stay unidentified until an adapter exists. |
+| **Other protection** | Only WorldGuard, GriefPrevention, or Paper `getCancelledBy` when present. |
+| **Prism / Ledger** | Not queried. Same companion idea as CoreProtect: keep them for lookup. |
+
+Do not expect CauseChain to name a canceller it cannot identify.

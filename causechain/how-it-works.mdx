@@ -1,0 +1,54 @@
+---
+title: 'How it works'
+description: 'Capture on the region thread, ingest queue, SQLite graph, and confidence ranks.'
+---
+
+CauseChain does not scroll a block log. It captures **events it can attribute**, stores them as a graph, and answers `/why` from that graph. If nothing was captured at a block, inspect stays empty and points you at CoreProtect.
+
+## Capture, then persist
+
+1. A Paper or Folia listener runs on the **owning region / entity thread**.
+2. The listener snapshots primitives (player UUID, location, entity UUID, material, region name). It does **not** keep live `Player`, `Entity`, or `Block` objects for later I/O.
+3. The snapshot is offered to a bounded **ingest queue**.
+4. A background writer batches rows into **local SQLite** (WAL). Tick and region threads never wait on disk.
+
+When the queue is under pressure, `performance.degraded-mode` (default true) skips fire spread, falling-block extras, and extra projectile hits so the server stays up. `/cc status` shows queue pressure and drop counts.
+
+## Nodes and edges
+
+A **node** is something that happened: a player action, TNT prime, explosion, death, deny, WorldEdit operation, block effect.
+
+An **edge** is a parent → child link with a **confidence rank**. `/cc explain` shows why that edge is believed.
+
+| Rank | Meaning |
+| --- | --- |
+| **Explicit** | The platform named the parent (igniter, shooter, cancelling plugin). |
+| **Deterministic** | Vanilla rules plus captured state leave one parent (TNT-to-TNT fuse in the same blast). |
+| **Inferred** | Best supported explanation, labeled as inferred. Not proof. |
+| **Unknown** | No parent was recorded. Unknown stays unknown. |
+
+Correlation (two things nearby in time) is never presented as proof. If two explanations remain plausible, `/why` can say **ambiguous**.
+
+## What inspect can see
+
+`/why inspect` and `/why here` only search **chains CauseChain already stored** at that location: fire, TNT, explosions, WorldEdit, deaths, denials, projectiles.
+
+They do **not** look up who placed a chest last week. That is CoreProtect `/co i`. Empty inspect names the claim or region when an adapter can, then tells you to use `/co i`.
+
+## What this release traces
+
+- Player deaths (TNT, projectiles, melee, void/fall with honest unknown)
+- WorldGuard and GriefPrevention build/break denials
+- Claim-scoped inspect of captured chains
+- Player TNT ignition and TNT-to-TNT chains
+- Explosions and aggregated block effects
+- Projectiles (no invented owner for dispensers)
+- Fire ignition/spread where the platform link is defensible
+- Falling blocks
+- WorldEdit / FAWE operations as **one semantic node** plus an effect set
+
+Chat text and command arguments are never stored. Remote upload of traces is not implemented.
+
+## Query bounds
+
+`/why` and `/chain` walk the graph with a budget (`queries.max-depth`, `queries.max-nodes`, `queries.min-confidence`). Oversized walks return a partial result instead of hanging the server. Retention purges oldest complete traces when the size cap is hit. See [Configuration](/causechain/configuration).

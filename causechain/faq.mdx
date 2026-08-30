@@ -1,0 +1,70 @@
+---
+title: 'FAQ'
+description: 'CoreProtect, Folia, Lands, rewind, unknown, storage, and Bukkit /reload.'
+---
+
+## Does this replace CoreProtect?
+
+**No.** CoreProtect (or Prism / Ledger) owns who touched the block and rollback. CauseChain owns `/why` on chains it captured. Empty inspect says to use `/co i`. Keep both.
+
+## Is inspect `/co i`?
+
+**No.** `/why inspect` and `/why here` only show **captured causal chains** (death, deny, TNT, fire, WorldEdit, …) at that location. They do not look up who placed the block. If there is no chain, chat names the land when it can and tells you to run CoreProtect `/co i`.
+
+## Platforms
+
+### Does CauseChain support Folia?
+
+Scheduler support is real: region, entity, global, and async schedulers, with `folia-supported: true`. There is **no published Folia stress run**. Smoke TNT plus death on your Folia jar before you treat it as production-proven. That is not a claim for every Folia fork or untested future build.
+
+### Java and Paper versions?
+
+Java **21+**. Paper API `1.21`. Paper **26.x** servers typically need **Java 25+** at runtime.
+
+## Protection plugins
+
+### Does it name Lands?
+
+**No.** Lands (and other protection plugins without an adapter) are not named. WorldGuard and GriefPrevention are. If the platform exposes `getCancelledBy`, that plugin name can appear; otherwise the denier stays unidentified rather than guessed.
+
+### Two plugins both deny?
+
+Both are listed. CauseChain does not pick a winner.
+
+## Features
+
+### Is there rewind / rollback?
+
+**No.** `/rewind` is not implemented. `remediation.enabled: true` logs a warning and is ignored. Use CoreProtect (or your logger) for rollback. CauseChain does not guess reversible mutations.
+
+### Why does `/why` say unknown?
+
+Unknown is a valid answer. Summoned TNT, void, and some fire/redstone have no recorded parent. CauseChain will not invent one. Inferred edges are labeled; correlation is not proof.
+
+### Will it log every successful place and break?
+
+**No.** That is what a block logger is for. CauseChain captures deaths, denials, explosions, projectiles, fire, falling blocks, and WorldEdit operations you enable in `capture.*`.
+
+## Storage
+
+### How large can the database get?
+
+`retention.max-database-size-mb` (default 2048) and `retention.days` (default 14). If both limits are hit, **size wins**: oldest complete traces are purged first. `/cc status` shows size.
+
+### Is there a cloud or remote upload?
+
+**No.** Traces stay on disk. `privacy.telemetry` must stay `false` (reload rejects `true`). bStats plugin [33693](https://bstats.org/plugin/bukkit/CauseChain/33693) is anonymous server counts only; opt out with `privacy.bstats: false`.
+
+## Operations
+
+### Can I Bukkit `/reload`?
+
+**No.** Do not use Bukkit `/reload`. Use `/cc reload` for safe config keys, or a full restart (especially on Folia).
+
+### Where is the download?
+
+CauseChain is **not released yet**. There is no Modrinth, Hangar, or Spigot project URL. Watch [Discord](https://discord.gg/kgHNjJsB2t) and the [mattbaconz Modrinth profile](https://modrinth.com/user/mattbaconz) for other plugins.
+
+<Card title="Discord support" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Questions and release status.
+</Card>

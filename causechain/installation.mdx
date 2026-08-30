@@ -1,0 +1,71 @@
+---
+title: 'Installation'
+description: 'Install CauseChain next to CoreProtect on Paper or Folia.'
+---
+
+## Requirements
+
+- **Server software:** Paper or Folia with Paper API `1.21`
+- **Java:** Java 21 or newer (Paper 26.x servers typically need Java 25+)
+- **Recommended:** CoreProtect (or another block logger) already running
+- **Optional:** WorldGuard, GriefPrevention, WorldEdit or FastAsyncWorldEdit, PlaceholderAPI
+
+CauseChain is a companion. Keep your logger. Do not remove CoreProtect because you installed CauseChain.
+
+<Warning>
+CauseChain is **not released yet**. When a jar exists, drop that file into `plugins/`. There is no marketplace download URL to paste here until a listing is published.
+</Warning>
+
+## Install CauseChain
+
+1. Stop the server (or wait for a planned restart). Do not use Bukkit `/reload`.
+2. Place `CauseChain-1.0.0.jar` in the `plugins` folder.
+3. Leave CoreProtect (and WorldGuard / GriefPrevention if you use them) installed.
+4. Start the server so CauseChain writes `plugins/CauseChain/`.
+5. No license key, no extra config, and no account for the five jobs.
+
+```text
+plugins/CauseChain-1.0.0.jar
+plugins/CoreProtect.jar          # keep this
+plugins/WorldGuard.jar           # optional, named deny
+plugins/GriefPrevention.jar      # optional, named deny
+plugins/WorldEdit.jar            # or FastAsyncWorldEdit
+```
+
+Soft-depends never crash the plugin when missing. `/cc adapters` reports what was detected.
+
+## First checks
+
+After the server is up, as an operator:
+
+```text
+/cc adapters
+/cc status
+/why
+```
+
+`/cc adapters` should list WorldGuard, GriefPrevention, WorldEdit, and CoreProtect as detected when those plugins are present. CoreProtect detection means coexistence only — CauseChain does **not** query CoreProtect history.
+
+`/why` with no death yet replies with the no-death line. After you die, `/why` explains the captured chain.
+
+## Player smoke test
+
+1. Die once (void, fall, or TNT). Run `/why`.
+2. As a visitor in a WorldGuard region with `block-place deny`, try to place a block, then `/why deny`.
+3. Stand on a block with no captured chain and `/why here`. You should see the land name and `Use CoreProtect /co i for who placed this block.`
+
+## Files written on first boot
+
+| Path | Purpose |
+| --- | --- |
+| `plugins/CauseChain/config.yml` | Capture, retention, queue, visuals, privacy, integrations |
+| `plugins/CauseChain/messages.yml` | MiniMessage chat strings |
+| `plugins/CauseChain/` SQLite database | Causal graph (local, bounded) |
+
+Edit config, then `/cc reload` for safe keys. Invalid privacy flags (`telemetry`, chat/command storage) are rejected; the last known-good config stays active. See [Configuration](/causechain/configuration).
+
+## Support
+
+<Card title="Join Discord" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Install questions and release status.
+</Card>

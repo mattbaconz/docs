@@ -1,0 +1,86 @@
+---
+title: 'CauseChain'
+description: 'Companion to CoreProtect. Ask /why for the chain; /co i for who placed the block.'
+---
+
+**CauseChain** sits next to CoreProtect. `/co i` is who touched the block. `/why` is how this became that.
+
+It records causal chains on Paper and Folia — death, a named WorldGuard or GriefPrevention deny, fire, TNT, projectiles, and WorldEdit — then answers in chat. It is not a block-history logger and does not replace CoreProtect lookup or rollback.
+
+<Warning>
+CauseChain is **not released yet**. There is no marketplace download page. These docs describe the operator plugin as it exists in development. Join Discord for status; do not expect a Modrinth or Hangar button here until a listing exists.
+</Warning>
+
+## Five jobs
+
+1. **Punch death** — `/why` after you die. `Alex ignited TNT → explosion` instead of `Steve was blown up by TNT`.
+2. **Named deny** — `/why deny` names `WorldGuard spawn (visitor) / …` or `GriefPrevention <owner> (visitor) / …`.
+3. **Inspect captured chains** — `/why inspect` on fire, TNT, or WorldEdit inside land you can build in. Empty inspect names the land and points at CoreProtect `/co i`.
+4. **Bow kill** — projectile chain; a dispenser stays a dispenser.
+5. **WorldEdit `//set`** — one semantic node plus an effect set. Staff still get global `/why`, `/chain`, evidence, and optional particle traces.
+
+TNT is the six-second demo, last on the list on purpose. The daily work is death, deny, and inspect.
+
+## Compatibility
+
+- **Server software:** Paper or Folia (`folia-supported: true`)
+- **API:** Paper `1.21` (`api-version: "1.21"`)
+- **Java:** Java 21 or newer. Paper **26.x** hosts typically need **Java 25+** at runtime
+- **License:** Apache License 2.0. No account, no cloud, no extra JARs for the five jobs
+- **Keep CoreProtect** (or Prism / Ledger) if you need who-placed-this and rollback
+
+Folia uses region, entity, global, and async schedulers. That is scheduler support, not a published Folia stress run. Smoke TNT plus death on your Folia jar before you treat it as production-proven.
+
+<Note>
+Soft-depends: WorldGuard, GriefPrevention, WorldEdit / FastAsyncWorldEdit, CoreProtect, PlaceholderAPI. Missing plugins do not crash CauseChain. Lands is not named until an adapter exists.
+</Note>
+
+## Quick commands
+
+```text
+/why
+/why deny
+/why inspect
+/cc adapters
+/cc status
+```
+
+## Documentation sections
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/causechain/installation">
+    Drop the jar, restart, keep CoreProtect, first `/cc adapters`.
+  </Card>
+  <Card title="How it works" icon="diagram-project" href="/causechain/how-it-works">
+    Snapshot on the region thread, queue, SQLite, and confidence ranks.
+  </Card>
+  <Card title="/why" icon="magnifying-glass" href="/causechain/why">
+    Death, deny, inspect, empty `/co i` copy, and staff vs player chat.
+  </Card>
+  <Card title="Commands" icon="terminal" href="/causechain/commands">
+    `/why`, `/chain`, `/cc`, and console `/cc why`.
+  </Card>
+  <Card title="Permissions" icon="key" href="/causechain/permissions">
+    `why.self` / `why.claim` default true; staff nodes default op.
+  </Card>
+  <Card title="Configuration" icon="gear" href="/causechain/configuration">
+    Capture flags, retention, queue, privacy, and hints.
+  </Card>
+  <Card title="Integrations" icon="puzzle-piece" href="/causechain/integrations">
+    WorldGuard, GriefPrevention, WorldEdit, CoreProtect, PlaceholderAPI.
+  </Card>
+  <Card title="FAQ" icon="circle-question" href="/causechain/faq">
+    CoreProtect, Folia, Lands, rewind, unknown, storage, `/reload`.
+  </Card>
+</CardGroup>
+
+## Support
+
+<CardGroup cols={2}>
+  <Card title="Discord" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+    Support and release status.
+  </Card>
+  <Card title="Modrinth" icon="hammer" href="https://modrinth.com/user/mattbaconz">
+    Other plugins on the mattbaconz profile. CauseChain has no project page yet.
+  </Card>
+</CardGroup>
