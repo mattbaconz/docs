@@ -1,0 +1,88 @@
+---
+title: 'Integrations'
+description: 'PlaceholderAPI, CoreProtect hints, Grim/Vulcan ingest, Geyser, Discord, public events.'
+---
+
+Soft-depends never crash Halt when missing. Optional plugins: PlaceholderAPI, CoreProtect, GrimAC, Vulcan. Discord is a webhook URL, not a plugin.
+
+```text
+softdepend: [PlaceholderAPI, CoreProtect, GrimAC, Vulcan]
+```
+
+## Discord
+
+Staff outbound path. Not a required dependency.
+
+1. `config.yml` → `alerts.discord: true`
+2. `alerts.yml` → `discord.enabled: true` and a valid `webhook_url`
+3. `/halt webhook test`
+
+Embeds include incident id, coords, and `/halt incident <id>` when those fields exist. Rate-limited by `rate_limit_per_minute`. Malformed URLs are ignored so Discord cannot break core runtime.
+
+See [Installation](/halt/installation).
+
+## PlaceholderAPI
+
+If PlaceholderAPI is present, Halt registers identifier `halt`. Missing PlaceholderAPI is ignored.
+
+| Placeholder | Meaning |
+| --- | --- |
+| `%halt_risk_total%` | Sum of the requesting player's current risk scores |
+| `%halt_risk_<type>%` | One signal type score (`crash`, `dupe`, `mine`, `freecam`, `other`) |
+| `%halt_incidents_open%` | Count of incidents with status `OPEN` (not all incidents) |
+| `%halt_lockdown_active%` | Active lockdown profile name, or `off` |
+| `%halt_armed%` | `containment.mode` (`off`, `contain`, `lockdown`) |
+| `%halt_contained%` | `true` / `false` whether the requesting player is currently contained |
+
+Use them on staff scoreboards. Empty or `0` means no score yet, not "clean forever."
+
+## CoreProtect
+
+**Coexistence and hints only.** If CoreProtect is installed, incident detail can include lookup/rollback hint copy around the incident location and time.
+
+Halt does **not**:
+
+- Query CoreProtect history
+- Run `/co rollback` for you
+- Replace CoreProtect lookup
+
+Keep CoreProtect (or Prism / Ledger) for who-placed-this and rollback. Pair `/halt export` with your logger. See the [Incident playbook](/halt/playbook).
+
+## GrimAC and Vulcan
+
+`integrations.grim_ingest` and `integrations.vulcan_ingest` (default true) copy flag events into Halt incidents when those plugins are present. Missing plugins are ignored.
+
+Halt does not replace Grim or Vulcan. Do not stack Grim **and** Vulcan. See [Recommended stacks](/halt/stacks).
+
+## Geyser / Floodgate
+
+FreecamWatch `geyser_lenient: true` uses looser reach and angle for Geyser/Floodgate client brands. That reduces Bedrock false flags. It does not block freecam clients on join and does not make Freecam "unaffected" on Geyser. GUI search falls back to chat on Geyser/Bedrock when the anvil search UI cannot open.
+
+## Public events
+
+Package: `dev.mattbaconz.halt.api`
+
+Other plugins can listen. Payloads expose both record-style and JavaBean accessors (`incident()` / `getIncident()`, and the same for `signal`, `riskScore`, `lockdown`, `containment`).
+
+| Event | Cancellation | When |
+| --- | --- | --- |
+| `HaltSignalDetectedEvent` | Cancellable | Raw signal before incident creation, alerts, and risk mutation. Cancel skips those side effects |
+| `HaltIncidentCreatedEvent` | Not cancellable | After an incident is created |
+| `HaltRiskScoreChangedEvent` | Not cancellable | Rolling risk score changed |
+| `HaltLockdownStartingEvent` | Cancellable | Before lockdown state is saved |
+| `HaltLockdownStartedEvent` | Not cancellable | After lockdown starts |
+| `HaltLockdownEndedEvent` | Not cancellable | After lockdown ends |
+| `HaltContainmentStartingEvent` | Cancellable | Before player or vector containment is saved |
+| `HaltContainmentStartedEvent` | Not cancellable | After containment starts |
+| `HaltContainmentEndedEvent` | Not cancellable | After containment ends or expires |
+
+Cancellable containment hooks hop onto the global scheduler before evaluating containment so Folia never touches Bukkit off-thread.
+
+## Not hooked
+
+| Plugin | Behavior |
+| --- | --- |
+| **LPX / ExploitFixer** | Not required. Pair them for packet crash; Halt does not ingest them |
+| **IllegalStack** | Not required. Pair for vanilla mechanic patches; Halt does not replace them |
+| **Vault** | Not used. Economy lockdown is command/item containment, not a balance freeze |
+| **Lands / WorldGuard** | Not named. Halt is not a claims plugin |

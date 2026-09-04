@@ -1,0 +1,164 @@
+---
+title: 'Configuration'
+description: 'Modules, checks, lockdowns, alerts, GUI chrome, and reload rules.'
+---
+
+On first boot Halt writes `plugins/Halt/`. Most keys apply after `/halt reload`. Invalid YAML, wrong types, or bad enum values are **rejected**; the last known-good config stays active and `/halt reload` reports `reload_failed`.
+
+Do not use Bukkit `/reload`. Use `/halt reload` or a full restart.
+
+Boolean fields must be `true` or `false`. Severity values are `INFO`, `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`. CrashGuard actions are `ALERT`, `ALERT_CANCEL`, `ALERT_KICK`.
+
+## `config.yml`
+
+```yaml title="plugins/Halt/config.yml"
+version: 1
+locale: en_us
+debug: false
+license_key: ""
+
+modules:
+  crash_guard: true
+  dupe_watch: true
+  mine_watch: true
+  freecam_watch: true
+  lockdown: true
+  incident_log: true
+  alert_bridge: true
+
+storage:
+  type: sqlite
+  retention_days: 0
+  sqlite:
+    file: halt.db
+
+alerts:
+  staff_chat: true
+  console: true
+  discord: false
+  minimum_staff_severity: medium
+  minimum_discord_severity: high
+
+incident_correlation:
+  enabled: true
+  window_seconds: 300
+  link_types: [dupe, mine, crash, freecam]
+
+lockdown:
+  suggest_on_critical: true
+  suggest_profile: economy
+
+punish:
+  enabled: false
+  commands: []
+
+integrations:
+  grim_ingest: true
+  vulcan_ingest: true
+
+containment:
+  mode: "off"
+  ttl_seconds: 900
+  kick_on_critical: false
+  min_severity: high
+```
+
+Module toggles control runtime behavior, not only status text:
+
+- Disabling `lockdown` suppresses lockdown commands, active state, history, and restriction enforcement
+- Disabling `incident_log` suppresses new incident persistence and incident command results
+- Disabling `alert_bridge` suppresses staff, console, and Discord fan-out; `/halt webhook test` reports disabled
+
+`containment.mode` is `off`, `contain`, or `lockdown`. `/halt arm` and `/halt setup <watch|contain|lockdown>` persist this key. `ttl_seconds: 0` means until staff runs `/halt contain off`. `kick_on_critical` kicks only that player after containment starts; it never bans.
+
+`punish.enabled` is off by default. When on, `/halt incident <id> punish` runs owner `punish.commands` with `{player}` `{uuid}` `{incident}` `{type}` `{severity}`. Still not auto-ban.
+
+`lockdown.suggest_on_critical` adds suggest copy for CRITICAL incidents while unarmed. It never auto-starts lockdown.
+
+## `checks.yml`
+
+Four watch families. Each check has `enabled`, windows, thresholds, `cooldown_seconds`, and either an `action` (CrashGuard) or `severity` (the others). Cooldowns suppress repeated incident/risk creation for the same check key; the check action (cancel/kick) can still run.
+
+### CrashGuard
+
+Command spam, inventory click bursts, book/sign text limits, failed interactions, anvil rename length, container-open spam. `ignored_commands` is only for command spam (base command label, no slash).
+
+`anvil_rename_limit` measures `PrepareAnvilEvent` rename length. `container_open_spam` uses rapid `InventoryOpenEvent` counts. Missing sections in older `checks.yml` files stay disabled.
+
+### DupeWatch
+
+Shulker cycles, hopper bursts, drop/pickup loops, high-value growth, death-drop recovery, ender-chest swap, bundle churn, villager trade burst.
+
+`high_value_growth` and `death_drop_recovery` use `valuable_items` weights times item amount. Pickups matching the player's own recent drop, including partial pickups from the same dropped stack, count as one drop/pickup-loop cycle per stack, not item-growth evidence. `ender_chest_swap`, `bundle_churn`, and `villager_trade_burst` are alert-first; they do not cancel the click. Armed containment is the cancel path.
+
+### MineWatch
+
+```yaml
+mine_watch:
+  enabled_worlds: []
+```
+
+Empty `enabled_worlds` means **all worlds**. A non-empty list is an allowlist. `alert_ratio` is weighted ore score across the sample window (`ore_weights`); it must be greater than `0` and at most `1`. `direct_ore_path` counts short non-ore runs that lead into valuable ore. `y_band_cluster` is a weighted-ore spike inside a tight Y/radius window.
+
+### FreecamWatch
+
+`max_distance` and `max_angle_degrees` must be greater than `0`. `geyser_lenient` (default true) uses `geyser_max_distance` / `geyser_max_angle_degrees` for Geyser/Floodgate client brands. See [Modules](/halt/modules).
+
+Material keys in `valuable_items` and `ore_weights` are trimmed and uppercased. Weights must be positive integers. Duplicate keys after normalization are rejected.
+
+## `lockdowns.yml`
+
+Must define at least one profile. `blocked_commands` entries must be non-blank scalars (no leading slash). Copy extra shop plugin labels from `examples/lockdown-command-packs.yml` in the jar.
+
+```yaml title="plugins/Halt/lockdowns.yml"
+profiles:
+  economy:
+    description: Contain shop/trade commands and item transfer during suspected dupes.
+    restrictions:
+      shulker_place: true
+      shulker_break: true
+      hopper_transfer: true
+      item_drop: false
+      container_open: false
+      blocked_commands: [ah, auction, auctionhouse, shop, shops, sell, trade, bounty, ec, crate, crates, spawnershop]
+    broadcast: true
+
+  full_containment:
+    description: Strong containment for active exploit incidents.
+    restrictions:
+      shulker_place: true
+      shulker_break: true
+      hopper_transfer: true
+      item_drop: true
+      container_open: true
+      blocked_commands: [ah, auction, auctionhouse, shop, shops, sell, trade, bounty, ec, crate, crates, spawnershop, withdraw]
+    broadcast: true
+```
+
+Economy lockdown is shop/trade command containment, not a Vault balance freeze. See [Containment](/halt/containment).
+
+## `alerts.yml`
+
+```yaml title="plugins/Halt/alerts.yml"
+discord:
+  enabled: false
+  webhook_url: ""
+  username: Halt
+  rate_limit_per_minute: 20
+```
+
+Webhook tests require `config.yml` `alerts.discord: true`, `alerts.yml` `discord.enabled: true`, a valid `http` or `https` `webhook_url` with a host, and `rate_limit_per_minute` above zero. Enabled Discord alerts are embeds with severity-colored sidebars, sent on the async scheduler, still rate-limited.
+
+Staff chat format and MiniMessage strings live here. Missing `messages` entries fall back to packaged English defaults. Visible GUI titles still come from locale MiniMessage in `locale/en_us.yml`, not from `gui.yml` title strings.
+
+Alert template placeholders: `{id}`, `{type}` / `{type_label}`, `{player}`, `{severity}` / `{severity_label}` / `{severity_styled}`, `{summary}`, `{status}`, `{world}` / `{x}` / `{y}` / `{z}`, `{brand}`, `{suggest_suffix}` (CRITICAL lockdown suggest while unarmed; armed HIGH/CRITICAL uses contain-off copy instead).
+
+## `gui.yml`
+
+Staff list chrome (`incidents`, `scan` picker): slots `0` search, `2` sort, `4` type/scope filter, `6` status filter (incidents only), `8` reset, `45` previous, `49` back, `53` next. Set a button to `-1` to hide it. Hub, lockdown, and incident detail do not use this chrome.
+
+## Reload vs restart
+
+Safe to reload: messages, display settings, `gui.yml` list chrome, most thresholds, `containment.mode`, module settings where listeners can be re-registered.
+
+Restart required: `storage.type`, `storage.sqlite.file`, any `storage.mysql` value. Those keys are rejected during `/halt reload`.

@@ -1,0 +1,74 @@
+---
+title: 'FAQ'
+description: 'License, Folia, Geyser, auto-ban, Vault freeze, demo jar, and Bukkit /reload.'
+---
+
+## What is Halt?
+
+Halt is incident response for dupes, crashes, and economy abuse: four watch modules, persisted staff cases, Discord, reversible lockdowns, and optional auto-contain. Default is watch-only. `/halt arm contain` is the kill-switch.
+
+## License
+
+### Do I need a license key?
+
+Yes for the paid jar. Set `license_key` in `plugins/Halt/config.yml`. Claim product id **`HALT`** in Discord (`/claim HALT`), then paste the key and **restart**. `/halt reload` does not re-check it.
+
+The paid jar verifies at `https://matt-drm.vercel.app/api/verify`. Hardware identity uses OS/arch/user plus `http://checkip.amazonaws.com`. Empty keys and `YOUR_KEY_HERE` fail. Invalid keys never start Halt. License-server or HTTP 5xx failures may start Halt only when a 72-hour local cache matches the current key hash.
+
+<Card title="Discord support" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  License claims and troubleshooting.
+</Card>
+
+### What is the demo jar?
+
+The BuiltByBit test-server zip uses `Halt-1.0.0-demo.jar` with DRM compiled off. That jar ignores an empty key. Invalid keys still disable Halt. Production servers should run the paid `Halt-1.0.0.jar`.
+
+## Does Halt require other plugins?
+
+No. PlaceholderAPI, CoreProtect, GrimAC, and Vulcan are optional. Missing plugins do not crash Halt. Discord webhook alerts need a URL in `alerts.yml`.
+
+## Does Halt replace LPX / ExploitFixer / Grim / Vulcan?
+
+No. Packet tools and combat ACs stay. Halt is the incident-response layer. See [Recommended stacks](/halt/stacks).
+
+## Does Halt auto-ban?
+
+No. Defaults are alerts. Armed contain restricts the player and matching mechanic. Optional `punish.commands` stay off until you enable them, and `/halt incident <id> punish` is still staff-triggered.
+
+## Is economy lockdown a Vault freeze?
+
+No. It blocks configured shop/trade **commands** and item-transfer systems (shulkers, hoppers, drops, containers) from `lockdowns.yml`. Account balances are not frozen.
+
+## Platforms
+
+### Does Halt support Folia?
+
+Yes. `folia-supported: true` and Paper scheduler APIs (not BukkitScheduler). Paper-compatible `1.20.1` through `26.2`. Folia **1.20.1** and **26.1.2** are the supported Folia line. Folia **26.2** is experimental. That is not a claim for every Folia fork.
+
+### Java and Paper versions?
+
+Halt bytecode is **Java 17**. Host Java:
+
+- **1.20.1–1.20.4**: Java **17**
+- **1.20.5–1.21.x**: Java **21**
+- **26.1+**: Java **25** (the server requires it)
+
+One jar. `api-version: "1.20"` so 1.20.1 hosts still load it.
+
+## Geyser / Bedrock
+
+FreecamWatch defaults to `geyser_lenient: true` with looser reach and angle for Geyser/Floodgate client brands. That reduces Bedrock false flags. It does not make Freecam "unaffected" on Geyser, and Halt does not block freecam clients on join.
+
+## Storage
+
+### Does Halt support MySQL?
+
+Yes. SQLite is the default. Switch with `/halt migrate storage --apply-config` then a restart. See [Installation](/halt/installation).
+
+### Can I Bukkit `/reload`?
+
+No. Use `/halt reload` for safe keys, or a full restart (especially on Folia). Storage engine, SQLite file, and MySQL credentials are restart-required.
+
+## Support tickets
+
+Include Halt version, server software and version, Java version, plugin list, `/halt status`, a console snippet, steps to reproduce, and the `modules` / `containment` sections of `config.yml`.

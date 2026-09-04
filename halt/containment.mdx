@@ -1,0 +1,66 @@
+---
+title: 'Containment'
+description: 'Economy lockdown, player contain, arm modes, TTL, and reverse commands.'
+---
+
+Containment is reversible restriction while the server stays up. It is not a ban, not a Vault freeze, and not join-only lockdown.
+
+Default first boot is **unarmed**. Halt suggests. Staff start lockdown or player contain by hand. `/halt arm contain` is the kill-switch.
+
+## Arm modes
+
+| Mode | How | What happens on HIGH/CRITICAL |
+| --- | --- | --- |
+| `off` | `/halt arm off` or `/halt setup watch` | Alert, persist, Discord, lockdown *suggest* only |
+| `contain` | `/halt arm contain` or `/halt setup contain` | Auto player + matching mechanic restrictions |
+| `lockdown` | `/halt arm lockdown` or `/halt setup lockdown` | Same as contain, plus rare correlated CRITICAL `full_containment` |
+
+Confirm with `/halt status` (`Armed:` line). `containment.min_severity` defaults to `high`. Armed auto-containment is dangerous and opt-in.
+
+`containment.ttl_seconds` (default 900) expires player/vector containment. `0` means until staff runs `/halt contain off`.
+
+`containment.kick_on_critical` kicks **that player** after containment starts. It never bans.
+
+`halt.bypass.containment` skips player containment enforcement. It does **not** skip server lockdown.
+
+## Lockdown profiles
+
+From `lockdowns.yml`. Start with `/halt lockdown <profile>` (`halt.lockdown.use`). Stop with `/halt lockdown off` (`halt.lockdown.stop`).
+
+| Profile | Typical use |
+| --- | --- |
+| `economy` | Shop/trade **commands** plus shulker place/break and hopper transfer. Item drop and container open stay allowed by default |
+| `full_containment` | Same, plus item drop, container open, and extra blocked commands such as `withdraw` |
+
+Copy extra shop plugin labels from `examples/lockdown-command-packs.yml` into `blocked_commands`. Labels have no leading slash.
+
+<Warning>
+The `economy` profile name means shop/trade command and item-transfer containment. It does not freeze Vault balances.
+</Warning>
+
+When `modules.lockdown` is disabled, Halt rejects lockdown start/stop, exposes no active lockdown or history, and does not enforce lockdown restrictions.
+
+## Player and vector contain
+
+Separate from the lockdown module. Staff:
+
+```text
+/halt contain <player> [reason]
+/halt contain off
+/halt contain off <player>
+/halt contain off all
+```
+
+Manual player contain applies economy commands, containers, drops, and shulkers to that player.
+
+Armed `contain` also restricts the **matching vector** (for example hopper burst → global hopper transfer block) for HIGH/CRITICAL.
+
+Armed `lockdown` only starts full-server `full_containment` when the incident is CRITICAL **and** already correlated. A single uncorrelated CRITICAL still contains the player/vector.
+
+## Reverse order
+
+1. `/halt contain off all`
+2. `/halt lockdown off`
+3. `/halt arm off` if you do not want auto-action on the next HIGH/CRITICAL
+
+Do not leave lockdown or containment on after the incident is controlled. See the [Incident playbook](/halt/playbook).

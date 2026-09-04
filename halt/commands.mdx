@@ -1,0 +1,90 @@
+---
+title: 'Commands'
+description: '/halt staff commands, console support, GUI, arm, and contain.'
+---
+
+Bare `/halt` shows scoped help. `halt.admin` sees all enabled admin commands. Staff with individual subcommand permissions see only those. A permission denial prints only when no command is available.
+
+Disabled modules are hidden from help and from relevant tab completions. Console can run every command except `/halt gui`.
+
+Do not use Bukkit `/reload`. Use `/halt reload` or a full restart.
+
+## Status, setup, reload
+
+| Command | Permission | Console | Purpose |
+| --- | --- | --- | --- |
+| `/halt` | Any granted `/halt` subcommand | Yes | Scoped command help |
+| `/halt status` | `halt.status` | Yes | Modules, storage, compatibility, lockdown, arm mode, alerts |
+| `/halt setup` | `halt.status` | Yes | First-run hints (storage, Discord, MineWatch worlds, Geyser Freecam, punish, arm mode) |
+| `/halt setup watch` | `halt.arm` | Yes | Write `containment.mode: off` then reload |
+| `/halt setup contain` | `halt.arm` | Yes | Write `containment.mode: contain` then reload |
+| `/halt setup lockdown` | `halt.arm` | Yes | Write `containment.mode: lockdown` then reload |
+| `/halt reload` | `halt.reload` | Yes | Reload safe config. Validation failures keep the last good config |
+| `/halt debug player <player>` | `halt.debug` | Yes | UUID, current risk scores, recent incident count |
+| `/halt webhook test` | `halt.webhook.test` | Yes | Queue a Discord test embed |
+
+`/halt status` reports `Modules: none` when no modules are enabled and `disabled` for disabled runtime modules.
+
+`/halt webhook test` reports disabled, unconfigured, malformed URL, and rate-limit states instead of claiming a queued test.
+
+## Incidents
+
+| Command | Permission | Console | Purpose |
+| --- | --- | --- | --- |
+| `/halt logs [player] [type] [page]` | `halt.logs.view` | Yes | Paged recent incidents. Player may be a UUID/name |
+| `/halt incident <id>` | `halt.logs.view` | Yes | One incident: evidence, assignment, recent notes |
+| `/halt incident <id> status <status>` | `halt.incident.manage` | Yes | `OPEN`, `REVIEWED`, `RESOLVED`, `IGNORED` |
+| `/halt incident <id> note <text>` | `halt.incident.manage` | Yes | Add a staff note |
+| `/halt incident <id> assign <staff>` | `halt.incident.manage` | Yes | Assign or reassign |
+| `/halt incident <id> punish` | `halt.incident.manage` | Yes | Run owner `punish.commands`. Off by default. Not auto-ban |
+| `/halt scan <player>` | `halt.scan` | Yes | Current risk scores and latest incident summaries |
+| `/halt purge` | `halt.incident.manage` | Yes | Purge resolved/ignored using `storage.retention_days`, or all resolved when retention is `0` |
+| `/halt export [--player] [--type] [--since] [--status]` | `halt.export` | Yes | JSON under `plugins/Halt/exports/` |
+| `/halt gui` | `halt.gui` | No | Staff chest GUI hub |
+
+Unknown player-name filters reply `Player not found.` instead of an unfiltered list. Unknown log types reply `Unknown incident type.` Invalid pages reply `Invalid page.`
+
+Blank incident notes and assignees are rejected before storage is touched. Status changes are appended to the note timeline with actor and old/new status.
+
+`/halt scan <player>` lists decayed current risk scores from highest to lowest (signal type as tie-breaker), plus a short recent-incident section even when one section is empty. `/halt debug player <player>` uses the same score order.
+
+## Lockdown and contain
+
+| Command | Permission | Console | Purpose |
+| --- | --- | --- | --- |
+| `/halt lockdown <profile>` | `halt.lockdown.use` | Yes | Start a lockdown profile (`economy`, `full_containment`) |
+| `/halt lockdown history` | `halt.lockdown.use` | Yes | Recent lockdown starts/stops |
+| `/halt lockdown off` | `halt.lockdown.stop` | Yes | Stop active lockdown |
+| `/halt arm off` | `halt.arm` | Yes | Persist unarmed mode |
+| `/halt arm contain` | `halt.arm` | Yes | Persist `contain` armed mode |
+| `/halt arm lockdown` | `halt.arm` | Yes | Persist `lockdown` armed mode |
+| `/halt contain <player> [reason]` | `halt.contain.use` | Yes | Manually contain a player |
+| `/halt contain off` | `halt.contain.stop` | Yes | Release all player and vector containments |
+| `/halt contain off <player>` | `halt.contain.stop` | Yes | Release one contained player |
+| `/halt contain off all` | `halt.contain.stop` | Yes | Release all player and vector containments |
+
+Commands that mutate server state log the actor and action. See [Containment](/halt/containment).
+
+## Storage migrate
+
+| Command | Permission | Console | Purpose |
+| --- | --- | --- | --- |
+| `/halt migrate storage [--dry-run] [--apply-config]` | `halt.migrate` | Yes | Copy SQLite into the configured MySQL target |
+
+`--dry-run` prints table counts. `--apply-config` writes `storage.type: mysql` after a successful copy. Restart to use MySQL.
+
+## GUI
+
+`/halt gui` opens the staff hub (incidents, lockdown, scan, status). Incident list and scan picker support search, click-cycle filters, click-cycle sort, reset, and paging. Hub, lockdown, and incident detail stay as action menus without that chrome.
+
+Incident list search matches player name, incident id, and summary (case-insensitive contains). Type cycles `ALL → CRASH → DUPE → MINE → FREECAM`. Status cycles `ALL → OPEN → REVIEWED → RESOLVED → IGNORED`. Sort cycles `Newest → Oldest → Severity`. Changing search, filter, or sort resets to page 1.
+
+Scan picker search matches player name. Filter cycles `Online → Has risk → Contained`. Sort cycles `Name → Risk high`. Has-risk includes online players plus offline UUIDs with a risk row or a recent incident.
+
+Java clients type list search in an anvil. Folia, Geyser/Bedrock, and failed anvil open fall back to chat. Send `-` or a blank query to clear search.
+
+Back from incident detail restores the previous incidents page, query, filters, and sort. Back from a scanned player restores the picker chrome.
+
+GUI list pages use the inner 7-wide grid (28 slots). `display.pagination.logs_page_size` is chat `/halt logs` only (default 10).
+
+See [Incidents](/halt/incidents) and [Permissions](/halt/permissions).

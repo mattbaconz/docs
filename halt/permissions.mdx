@@ -1,0 +1,90 @@
+---
+title: 'Permissions'
+description: 'halt.admin children vs bypass nodes that stay separate.'
+---
+
+All command nodes default **op**. Bypass nodes default **false** and are **not** bundled in `halt.admin`.
+
+`plugin.yml` does not set a top-level `/halt` permission. The executor applies subcommand permissions so scoped help works.
+
+## `halt.admin`
+
+Default **op**. Grants every staff command child below. Detection bypass permissions stay separate.
+
+| Child | Included |
+| --- | --- |
+| `halt.status` | true |
+| `halt.reload` | true |
+| `halt.logs.view` | true |
+| `halt.incident.manage` | true |
+| `halt.scan` | true |
+| `halt.lockdown.use` | true |
+| `halt.lockdown.stop` | true |
+| `halt.arm` | true |
+| `halt.contain.use` | true |
+| `halt.contain.stop` | true |
+| `halt.webhook.test` | true |
+| `halt.alerts.receive` | true |
+| `halt.debug` | true |
+| `halt.gui` | true |
+| `halt.export` | true |
+| `halt.migrate` | true |
+
+Give `halt.admin` to senior staff. Give `halt.logs.view` plus `halt.scan` without `halt.arm` if you want review without the kill-switch.
+
+## Command nodes
+
+| Permission | Default | Description |
+| --- | --- | --- |
+| `halt.status` | op | `/halt status`, `/halt setup` hints |
+| `halt.reload` | op | `/halt reload` |
+| `halt.logs.view` | op | `/halt logs`, `/halt incident <id>` |
+| `halt.incident.manage` | op | Notes, assignment, status, punish templates, `/halt purge` |
+| `halt.scan` | op | `/halt scan <player>` |
+| `halt.lockdown.use` | op | Start lockdowns and view history |
+| `halt.lockdown.stop` | op | `/halt lockdown off` |
+| `halt.arm` | op | `/halt arm`, `/halt setup watch\|contain\|lockdown` |
+| `halt.contain.use` | op | `/halt contain <player>` |
+| `halt.contain.stop` | op | `/halt contain off` |
+| `halt.webhook.test` | op | `/halt webhook test` |
+| `halt.alerts.receive` | op | Receive staff chat alerts |
+| `halt.debug` | op | `/halt debug player` |
+| `halt.gui` | op | `/halt gui` |
+| `halt.export` | op | `/halt export` |
+| `halt.migrate` | op | `/halt migrate storage` |
+
+## Bypass nodes
+
+These default **false**. They are not children of `halt.admin`. Grant them only to staff who should skip a watch module or player containment.
+
+| Permission | Default | Description |
+| --- | --- | --- |
+| `halt.bypass.crash` | false | Bypass CrashGuard mitigations |
+| `halt.bypass.dupe` | false | Bypass DupeWatch mitigations |
+| `halt.bypass.mine` | false | Bypass MineWatch alerts |
+| `halt.bypass.freecam` | false | Bypass FreecamWatch alerts |
+| `halt.bypass.containment` | false | Bypass **player** containment enforcement. Does not bypass server lockdown |
+
+<Warning>
+`halt.bypass.containment` lets that player ignore player-contain restrictions. Server `economy` / `full_containment` lockdown still applies to them.
+</Warning>
+
+## Typical LuckPerms groups
+
+```text
+# Moderators — review only
+lp group mod permission set halt.logs.view true
+lp group mod permission set halt.scan true
+lp group mod permission set halt.gui true
+lp group mod permission set halt.alerts.receive true
+
+# Senior staff — cases and manual contain, no arm
+lp group sr-mod permission set halt.incident.manage true
+lp group sr-mod permission set halt.lockdown.use true
+lp group sr-mod permission set halt.lockdown.stop true
+lp group sr-mod permission set halt.contain.use true
+lp group sr-mod permission set halt.contain.stop true
+
+# Admins
+lp group admin permission set halt.admin true
+```

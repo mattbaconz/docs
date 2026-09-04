@@ -1,0 +1,67 @@
+---
+title: 'Incident playbook'
+description: 'Staff procedure for active exploit abuse. Alert-first. Armed auto-contain is opt-in.'
+---
+
+Staff procedure for an active dupe, crash, or economy incident. Halt defaults to **alert**, not auto-ban. Owners choose punishments separately. Armed auto-containment is opt-in and dangerous.
+
+## 1. Triage the alert
+
+1. Read the staff chat / Discord embed (type, player, severity, summary).
+2. Run `/halt incident <id>` (or the staff GUI incident detail) for evidence, assignment, notes, and CoreProtect lookup/rollback hints.
+3. Run `/halt scan <player>` for current risk scores and recent incident summaries.
+4. Decide: false positive, watch, or active containment. GUI actions: cycle status, assign to self, add a review note, start the suggested lockdown.
+
+## 2. Arm only when you want Halt to act
+
+First boot stays unarmed (`containment.mode: off`): detect, persist, Discord, suggest. Never auto-starts containment or full-server lockdown.
+
+1. Watch-only: `/halt arm off` or `/halt setup watch`.
+2. Auto player + matching mechanic: `/halt arm contain` or `/halt setup contain`. HIGH/CRITICAL then restrict the suspect plus the matching vector.
+3. Same as contain, plus rare full-server `full_containment` when the incident is CRITICAL **and** already correlated: `/halt arm lockdown`.
+4. Confirm with `/halt status` (`Armed:` line). Reverse with `/halt contain off` / `/halt contain off <player|all>` and `/halt lockdown off`.
+
+Optional `containment.kick_on_critical` kicks **that player** after containment starts. It never bans. `halt.bypass.containment` skips player containment for staff; it does not skip server lockdown.
+
+## 3. Contain when economy risk is real
+
+If Halt is unarmed, staff still start containment by hand:
+
+1. Start shop/trade containment: `/halt lockdown economy`.
+2. Or contain one player: `/halt contain <player> [reason]`.
+3. Escalate if needed: `/halt lockdown full_containment`.
+4. Do **not** leave lockdown or containment on after the incident is controlled.
+
+The `economy` profile is **not** a Vault balance freeze. It blocks configured commands and item-transfer systems per `lockdowns.yml`.
+
+## 4. Investigate
+
+1. Assign the incident: `/halt incident <id> assign <staff>`.
+2. Add notes as you check inventories, chests, and shop logs.
+3. Use your rollback tool (for example CoreProtect) around the incident location/time from Halt evidence.
+4. Optionally `/halt export` for a JSON package of incidents, notes, risk scores, and lockdown history.
+
+## 5. Resolve
+
+1. Apply any punishment through your separate moderation stack. Optional: enable `punish.commands` and run `/halt incident <id> punish`. Still staff-triggered. Still not auto-ban.
+2. Set status: `/halt incident <id> status RESOLVED` (or `IGNORED` for false positives, `REVIEWED` when still monitoring).
+3. End containment and lockdown: `/halt contain off all` then `/halt lockdown off`. Disarm if you do not want auto-action: `/halt arm off`.
+4. Tune thresholds only after confirming a pattern of false positives. See `checks.yml` cooldowns and module toggles.
+
+## Quick reference
+
+| Situation | First action |
+| --- | --- |
+| Unarmed CRITICAL DupeWatch | `/halt lockdown economy` then investigate |
+| Armed contain HIGH/CRITICAL | Halt already contained the player/vector; `/halt contain off` when safe |
+| Armed lockdown + correlated CRITICAL | Confirm `/halt status`; reverse with contain off + lockdown off |
+| CrashGuard spam / book noise | Cancel/kick already configurable; review `/halt logs` |
+| MineWatch / FreecamWatch | Watch + `/halt scan`; player containment if armed; do not full-lock unless economy is at risk |
+| Suspected false positive | Note + `IGNORED`; raise thresholds later |
+
+## Next
+
+- [Containment](/halt/containment)
+- [Recommended stacks](/halt/stacks)
+- [Commands](/halt/commands)
+- [Configuration](/halt/configuration)

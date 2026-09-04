@@ -1,0 +1,72 @@
+---
+title: 'Incidents'
+description: 'Staff cases, GUI, correlation, export, and optional punish templates.'
+---
+
+Every watch signal can become a persisted **staff case**: type, severity, player, location, evidence metadata, status, timestamps, notes, and assignment.
+
+When `modules.incident_log` is disabled, Halt does not create or expose incident records.
+
+## Statuses
+
+| Status | Meaning |
+| --- | --- |
+| `OPEN` | New or still in play |
+| `REVIEWED` | Looked at, still monitoring |
+| `RESOLVED` | Closed after action or confirmed handled |
+| `IGNORED` | False positive or not worth a case |
+
+Change with `/halt incident <id> status <status>` or the GUI. The change is appended to the note timeline with actor and old/new status.
+
+## Chat workflow
+
+```text
+/halt logs
+/halt logs <player>
+/halt incident <id>
+/halt incident <id> note <text>
+/halt incident <id> assign <staff>
+/halt scan <player>
+```
+
+Blank notes and assignees are rejected before storage is touched. Unknown players reply `Player not found.` instead of dumping the unfiltered list.
+
+`/halt scan <player>` shows decayed current risk (highest first) plus a short recent-incident section.
+
+## Staff GUI
+
+`/halt gui` (`halt.gui`). Hub actions: incidents, lockdown, scan, status.
+
+Incident list chrome: search, type filter, status filter, sort, reset, paging. Search matches player name, incident id, and summary. Type cycles `ALL → CRASH → DUPE → MINE → FREECAM`. Status cycles `ALL → OPEN → REVIEWED → RESOLVED → IGNORED`. Sort cycles `Newest → Oldest → Severity`.
+
+Scan picker: search by name, filter `Online → Has risk → Contained`, sort `Name → Risk high`.
+
+Java clients type search in an anvil. Folia, Geyser/Bedrock, and failed anvil open fall back to chat. Send `-` or a blank query to clear.
+
+Incident detail: cycle status, assign to self, add a review note, start the suggested lockdown. Back restores the previous list page, query, filters, and sort.
+
+GUI pages use the inner 7-wide grid. Chat `/halt logs` page size is `display.pagination.logs_page_size` (default 10).
+
+## Correlation
+
+`incident_correlation.enabled` (default true) links same-player OPEN incidents within `window_seconds` (default 300) for `link_types` via `parent_id`. Related hopper / value-growth / mining signals become one case instead of a row storm.
+
+CRITICAL unarmed incidents can **suggest** `lockdown.suggest_profile` (default `economy`) in chat, Discord, and GUI. Suggest never auto-starts lockdown.
+
+## Export
+
+```text
+/halt export [--player] [--type] [--since] [--status]
+```
+
+Writes JSON under `plugins/Halt/exports/`: incidents, notes, assignments, risk scores, and lockdown history. Use it with CoreProtect around the evidence coords. Halt does not run rollback for you.
+
+## Punish templates
+
+`punish.enabled` defaults **false**. When on, `/halt incident <id> punish` runs owner `punish.commands` with `{player}` `{uuid}` `{incident}` `{type}` `{severity}`.
+
+This is still staff-triggered. Halt does not auto-ban.
+
+## Retention
+
+`storage.retention_days` schedules automatic purge of `RESOLVED` and `IGNORED` incidents. `0` disables scheduled retention. `/halt purge` removes resolved incidents using that window, or all resolved incidents when retention is `0`.

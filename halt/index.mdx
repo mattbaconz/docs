@@ -1,0 +1,108 @@
+---
+title: 'Halt'
+description: 'Incident response for dupes, crashes, and economy abuse.'
+---
+
+**Halt** is the staff case layer for dupes, crashes, and economy abuse. Four watch modules persist incidents, score risk, and alert Discord. Default is watch-only. `/halt arm contain` is the kill-switch: HIGH/CRITICAL auto-restricts the suspect and the matching mechanic.
+
+It is not a packet firewall and not a combat anticheat. Run LPX or ExploitFixer and Grim or Vulcan beside it when those layers matter.
+
+<Note>
+Paid builds require a license key in `config.yml`. Claim product id `HALT` in Discord, then paste the key before you go live. `/halt reload` does not re-check the key.
+</Note>
+
+## Who it is for
+
+SMP, Lifesteal, Skyblock, BoxPvP, and economy-server owners who cannot afford crashes, dupes, rollback nights, or untracked abuse.
+
+## What Halt does
+
+- **Signals** from CrashGuard, DupeWatch, MineWatch, and FreecamWatch
+- **Staff cases** with severity, evidence, status, notes, and assignment
+- **Risk scores** for triage
+- **Lockdown profiles** that contain shop/trade commands and item-transfer systems while the server stays up
+- **AlertBridge** to staff chat, console, and Discord embeds
+- **Opt-in armed containment** on HIGH/CRITICAL. Full-server lockdown stays rare and correlated
+
+## What Halt does not do
+
+- Combat anticheat (no killaura or fly prediction)
+- Netty/packet crash firewall (no PacketEvents, ProtocolLib, or HamsterAPI)
+- Silent vanilla exploit patches like IllegalStack
+- Auto-ban. Armed mode is reversible restriction, not a ban
+- Vault/balance freeze. The `economy` profile blocks configured shop commands and item transfers
+- Join-only lockdown. Halt contains subsystems; players can still be online
+
+## Compatibility
+
+- **Server software:** Paper or Folia (`folia-supported: true`)
+- **Minecraft:** `1.20.1` through `26.2` (one jar, `api-version: "1.20"`)
+- **Java:** Halt bytecode is Java 17. Host Java follows the server:
+  - Paper/Folia **1.20.1–1.20.4**: Java **17**
+  - Paper/Folia **1.20.5–1.21.x**: Java **21**
+  - Paper/Folia **26.1+**: Java **25**
+- **Folia:** **26.1.2** is the supported Folia line. Folia **26.2** is experimental
+- **Dependencies:** none required. Optional PlaceholderAPI, CoreProtect, GrimAC, Vulcan
+
+<Warning>
+Do not use Bukkit `/reload`. Use `/halt reload` for safe keys, or a full restart (especially on Folia). Storage engine changes always need a restart.
+</Warning>
+
+## Quick commands
+
+```text
+/halt setup
+/halt status
+/halt gui
+/halt incident <id>
+/halt arm contain
+/halt lockdown economy
+```
+
+First boot stays unarmed (`containment.mode: off`). Confirm with `/halt status` before you arm anything.
+
+## Documentation sections
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/halt/installation">
+    Jar, license key, Discord webhook, SQLite or MySQL, first `/halt setup`.
+  </Card>
+  <Card title="How it works" icon="diagram-project" href="/halt/how-it-works">
+    Watch-only vs armed contain vs rare full-server lockdown.
+  </Card>
+  <Card title="Incident playbook" icon="clipboard-list" href="/halt/playbook">
+    Triage, contain, investigate, resolve. Defaults stay alert-only.
+  </Card>
+  <Card title="Commands" icon="terminal" href="/halt/commands">
+    `/halt` staff commands, console support, and GUI.
+  </Card>
+  <Card title="Permissions" icon="key" href="/halt/permissions">
+    Admin children vs bypass nodes that stay separate.
+  </Card>
+  <Card title="Configuration" icon="gear" href="/halt/configuration">
+    Modules, checks, lockdowns, alerts, GUI chrome, reload rules.
+  </Card>
+  <Card title="Modules" icon="shield-halved" href="/halt/modules">
+    CrashGuard, DupeWatch, MineWatch, FreecamWatch.
+  </Card>
+  <Card title="Containment" icon="lock" href="/halt/containment">
+    Economy lockdown, player contain, arm modes, reverse commands.
+  </Card>
+  <Card title="Recommended stacks" icon="layer-group" href="/halt/stacks">
+    Pair Halt with packet tools, IllegalStack, and one combat AC.
+  </Card>
+  <Card title="FAQ" icon="circle-question" href="/halt/faq">
+    License, Folia, Geyser, auto-ban, Vault freeze, demo jar.
+  </Card>
+</CardGroup>
+
+## Support
+
+<CardGroup cols={2}>
+  <Card title="Discord" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+    Claim `/claim HALT` and get support.
+  </Card>
+  <Card title="BuiltByBit" icon="download" href="https://builtbybit.com/members/mattbaconz">
+    Paid Halt jar. Listing URL is added when the resource is live.
+  </Card>
+</CardGroup>

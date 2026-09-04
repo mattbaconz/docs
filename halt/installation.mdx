@@ -1,0 +1,150 @@
+---
+title: 'Installation'
+description: 'Install Halt on Paper or Folia, add your license, and run first setup.'
+---
+
+## Requirements
+
+- **Server software:** Paper or Folia `1.20.1` through `26.2`
+- **Java:** Halt bytecode is Java 17. Host Java is **17** on 1.20.1–1.20.4, **21** on 1.20.5–1.21.x, **25** on 26.1+
+- **License:** A paid Halt license key (product id `HALT`)
+- **Optional:** PlaceholderAPI, CoreProtect, GrimAC, Vulcan, a Discord webhook
+
+Folia uses region-safe Paper schedulers (`folia-supported: true`). Folia **26.1.2** is the supported line. Folia **26.2** is experimental. Smoke your host before you treat 26.2 as production-proven.
+
+No extra JARs are required for Halt to boot. Soft-depends never crash the plugin when missing.
+
+<Warning>
+Do not use Bukkit `/reload`. Use `/halt reload` for safe config keys, or a full restart. Storage type and MySQL credentials always need a restart.
+</Warning>
+
+## Install Halt
+
+1. Stop the server.
+2. Place `Halt-1.0.0.jar` in the `plugins` folder.
+3. Start the server once so Halt writes `plugins/Halt/`.
+4. Stop the server again.
+5. Open `plugins/Halt/config.yml`.
+6. Set `license_key` to the key from Discord `/claim HALT`.
+7. Start the server.
+
+```yaml title="plugins/Halt/config.yml"
+license_key: "MATT-XXXX-XXXX"
+```
+
+Verification runs on enable. `/halt reload` does not re-check the key. Changing the key requires a restart.
+
+The BuiltByBit test-server zip uses `Halt-1.0.0-demo.jar` with DRM compiled off. That demo ignores an empty key. Invalid keys still disable Halt.
+
+## Claim your license
+
+Join Discord and claim product id `HALT` (`/claim HALT`). Paste the generated key into `config.yml` before production.
+
+The paid jar posts to `https://matt-drm.vercel.app/api/verify` with product `HALT`. Hardware identity includes OS/arch/user and `http://checkip.amazonaws.com`. Empty keys and `YOUR_KEY_HERE` fail. License-server or HTTP 5xx failures may start Halt only when a 72-hour local cache matches the current key hash.
+
+<Card title="Join Discord" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Claim your license key and get support.
+</Card>
+
+## First checks
+
+After the server is up, as an operator:
+
+```text
+/halt setup
+/halt status
+/halt gui
+```
+
+`/halt setup` prints storage, Discord, MineWatch worlds, Geyser Freecam, punish-template, and current arm mode hints. First boot stays **watch-only** (`containment.mode: off`).
+
+Arm only when you want Halt to restrict players by itself:
+
+```text
+/halt setup watch
+/halt setup contain
+/halt setup lockdown
+```
+
+Those write `containment.mode` then reload. Confirm with `/halt status` (`Armed:` line).
+
+## Discord webhooks
+
+1. Set `config.yml` → `alerts.discord: true`
+2. Set `alerts.yml` → `discord.enabled: true` and a valid `webhook_url`
+3. Run `/halt webhook test`
+
+Both Discord flags must be on. Malformed URLs (including HTTP(S) without a host) are treated as disabled so Discord cannot break core runtime.
+
+## Storage
+
+SQLite is the default. No extra database is required.
+
+```yaml title="plugins/Halt/config.yml"
+storage:
+  type: sqlite
+  retention_days: 0
+  sqlite:
+    file: halt.db
+```
+
+`storage.sqlite.file` must be a relative path inside the Halt data folder. Absolute paths, drive letters, `..`, and leading/trailing whitespace are rejected.
+
+### MySQL
+
+Create the database and user first. Copy SQLite rows, then restart:
+
+```text
+/halt migrate storage --dry-run
+/halt migrate storage --apply-config
+```
+
+`--apply-config` writes `storage.type: mysql` after a successful copy. Restart to use MySQL. Changing `storage.type`, the SQLite file, or any MySQL credential during `/halt reload` is rejected.
+
+```yaml
+storage:
+  type: mysql
+  retention_days: 30
+  mysql:
+    host: localhost
+    port: 3306
+    database: halt
+    username: halt
+    password: change_me
+    use_ssl: false
+    pool_size: 10
+```
+
+`retention_days: 0` disables scheduled purge of `RESOLVED` and `IGNORED` incidents. `/halt purge` still removes resolved incidents (all of them when retention is `0`).
+
+## Files written on first boot
+
+| Path | Purpose |
+| --- | --- |
+| `plugins/Halt/config.yml` | License, modules, storage, alerts, containment |
+| `plugins/Halt/checks.yml` | CrashGuard, DupeWatch, MineWatch, FreecamWatch thresholds |
+| `plugins/Halt/lockdowns.yml` | `economy` and `full_containment` profiles |
+| `plugins/Halt/alerts.yml` | Discord webhook, staff chat format, MiniMessage strings |
+| `plugins/Halt/gui.yml` | Staff chest GUI chrome slots |
+| `plugins/Halt/display.yml` | Display settings |
+| `plugins/Halt/locale/en_us.yml` | Locale MiniMessage |
+| `plugins/Halt/halt.db` | SQLite incidents, notes, risk, lockdowns, containments |
+
+Shop command-name packs live in `examples/lockdown-command-packs.yml` inside the jar. Copy labels into `lockdowns.yml` for your shop plugins.
+
+## Support template
+
+```text
+Plugin: Halt
+Version:
+Server version:
+Java version:
+Dependencies:
+Steps to reproduce:
+Expected:
+Actual:
+Logs:
+Config snippet:
+```
+
+Include `/halt status` output and the `modules` plus `containment` sections of `config.yml`.

@@ -1,0 +1,63 @@
+---
+title: 'Recommended stacks'
+description: 'Pair Halt with packet hardening, vanilla patches, and one combat anticheat.'
+---
+
+Halt is the **incident-response layer**. Pair it with packet hardening, vanilla patches, and a combat anticheat when those layers matter for your gamemode. Halt does not replace them.
+
+Baseline for every stack:
+
+- Paper (or Folia) with sensible book / item validation settings. Halt's jar is Java 17 bytecode; Paper/Folia **1.20.5–1.21.x** hosts need **Java 21**; **26.1+** hosts need **Java 25**. Folia 26.2 is experimental.
+- Halt with alert-first defaults
+- Discord webhook configured for HIGH/CRITICAL
+
+## SMP / economy survival
+
+| Layer | Recommendation |
+| --- | --- |
+| Packet / crash | LPX or ExploitFixer |
+| Vanilla patches | IllegalStack (tune carefully) |
+| Combat AC | GrimAC or Vulcan (pick one; do not stack both) |
+| Incident response | **Halt** |
+| Rollback | CoreProtect (or equivalent) |
+
+## Skyblock / BoxPvP
+
+| Layer | Recommendation |
+| --- | --- |
+| Packet / crash | LPX or ExploitFixer |
+| Vanilla patches | IllegalStack modules that match island/shop mechanics |
+| Combat AC | GrimAC or Vulcan |
+| Incident response | **Halt** — lean on DupeWatch + lockdown |
+| Rollback | CoreProtect |
+
+## Lifesteal / PvP-heavy
+
+| Layer | Recommendation |
+| --- | --- |
+| Packet / crash | LPX or ExploitFixer |
+| Combat AC | GrimAC or Vulcan |
+| Incident response | **Halt** — MineWatch/FreecamWatch for abuse review; lockdown for active economy incidents |
+| Client policy (optional) | Sentry / similar for banned clients |
+
+## Minimal budget stack
+
+| Layer | Recommendation |
+| --- | --- |
+| Packet / crash | Paper limits + free ExploitShield, or skip if risk is low |
+| Vanilla patches | IllegalStack |
+| Combat AC | GrimAC |
+| Incident response | **Halt** |
+
+## Coexistence rules
+
+- Do **not** stack Grim and Vulcan.
+- Prefer one packet firewall (LPX **or** ExploitFixer), not both.
+- ExploitFixer may conflict with other packet listeners (HamsterAPI path). Follow that product's guidance.
+- Halt stays on Bukkit-level signals and does not require PacketEvents, ProtocolLib, or HamsterAPI.
+
+## Next
+
+- [Incident playbook](/halt/playbook)
+- [How it works](/halt/how-it-works)
+- [Integrations](/halt/integrations)

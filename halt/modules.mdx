@@ -1,0 +1,54 @@
+---
+title: 'Modules'
+description: 'CrashGuard, DupeWatch, MineWatch, and FreecamWatch. Signals, not a packet firewall.'
+---
+
+Four watch modules raise **behavioral signals** for staff review. Toggle them in `config.yml` → `modules`. Thresholds live in `checks.yml`. See [Configuration](/halt/configuration).
+
+Halt is not a Netty packet firewall and not a combat anticheat. Pair LPX/ExploitFixer and Grim/Vulcan when those layers matter.
+
+## CrashGuard
+
+Detects action-spam and risky-input patterns that may lead to instability.
+
+**Checks:** command spam, inventory click bursts, book/sign text limits, repeated failed interactions, anvil rename length, container-open spam.
+
+Configurable `action`: `alert`, `alert_cancel`, `alert_kick`. Bukkit-level signals only. CrashGuard does not replace LPX, ExploitFixer, or Paper book-size limits.
+
+## DupeWatch
+
+Tracks suspicious inventory, container, shulker, and drop patterns.
+
+**Checks:** shulker cycles, hopper bursts, correlated drop/pickup loops, sudden weighted high-value item growth, repeated valuable death-drop recovery, ender-chest swaps, bundle churn, villager trade bursts.
+
+Villager trades are watched by `TradeWatchListener` as part of DupeWatch (`halt.bypass.dupe`), not as a fifth module.
+
+DupeWatch does not silently patch every vanilla dupe mechanic the way IllegalStack-style protectors do. Armed containment is the cancel path for several alert-first checks (ender-chest, bundles, villager trades).
+
+## MineWatch
+
+Flags xray-like mining signals.
+
+**Checks:** weighted ore windows, repeated direct-to-ore paths, Y-band ore clusters, valuable-block weights, world allowlists.
+
+Empty `enabled_worlds` means all worlds. MineWatch is a staff **alert** module, not Paper anti-xray and not a combat-AC xray check.
+
+## FreecamWatch
+
+Flags suspicious block, container, and entity interactions.
+
+**Checks:** reach distance, line-of-sight failures, unusual interaction angles, hidden access to storage-like blocks, container open without recent LoS, through-wall streaks, entity right-clicks.
+
+`geyser_lenient` (default true) uses looser reach/angle for Geyser/Floodgate client brands. Halt does not block freecam clients on join.
+
+## Other runtime modules
+
+These are not "watch" modules but they have the same `modules.*` toggles:
+
+| Module | When disabled |
+| --- | --- |
+| `incident_log` | No new incident persistence; incident commands return nothing useful |
+| `lockdown` | No lockdown start/stop, history, or restriction enforcement. Player containment is a separate service |
+| `alert_bridge` | No staff, console, or Discord fan-out; webhook tests report disabled |
+
+Player/vector containment is `ContainmentService`, not the lockdown module toggle. Unarmed default never auto-starts it. See [Containment](/halt/containment).
