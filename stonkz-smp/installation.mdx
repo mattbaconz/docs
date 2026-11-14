@@ -1,0 +1,97 @@
+---
+title: 'Installation'
+description: 'Install Stonkz SMP on Paper 26.1.2, add your four licence keys and open the first season.'
+---
+
+The whole install takes a few minutes. You copy one folder, paste four keys and restart.
+
+## Requirements
+
+- **Paper 26.1.2** ([download](https://papermc.io/downloads/paper)). Paper is not in the zip.
+- **Java 25**
+- **4 GB of RAM** or more for the server
+- **Internet access** on the server, for the four licence checks
+- A Discord account, to claim your keys
+
+## Install
+
+<Steps>
+  <Step title="Back up and stop">
+    Stop your server and back up anything you want to keep.
+  </Step>
+  <Step title="Rebrand (optional, easiest now)">
+    On Windows, double-click `rebrand.bat` in the package and type your server's name and address. You can also do this later. See [Rebranding](/stonkz-smp/rebranding).
+  </Step>
+  <Step title="Copy the server folder">
+    Copy everything from the package's `server` folder into your server's root folder. Let it merge with the existing folders.
+  </Step>
+  <Step title="First start">
+    Start the server once. The four premium plugins say they need a licence key and disable themselves. That is expected.
+  </Step>
+  <Step title="Claim and paste your keys">
+    Claim your four keys in Discord and paste each one into its plugin's config. See [Licence keys](/stonkz-smp/licence-keys) for the exact files.
+  </Step>
+  <Step title="Restart">
+    Restart the server. All four premium plugins now enable.
+  </Step>
+  <Step title="Make yourself admin">
+    In the console, run `lp user <your name> parent set admin`.
+  </Step>
+  <Step title="Start the first season">
+    When you're ready to open, run `/season start`.
+  </Step>
+</Steps>
+
+### If your world is not called `world`
+
+The spawn and datapack sit inside a folder named `world`. If `level-name` in `server.properties` is something else, move them into your world folder instead:
+
+| Move this | Into this |
+| --- | --- |
+| `world/dimensions/minecraft/spawn` | `<your level-name>/dimensions/minecraft/` |
+| `world/datapacks/stonkzsmp` | `<your level-name>/datapacks/` |
+
+### Hosting panels
+
+The zip uses forward-slash paths, so it unpacks correctly on Linux hosts and panels such as Pterodactyl. Upload it, unzip it, then move the contents of `server` into your server's root folder.
+
+`rebrand.bat` only runs on Windows. On a Linux host, edit three lines by hand instead. See [Rebranding](/stonkz-smp/rebranding).
+
+## Licence keys
+
+You need four keys: Stonkz, 3TSpawner, WorldEvents PRO and SeasonManager PRIME.
+
+1. Join the [Discord](https://discord.gg/kgHNjJsB2t).
+2. Run `/verify` to link the store account you bought with. You get the **Stonkz SMP** role.
+3. Run `/claim` once for each plugin.
+4. Paste each key into its plugin's config and restart.
+
+| Plugin | File | Setting |
+| --- | --- | --- |
+| Stonkz | `plugins/Stonkz/config.yml` | `license_key` |
+| 3TSpawner | `plugins/3TSpawner/config.yml` | `license_key` |
+| WorldEvents PRO | `plugins/WorldEventsPro/config.yml` | `license-key` |
+| SeasonManager PRIME | `plugins/SeasonManager-Prime/config.yml` | `license_key` |
+
+Full details are on the [Licence keys](/stonkz-smp/licence-keys) page.
+
+<Warning>
+WorldEvents PRO uses `license-key` with a hyphen. The other three use `license_key` with an underscore.
+</Warning>
+
+## First checks
+
+Join the server and check these:
+
+- You land at the **Stonkz Exchange** with a set of stone tools.
+- The scoreboard shows your money, kills, deaths, playtime, team, season and the next event.
+- `/menu` opens the main menu.
+- `/shop` opens the market and `/spawnershop` opens the spawner shop.
+
+<Warning>
+Do not use Bukkit `/reload`. Restart the server after config changes, or use each plugin's own reload command, such as `/tab reload` or `/dm reload`.
+</Warning>
+
+## Need help?
+
+Open a ticket in our [Discord](https://discord.gg/kgHNjJsB2t). Include your `logs/latest.log`.

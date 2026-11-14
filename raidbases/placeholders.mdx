@@ -1,0 +1,41 @@
+---
+title: 'Placeholders'
+description: 'PRO: PlaceholderAPI placeholders for scoreboards, tab lists and holograms.'
+---
+
+<Note>
+PlaceholderAPI placeholders are a **Raid Bases PRO** feature. Install [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) and Raid Bases PRO registers them on startup. No eCloud download is needed.
+</Note>
+
+On startup the console logs `Registered PlaceholderAPI placeholders %raidbases_...%.`
+
+## Server placeholders
+
+| Placeholder | Returns |
+| --- | --- |
+| `%raidbases_active%` | Raids standing now |
+| `%raidbases_max%` | Raids allowed at once (`max-active`) |
+| `%raidbases_next%` | Time to the next scheduled raid, like `12m 30s`. Empty when the schedule is off |
+
+## Nearest raid
+
+These describe the raid nearest the player, in their own world first. They are empty when no raid is standing, and need an online player.
+
+| Placeholder | Returns |
+| --- | --- |
+| `%raidbases_nearest_tier%` | Its tier name, without colours |
+| `%raidbases_nearest_phase%` | Its phase: rising, guarded, vault open, looted or collapsing |
+| `%raidbases_nearest_distance%` | Blocks away. Empty when it is in another world |
+| `%raidbases_nearest_guards%` | Guards still alive |
+| `%raidbases_nearest_time%` | Time left, like `14m 39s`. After the vault cracks, the time until the collapse |
+
+## Example scoreboard lines
+
+```text
+Raids: %raidbases_active%/%raidbases_max%
+Next raid: %raidbases_next%
+%raidbases_nearest_tier% (%raidbases_nearest_phase%)
+%raidbases_nearest_distance%m away, %raidbases_nearest_guards% guards
+```
+
+Phase names come from `phase.*` in `messages.yml`, so changing them there changes the placeholder too.

@@ -1,0 +1,78 @@
+---
+title: 'Commands'
+description: 'Every /raid command for players and admins.'
+---
+
+Everything runs through `/raid`. Its aliases are `/raidbases` and `/rb`. The whole command needs `raidbases.player`, which everyone has by default.
+
+`/raid help` shows the commands you can use. The buy line appears in PRO for players with `raidbases.buy`. Admin lines appear for players with `raidbases.admin`.
+
+## Player commands
+
+| Command | Permission | Edition | What it does |
+| --- | --- | --- | --- |
+| `/raid` | `raidbases.player` | Both | Standing raids with tier, phase, and direction and distance from you. With none up, the time to the next scheduled raid |
+| `/raid help` | `raidbases.player` | Both | The commands you can use |
+| `/raid track` | `raidbases.player` | Both | Toggle an action-bar compass to the nearest raid |
+| `/raid track <id>` | `raidbases.player` | Both | Track that raid. Run it again to stop |
+| `/raid buy` | `raidbases.buy` | PRO | List the tiers for sale |
+| `/raid buy <tier>` | `raidbases.buy` | PRO | Buy a raid of that tier with Vault money |
+| `/raid pro` | `raidbases.player` | Both | Which edition is running, and what PRO adds |
+
+`/raid track` and `/raid buy` are for players only, not the console. The nearest raid means the nearest one in your world first.
+
+Raid ids work with or without `#`: `/raid track 3` and `/raid track #3` are the same.
+
+## Admin commands
+
+| Command | Permission | What it does |
+| --- | --- | --- |
+| `/raid start` | `raidbases.admin` | Raise a raid of the first tier, searching the configured ring |
+| `/raid start <tier>` | `raidbases.admin` | Raise a raid of that tier |
+| `/raid start <tier> <layout>` | `raidbases.admin` | Raise that tier with a specific fort |
+| `/raid start here [tier] [layout]` | `raidbases.admin` | Raise it centred where you stand. Players only |
+| `/raid stop <id>` | `raidbases.admin` | Collapse that raid now. The land comes back |
+| `/raid stop all` | `raidbases.admin` | Collapse every raid now |
+| `/raid list` | `raidbases.admin` | Every raid with id, tier, layout, phase, coordinates, guards and time left, plus the next scheduled raid |
+| `/raid reload` | `raidbases.admin` | Reload `config.yml` and `messages.yml` |
+
+The console can run every admin command except `/raid start here`.
+
+### Starting raids
+
+The order is `here`, then the tier, then the layout. To pick a layout you have to name a tier.
+
+```text
+/raid start
+/raid start medium
+/raid start hard ziggurat
+/raid start here
+/raid start here nightmare bastion
+/raid start here medium schem:frostkeep
+```
+
+- **Tiers** are the keys under `tiers` in `config.yml`: `easy`, `medium`, `hard` and `nightmare` by default. Lite runs the first tier only.
+- **Layouts** are `outpost`, `camp`, `hideout`, `keep`, `watchtower`, `castle`, `citadel`, `ziggurat`, `fortress`, `arena` and `bastion`. In PRO, `schem:<name>` raises `plugins/RaidBases/forts/<name>.schem`.
+- Without a layout, the tier picks one of its `layouts` at random.
+- Without `here`, the raid rises in your world if it is a raid world, otherwise in a configured world. From the console it always uses a configured world.
+- With `here`, the raid rises in the world you stand in, even one that isn't listed under `worlds`.
+
+You see `Looking for land…`, then either the coordinates (click to suggest a teleport) or `No raid this time:` with the reason.
+
+### Reloading
+
+`/raid reload` reads `config.yml` and `messages.yml` again.
+
+- Raids already standing keep the settings they started with.
+- The timer for the next scheduled raid starts over.
+- The PRO licence is not checked again. Restart after changing `license_key`.
+
+<Warning>
+Do not use Bukkit `/reload`. Use `/raid reload` or a full restart.
+</Warning>
+
+## Tab completion
+
+Tab completion shows only what you can use. Players see `track`, `help` and `pro`, plus `buy` in PRO with `raidbases.buy`. Admins also see `start`, `stop`, `list` and `reload`, with tier and layout names after `start`.
+
+See [Permissions](/raidbases/permissions).

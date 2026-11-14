@@ -1,0 +1,42 @@
+---
+title: 'Placeholders'
+description: 'PRO PlaceholderAPI placeholders for relic holders, relic states and the hold-time leaderboard.'
+---
+
+<Note>
+Placeholders are a **PRO** feature and need [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) installed. Lite has no placeholders.
+</Note>
+
+Relics SMP PRO registers the `relics` expansion on startup when PlaceholderAPI is enabled. No eCloud download is needed.
+
+| Placeholder | Returns |
+| --- | --- |
+| `%relics_holder_<relic>%` | The holder's name while the relic is held or waiting for an offline holder. Otherwise `None` |
+| `%relics_state_<relic>%` | `altar`, `held`, `dropped` or `escrow` |
+| `%relics_top_<n>%` | The player in place `n` on this season's hold-time board, or `-` if nobody is there yet |
+| `%relics_top_<n>_time%` | Their hold time, such as `1h 5m`, `3m 53s` or `45s`. `-` if nobody is there yet |
+| `%relics_held_time%` | The viewing player's own hold time this season. `0s` if none |
+
+- `<relic>` is any relic id: `storm`, `inferno`, `void`, `gravity`, `blood`, `orbital`, or a [custom relic](/relics-smp/custom-relics) id (PRO 1.1.0+)
+- `<n>` works from `1` to `100`
+- Holder and state are always current. Leaderboard and hold-time values refresh once a second
+
+See [How the hunt works](/relics-smp/how-it-works#where-a-relic-can-be) for what each state means and [Seasons](/relics-smp/seasons) for how hold time is counted.
+
+## Examples
+
+A scoreboard that tracks the hunt:
+
+```text
+Storm: %relics_holder_storm%
+Orbital: %relics_holder_orbital%
+Orbital is %relics_state_orbital%
+#1 %relics_top_1% (%relics_top_1_time%)
+You: %relics_held_time%
+```
+
+A custom relic works the same way:
+
+```text
+Frost: %relics_holder_frost%
+```

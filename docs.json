@@ -301,6 +301,175 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Relics SMP",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "relics-smp/index",
+              "relics-smp/installation",
+              "relics-smp/faq"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "relics-smp/how-it-works",
+              "relics-smp/commands",
+              "relics-smp/permissions",
+              "relics-smp/configuration",
+              "relics-smp/placeholders"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "relics-smp/relics",
+              "relics-smp/custom-relics",
+              "relics-smp/spawning",
+              "relics-smp/seasons"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "FirstHour",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "firsthour/index",
+              "firsthour/installation",
+              "firsthour/lite-vs-pro",
+              "firsthour/faq"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "firsthour/commands",
+              "firsthour/permissions",
+              "firsthour/configuration",
+              "firsthour/placeholders"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "firsthour/welcome-and-goals",
+              "firsthour/paths",
+              "firsthour/rewards",
+              "firsthour/veterans",
+              "firsthour/dashboard"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Gamesmith",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "gamesmith/index",
+              "gamesmith/installation",
+              "gamesmith/faq"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "gamesmith/commands",
+              "gamesmith/permissions",
+              "gamesmith/configuration",
+              "gamesmith/placeholders"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "gamesmith/presets",
+              "gamesmith/build-a-game",
+              "gamesmith/editor",
+              "gamesmith/rules",
+              "gamesmith/arenas",
+              "gamesmith/matches",
+              "gamesmith/integrations"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Raid Bases",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "raidbases/index",
+              "raidbases/installation",
+              "raidbases/lite-vs-pro",
+              "raidbases/faq"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "raidbases/commands",
+              "raidbases/permissions",
+              "raidbases/configuration",
+              "raidbases/placeholders"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "raidbases/raids",
+              "raidbases/forts-and-tiers",
+              "raidbases/defenses",
+              "raidbases/where-forts-rise",
+              "raidbases/custom-forts",
+              "raidbases/buying-and-rewards",
+              "raidbases/worldevents"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Stonkz SMP",
+        "groups": [
+          {
+            "group": "General",
+            "pages": [
+              "stonkz-smp/index",
+              "stonkz-smp/whats-inside",
+              "stonkz-smp/installation",
+              "stonkz-smp/licence-keys",
+              "stonkz-smp/updating",
+              "stonkz-smp/faq"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "stonkz-smp/commands",
+              "stonkz-smp/ranks",
+              "stonkz-smp/configuration",
+              "stonkz-smp/rebranding"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "stonkz-smp/spawn",
+              "stonkz-smp/economy",
+              "stonkz-smp/crates-and-afk",
+              "stonkz-smp/events",
+              "stonkz-smp/seasons"
+            ]
+          }
+        ]
       }
     ]
   }

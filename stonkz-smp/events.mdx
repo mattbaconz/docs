@@ -1,0 +1,72 @@
+---
+title: 'World events'
+description: 'Random world events every 30 minutes plus a weekly calendar, powered by WorldEvents PRO.'
+---
+
+Stonkz SMP never goes quiet. WorldEvents PRO rolls in new world events all day, and a weekly calendar gives players fixed dates to show up for.
+
+## Random events
+
+Every **30 minutes**, WorldEvents PRO picks new events from its library of 100+ ready-made events, from Diamond Fever and Gold Rush to Blood Moon, Meteor Shower and Zombie Apocalypse.
+
+| Setting | Default |
+| --- | --- |
+| Time between rounds | 30 minutes |
+| Events per round | up to 3 |
+| Events running at once | up to 5 |
+| Cooldown before the same event repeats | 60 minutes |
+
+Running events show as boss bars, and players get a chat announcement when each one starts and ends.
+
+## Weekly calendar
+
+On top of the random rounds, three events run on a fixed schedule:
+
+| Event | When |
+| --- | --- |
+| **Diamond Fever** | Every day at 8 PM |
+| **Gold Rush** | Saturday and Sunday at 6 PM, for 30 minutes |
+| **Blood Moon** | Every Friday at 9 PM |
+
+Players get a warning 5 minutes before a calendar event starts. Times use the server's clock and time zone.
+
+Gold Rush makes gold ore drop triple raw gold. When players sell the extra gold, its market price falls, so smart traders hold their gold for the weekend and sell before the crash.
+
+```yaml title="plugins/WorldEventsPro/calendar.yml"
+events:
+  nightly_diamond_fever:
+    event: "diamond-fever"
+    schedule: "0 20 * * *"       # Every day at 8 PM
+    enabled: true
+  weekend_gold_rush:
+    event: "gold-rush"
+    schedule: "0 18 * * SAT,SUN" # Weekends at 6 PM
+    duration-override: 30
+    enabled: true
+  friday_blood_moon:
+    event: "blood-moon"
+    schedule: "0 21 * * FRI"     # Fridays at 9 PM
+    enabled: true
+```
+
+The `schedule` uses cron format: minute, hour, day of month, month, day of week. Change the times to fit your players, then restart.
+
+## Spawn stays clean
+
+Events are switched off in the `spawn` world, so the Stonkz Exchange is never hit by a meteor or a mob wave:
+
+```yaml title="plugins/WorldEventsPro/config.yml"
+world-settings:
+  spawn:
+    enabled: false
+```
+
+## Where players see events
+
+- The **scoreboard** shows **● Live now** while an event runs, plus a countdown to the next round.
+- `/wevent list` shows the events running right now.
+- The **World Events** NPC at spawn and the clock in `/menu` open the same list.
+
+<Note>
+Supply Drop is switched off in this setup. It needs a schematic file that the setup does not include.
+</Note>

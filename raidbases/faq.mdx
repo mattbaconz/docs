@@ -1,0 +1,114 @@
+---
+title: 'FAQ'
+description: 'Safety, missing raids, TNT, licences, schematics and server software.'
+---
+
+## World safety
+
+### Will a fort ever wreck a player's base?
+
+Raid Bases avoids land players use. It refuses chunks where players have spent more than `site.max-inhabited-minutes` (15 by default), spots within `site.player-distance` of a player, and any spot with a chest, furnace, bee nest, sign or other block entity, a named or tamed mob, an item frame, armor stand, minecart or boat in the fort's area. See [Where forts rise](/raidbases/where-forts-rise).
+
+Before the first block changes, the whole area is saved to disk. When the raid ends, it is put back and checked block for block.
+
+### What happens if the server crashes mid-raid?
+
+On the next start, Raid Bases restores the land from the journal, saves the world, then deletes the journal. A normal stop puts every fort back at once before the plugin shuts down.
+
+### Can players keep blocks from the fort?
+
+No. Nothing broken inside a fort's area drops, not even ores from the ground under it. Everything there comes back when the fort goes.
+
+### Can players hide loot in a fort?
+
+No. Chests and other block entities can't be placed inside a fort's area. They would vanish with their contents when the land is put back.
+
+## Raids
+
+### Why didn't a raid rise?
+
+Check these in order:
+
+1. **Players online:** scheduled raids skip a turn when fewer than `schedule.min-players` are online (2 by default).
+2. **Room:** the server already has `max-active` raids standing (always 1 in Lite).
+3. **Schedule:** `schedule.enabled` is `true`, and the tier has a weight above `0` under `schedule.tiers`.
+4. **World:** `worlds` names a loaded world.
+5. **Land:** the console logs `found no land after 24 tries (last: …)`. On worlds with lots of water, raise `site.attempts` or allow some `site.max-wet-columns`.
+
+`/raid list` shows the time to the next scheduled raid.
+
+### Do more players crack the vault faster?
+
+No. Progress fills one second per second while anyone is in range. Bring friends to fight the guards and to stop rivals from taking the vault.
+
+### What if nobody cracks the vault?
+
+When the tier's `time-limit-minutes` runs out, chat says the fort held out and it collapses with no loot.
+
+### Can I use TNT on a fort?
+
+Yes. TNT that goes off inside a fort's area breaks fort blocks, ignores PRO wall HP and drops nothing. A blast from outside the area can't touch the fort, and nothing breaks the vault.
+
+### Do guards burn in daylight?
+
+No. Guards also take no fall, suffocation, drowning, magma block or fire block damage, and they can't hurt each other. Fire Aspect and Flame still burn them.
+
+### Why is the vault a lodestone?
+
+On Paper 1.20.6 the vault block is behind an experimental flag, so Raid Bases uses a lodestone there unless the world has that flag on. It works the same way.
+
+### Will the first raid after a restart lag?
+
+The first raid after a restart can cost a short hitch while Java loads the raid code and the guards' mobs. Later raids don't.
+
+## Custom forts (PRO)
+
+### Do I need WorldEdit installed?
+
+Only to build and save your fort. Raid Bases reads the `.schem` file itself, so the raid server doesn't need WorldEdit.
+
+### My schematic fort says it can't be found.
+
+Keep the file name lowercase. Tier layouts and commands are read in lowercase, so `schem:MyCastle` looks for `mycastle.schem`. Check the file is in `plugins/RaidBases/forts/`.
+
+### Do chests in my schematic keep their items?
+
+No. Containers rise empty on purpose: the vault is the loot. Sign text, banner patterns and player-head skins do come across. See [Custom forts](/raidbases/custom-forts).
+
+## Licence and editions
+
+### Why does PRO disable itself on startup?
+
+It has no valid licence key, or the licence server couldn't be reached and the key hasn't passed a check in the last 72 hours. The console says why. Claim a key with `/claim RAIDBASES` in the Discord, paste it into `license_key` and restart. See [Installation](/raidbases/installation#claim-your-pro-licence).
+
+While PRO is disabled, `/raid` gives Bukkit's internal error line.
+
+### Does PRO need internet?
+
+Yes, for the licence check on startup. If the licence server can't be reached, PRO still starts when the same key passed a check in the last 72 hours.
+
+### Can I switch from Lite to PRO without losing my config?
+
+Yes. Both use the same files. Swap the jar, add your key and restart.
+
+### Can I run Lite and PRO together?
+
+No. Install one edition only.
+
+## Server software
+
+### Does it run on Spigot or Folia?
+
+No. Raid Bases supports Paper `1.20.6` through `26.3`.
+
+### Which Java version?
+
+Java 21 or newer. Paper 26.x servers need Java 25.
+
+### Can I use Bukkit `/reload`?
+
+No. Use `/raid reload` for config and messages, or a full restart.
+
+<Card title="Discord support" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Questions, licence keys and support.
+</Card>

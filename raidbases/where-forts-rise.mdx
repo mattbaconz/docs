@@ -1,0 +1,87 @@
+---
+title: 'Where forts rise'
+description: 'How Raid Bases picks land, saves it before building, and puts it back after every raid or crash.'
+---
+
+A plugin that pastes buildings into a survival world has one job: never wreck anything. Raid Bases picks its spots carefully, saves the land before the first block changes, and checks every block when it puts the land back.
+
+## The search ring
+
+Raids rise in the worlds listed under `worlds`. An empty list means the server's first world.
+
+Inside that world, Raid Bases tries random spots in a ring around `site.center`, between `site.min-distance` and `site.max-distance` blocks from it. By default that is 500 to 3,000 blocks from `0, 0`.
+
+```yaml title="plugins/RaidBases/config.yml"
+worlds:
+  - world
+
+site:
+  center: [0, 0]
+  min-distance: 500
+  max-distance: 3000
+  player-distance: 64
+  max-inhabited-minutes: 15
+  max-height-spread: 6
+  max-wet-columns: 0
+  attempts: 24
+  generate-chunks: true
+  margin: 4
+  foundation-depth: 10
+```
+
+When a player runs `/raid buy`, or an admin runs `/raid start`, the fort rises in that player's world if it is a raid world. Otherwise Raid Bases picks one of the configured worlds.
+
+## What a spot must pass
+
+Raid Bases tries up to `site.attempts` spots (24 by default). A spot is refused when:
+
+- **It is someone's home.** Any chunk under the fort, or one chunk around it, where players have spent more than `max-inhabited-minutes` in total (15 by default). Lower is safer on servers without claims.
+- **A player is near.** Anyone within `player-distance` blocks (64 by default).
+- **It holds someone's things.** Any chest, furnace, hopper, sign, bee nest, spawner or other block entity inside the fort's area.
+- **It holds someone's animals or decorations.** Named or tamed mobs, item frames, paintings, armor stands, minecarts or boats.
+- **It is wet.** More columns with water, lava, kelp, seagrass or waterlogged blocks under the fort than `max-wet-columns` (0 by default).
+- **It is too steep.** The ground rises and falls by more than `max-height-spread` blocks (6 by default).
+- **It is outside the world border**, too high or too low for the fort, or within 48 blocks of another standing raid.
+- **It is unexplored**, when `generate-chunks` is `false`. Turn generation off on pre-generated worlds.
+
+The ground check runs on a copy of the chunks, off the main thread. Just before building, Raid Bases looks again in case someone placed storage in the meantime.
+
+If every try fails, the raid does not happen. An admin sees `No raid this time:` with the last reason, a buyer gets their money back, and the schedule tries again next turn.
+
+<Tip>
+On a world with many rivers, the big forts can struggle to find a dry spot. Raise `site.attempts`, or allow a few wet columns with `max-wet-columns`.
+</Tip>
+
+### `/raid start here`
+
+When an admin starts a raid where they stand, Raid Bases skips the inhabited-time, player-distance, slope and water checks. It still refuses block entities, someone's animals or decorations, the world border, another raid within 48 blocks, and a floor too high or too low.
+
+## The land journal
+
+Before the first block of a fort goes up, Raid Bases saves the whole area, from below the foundation to above the top, to a journal file in `plugins/RaidBases/journals/`. The fort only starts to rise once that file is on disk.
+
+While the raid runs, the fort's chunks stay loaded.
+
+## Putting the land back
+
+When a raid ends, the fort comes down from the top and every block of the area goes back to what the journal says. Then Raid Bases makes a second pass over every block and fixes anything still different, such as something a player placed late or a block that physics moved.
+
+Trees the fort cut through get their logs back, and their leaves are refreshed so they don't decay afterwards.
+
+The journal file is deleted only after the world has been saved with the land back in place.
+
+## Crash-safe
+
+- **Normal stop:** every standing fort is put back at once, before the plugin shuts down.
+- **Crash, kill or power cut:** on the next start, Raid Bases restores every journal it finds, saves the world, then deletes the journal. The console logs how many blocks were checked and restored.
+- **World loaded later:** if a world manager loads the raid world after Raid Bases starts, its journals wait and are restored when the world loads.
+- **Damaged journal:** it is kept on disk for a manual look and the console says so.
+- **World unloaded mid-raid:** its forts are put back at once.
+
+<Warning>
+Don't delete or edit files in `plugins/RaidBases/journals/`. They are how Raid Bases puts your land back.
+</Warning>
+
+## Where announcements point
+
+Chat rounds the announced location to `announce.round` blocks (25 by default). Admins see exact coordinates with `/raid list`, with a click to suggest a teleport.

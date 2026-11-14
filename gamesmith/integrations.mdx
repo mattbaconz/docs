@@ -1,0 +1,72 @@
+---
+title: 'Integrations'
+description: 'Optional hooks: MythicMobs, Typewriter, Vault, PlaceholderAPI and AdvancedSlimePaper (PRO), plus world managers.'
+---
+
+Gamesmith needs no other plugin. Each hook below switches on by itself when its plugin is installed. A missing plugin never stops Gamesmith from starting.
+
+| Plugin | What it adds | Edition |
+| --- | --- | --- |
+| [MythicMobs](https://www.spigotmc.org/resources/mythicmobs.5702/) | `mythic:<id>` mobs in the **Spawn mobs** action | PRO |
+| [Typewriter](https://github.com/gabber235/Typewriter) | The **Typewriter entry** action | PRO |
+| [Vault](https://www.spigotmc.org/resources/vault.34315/) and an economy plugin | `money:<amount>` rewards | PRO |
+| [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) | `%gamesmith_...%` placeholders | PRO |
+| [AdvancedSlimePaper](https://github.com/InfernalSuite/AdvancedSlimePaper) | A fresh world for every match | PRO |
+| Multiverse-Core, Hyperverse, MultiWorld, MyWorlds | Load before Gamesmith, so arenas in their worlds work | Lite and PRO |
+
+PRO logs one line for each hook it finds at startup.
+
+## MythicMobs (PRO)
+
+Spawn any MythicMobs mob from a rule. In the **Spawn mobs** action, set **mob** to `mythic:` followed by the mob's internal name:
+
+```yaml
+- {action: spawn, mob: 'mythic:SkeletalKnight', count: 1, marker: mob-spawn, fallback: SKELETON}
+```
+
+- A Mythic mob counts toward **Player kills a game mob** and **All game mobs are dead** like any other game mob.
+- Set a vanilla **fallback**. It spawns instead when MythicMobs is missing or the id does not exist, and the console warns once per match.
+- On Lite, the editor does not accept `mythic:` mobs. A game file or preset that has one still works on Lite if it has a fallback; the fallback spawns. Without a fallback, the game shows the problem `MythicMobs mobs are PRO; set a vanilla fallback mob.`
+
+The Mob Waves preset uses `mythic:SkeletalKnight` for its boss, with a skeleton as the fallback.
+
+## Typewriter (PRO)
+
+The **Typewriter entry** action starts a Typewriter dialogue, cinematic or action for the target player. Set **entry** to the entry's id.
+
+```yaml
+- when: {trigger: phase-start}
+  do:
+  - {action: typewriter, entry: boss_intro, target: all}
+```
+
+Gamesmith runs `typewriter trigger <entry> <player>` as the console for each target. Entry ids may use letters, digits, `_`, `.`, `:` and `-`. If Typewriter is not installed, the console says `The Typewriter action needs the Typewriter plugin.` and the match carries on.
+
+Use it to start a quest when someone wins, or play a cutscene when the boss phase begins.
+
+## Vault (PRO)
+
+With Vault and an economy plugin (EssentialsX, for example), add money rewards in **Win & rewards**:
+
+```text
+money:100
+money:12.50
+```
+
+If no economy is found, the console says `A money reward needs Vault and an economy plugin.` and the other rewards are still given.
+
+PRO also has `command:` rewards and the **Console command** action. Those need no other plugin: they run as the console with `{player}` replaced by the player's name.
+
+## PlaceholderAPI (PRO)
+
+PRO registers the `gamesmith` expansion once every plugin has loaded. No eCloud download is needed. See [Placeholders](/gamesmith/placeholders).
+
+## AdvancedSlimePaper (PRO)
+
+On an AdvancedSlimePaper server, a game can run every match in its own copy of the arena. Matches of the same game then run side by side, and nothing needs putting back. Switch it on per game in **Settings** → **Arena reset**. See [Arenas](/gamesmith/arenas#fresh-worlds-pro).
+
+Startup says `AdvancedSlimePaper found: fresh-world matches are on.` If the AdvancedSlimePaper build does not fit, Gamesmith logs a warning and fresh worlds stay off. Games set to **Put blocks back** play as normal. A game set to **Fresh world per match** shows the problem `Fresh-world matches need Gamesmith PRO on an AdvancedSlimePaper server.` until fresh worlds work again, or until you set `instance: false` in its game file.
+
+## World managers
+
+Multiverse-Core, Hyperverse, MultiWorld and MyWorlds are soft dependencies. When one is installed, Gamesmith loads after it, so arenas in its worlds are ready. If an arena's world is not loaded, the game shows `World <world> is not loaded.` until it is. Crash recovery waits for late-loading worlds before restoring an arena.

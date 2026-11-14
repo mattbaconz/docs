@@ -1,0 +1,29 @@
+---
+title: 'Permissions'
+description: 'relics.use for players and relics.admin for staff.'
+---
+
+Relics SMP has two permission nodes.
+
+| Permission | Default | What it allows |
+| --- | --- | --- |
+| `relics.use` | everyone | `/relics`, `/relics help`, `/relics info`, `/relics top` (PRO) and `/relics pro` |
+| `relics.admin` | op | Every `/relics admin` command, plus teleport and reset on the relic board |
+
+<Note>
+Every `/relics` command checks `relics.use` first, admin commands included. If you take `relics.use` away from a group, its admins lose `/relics admin` too.
+</Note>
+
+No permission is needed to claim a relic at its altar, cast its power, carry it or pick it up. The hunt is open to everyone. To keep powers out of an area, use the [protection settings](/relics-smp/how-it-works#where-powers-work), not permissions.
+
+Players with `relics.admin` also see the admin commands in `/relics help`. On Lite, they see the locked PRO relics on the board while `hints.pro` is `true`.
+
+## LuckPerms examples
+
+```text
+# Give a helper the admin tools
+lp user Steve permission set relics.admin true
+
+# Hide the relic board and info from a group
+lp group default permission set relics.use false
+```

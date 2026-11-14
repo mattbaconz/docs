@@ -1,0 +1,102 @@
+---
+title: 'Buying and rewards'
+description: 'PRO: players buy raids with /raid buy, and the vault pays out money and command rewards.'
+---
+
+<Note>
+`/raid buy`, money rewards and command rewards are **Raid Bases PRO** features. Item loot works in both editions.
+</Note>
+
+## Buy a raid
+
+`/raid buy <tier>` lets a player spend Vault money to call in a raid of that tier. It is a money sink your players actually enjoy.
+
+```text
+/raid buy easy
+/raid buy medium
+/raid buy hard
+```
+
+What happens:
+
+1. Raid Bases checks the tier is for sale, the server has room for another raid and there is a raid world.
+2. It takes the price through Vault and tells the player.
+3. Chat announces who bought which raid, then the fort rises like any other.
+4. If no land is found, or the raid can't start, the buyer gets the money back and is told so.
+
+A tier is for sale when its `price` is above `0`. By default:
+
+| Tier | `price` |
+| --- | --- |
+| `easy` (Outlaw Hideout) | 2,500 |
+| `medium` (Bandit Stronghold) | 6,000 |
+| `hard` (Warlord Fortress) | 15,000 |
+| `nightmare` (Nightmare Bastion) | 0, not for sale |
+
+`/raid buy` with no tier lists the tiers for sale.
+
+The fort rises in the buyer's world if it is a raid world, otherwise in one of the configured `worlds`. It searches the same ring as scheduled raids, with the same safety rules. See [Where forts rise](/raidbases/where-forts-rise).
+
+### Requirements
+
+- Vault and an economy plugin, such as EssentialsX. Without them, `/raid buy` replies that it needs Vault and an economy plugin.
+- The `raidbases.buy` permission. Everyone has it by default. Take it away to stop a group from buying.
+
+```text
+lp group default permission set raidbases.buy false
+```
+
+## Rewards
+
+When a vault cracks, its tier's loot always spills out on the floor for anyone to grab. In PRO, every player standing at the vault at that moment also gets the tier's `money` and `commands`.
+
+### Money
+
+`money` is paid to each player at the vault through Vault, as a random amount in the range. They see `+<amount> for cracking the vault.`
+
+```yaml title="plugins/RaidBases/config.yml"
+tiers:
+  medium:
+    money: 150-350
+```
+
+Set `money: 0` to turn it off for a tier. If a tier pays money but there is no economy, the console warns you and the rest of the rewards still run.
+
+### Commands
+
+`commands` run from the console once for each player at the vault. Use `{player}` for the player's name and `{tier}` for the tier key.
+
+```yaml title="plugins/RaidBases/config.yml"
+tiers:
+  hard:
+    commands:
+      - "crate key give {player} raid 1"
+      - "lp user {player} permission set raids.cracked.{tier} true"
+```
+
+Use this for crate keys, ranks, titles or anything else your server runs on commands.
+
+## Item loot
+
+Loot is the same in Lite and PRO. Each entry rolls on its own `chance`, and the amount is random in its range. Stacks are split to the item's stack size. Mobs can't pick the loot up.
+
+```yaml title="plugins/RaidBases/config.yml"
+loot:
+  - item: diamond
+    amount: 2-4
+    chance: 0.6
+  - item: nether_star
+    amount: 1
+    chance: 0.1
+    name: "<gradient:#ffb347:#ff3b30>Warlord's Star</gradient>"
+    lore:
+      - "<gray>Pried from a Nightmare Bastion vault.</gray>"
+```
+
+| Field | Meaning |
+| --- | --- |
+| `item` | A Minecraft item id |
+| `amount` | A number like `3`, or a range like `2-6` |
+| `chance` | `0` to `1`. `1.0` always drops |
+| `name` | Optional MiniMessage display name |
+| `lore` | Optional MiniMessage lore lines |

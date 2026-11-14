@@ -1,0 +1,51 @@
+---
+title: 'WorldEvents'
+description: 'Raise a fort near your players when a WorldEvents event starts.'
+---
+
+Raid Bases hooks into [WorldEvents](https://modrinth.com/plugin/worldevents), Core or PRO. When an event you list starts, a fort of the tier you picked rises near your players. A Blood Moon can raise a Nightmare Bastion. A Treasure Hunt can raise an Outlaw Hideout.
+
+The hook works in both Raid Bases editions. Raid Bases Lite always raises its first tier.
+
+## Set it up
+
+1. Install WorldEvents or WorldEvents PRO next to Raid Bases.
+2. Map events to tiers under `worldevents` in `plugins/RaidBases/config.yml`.
+3. Restart the server.
+
+On startup the console says `Hooked into WorldEvents` (or `WorldEventsPro`) and lists the events that raise forts.
+
+```yaml title="plugins/RaidBases/config.yml"
+worldevents:
+  enabled: true
+  # The fort rises this many blocks from a random online player in a raid world.
+  min-distance: 150
+  max-distance: 500
+  events:
+    blood-moon: nightmare
+    blood-moon-rising: hard
+    zombie-apocalypse: hard
+    meteor-shower: medium
+    treasure-hunt: easy
+```
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `enabled` | `true` | Turn the hook's event list on or off |
+| `min-distance` | `150` | Closest the fort rises to the chosen player |
+| `max-distance` | `500` | Farthest the fort rises from the chosen player. `0` uses the normal search ring |
+| `events` | five events | Event name to tier key |
+
+## Event names
+
+Use the event's name: its key in the `.yml` files in WorldEvents' `events` folder, such as `blood-moon` or `meteor-shower`. `blood-moon` and `blood_moon` count as the same event. An event that maps to a tier that doesn't exist is skipped, and the console warns you on load.
+
+After you change the list, run `/raid reload`.
+
+## Where the fort rises
+
+When a listed event starts, Raid Bases picks a random online player in a raid world and searches for land `min-distance` to `max-distance` blocks from them, so the event's players can reach it. If nobody is in a raid world, or `max-distance` is `0`, it uses the normal search ring.
+
+An event only happens once, so its fort gets three times `site.attempts` to find land. Every other safety rule still applies. See [Where forts rise](/raidbases/where-forts-rise).
+
+If the server already has as many raids as it allows, or no land is found, no fort rises for that event.

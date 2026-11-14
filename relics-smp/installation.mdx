@@ -1,0 +1,137 @@
+---
+title: 'Installation'
+description: 'Install Relics SMP on Paper, add your PRO licence key and set your first altars.'
+---
+
+## Requirements
+
+- **Server software:** Paper. Tested on Paper `1.21.4` and `26.1`
+- **Java:** 21 or newer, or whatever your Paper build needs
+- **PRO only:** a licence key and outbound internet access for the licence check
+- **Optional:** WorldGuard, PlaceholderAPI, WorldEvents PRO
+
+No other jars are needed. Optional plugins are soft dependencies. Relics SMP runs fine without them.
+
+<Warning>
+Install one edition only: `RelicsSMP-Lite-<version>.jar` or `RelicsSMP-PRO-<version>.jar`, never both. They are the same plugin (`RelicsSMP`) and share the `plugins/RelicsSMP/` folder.
+</Warning>
+
+## Install Relics SMP
+
+<Steps>
+  <Step title="Add the jar">
+    Stop the server. Place the Relics SMP jar in the `plugins` folder. Start the server once so it writes `plugins/RelicsSMP/`.
+  </Step>
+  <Step title="Add your licence key (PRO only)">
+    Stop the server. Open `plugins/RelicsSMP/config.yml` and paste your key into `license_key`. Start the server again. Lite skips this step.
+
+    ```yaml title="plugins/RelicsSMP/config.yml"
+    license_key: "YOUR-KEY-FROM-DISCORD"
+    ```
+  </Step>
+  <Step title="Set the altars">
+    Join as an operator. Stand where a relic should live and run `/relics admin setaltar <relic>`. The altar goes at your feet. Repeat for each relic.
+
+    ```text
+    /relics admin setaltar storm
+    /relics admin setaltar inferno
+    /relics admin setaltar void
+    /relics admin setaltar gravity
+    /relics admin setaltar blood
+    /relics admin setaltar orbital
+    ```
+
+    Lite has Storm and Inferno only. A relic without an altar waits at home and can't be claimed from an altar.
+  </Step>
+  <Step title="Check it works">
+    Run `/relics` to open the relic board. Each relic should show **Waiting at its altar**. Walk to an altar and right-click the floating relic to claim it.
+  </Step>
+</Steps>
+
+## Claim your PRO licence
+
+<Steps>
+  <Step title="Join Discord">
+    Join the [support Discord](https://discord.gg/kgHNjJsB2t).
+  </Step>
+  <Step title="Verify your purchase">
+    Run `/verify` and follow the steps.
+  </Step>
+  <Step title="Claim the key">
+    Run `/claim RELICS_SMP`. The bot gives you your licence key.
+  </Step>
+  <Step title="Paste and restart">
+    Paste the key into `license_key` in `plugins/RelicsSMP/config.yml`, then restart the server.
+  </Step>
+</Steps>
+
+How the check works:
+
+- The key is checked on every startup, off the main thread, so a slow licence server never stalls your boot
+- With no key (or the placeholder `YOUR_KEY_HERE`), PRO logs `No licence key found. Run /claim RELICS_SMP in the support Discord...` and disables itself
+- An invalid key disables the plugin
+- If the licence server can't be reached, PRO tries three times. It keeps running when the same key passed a check in the last 72 hours. Otherwise it disables itself
+- `/relics admin reload` does not re-check the key. Restart after you change it
+
+<Card title="Join Discord" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Verify your purchase and claim your key.
+</Card>
+
+## Files written
+
+| Path | Purpose |
+| --- | --- |
+| `plugins/RelicsSMP/config.yml` | Licence key, custody rules, reveals, protection, spawning, seasons, relic tuning, sounds, particles, titles, menu |
+| `plugins/RelicsSMP/messages.yml` | Every line of text, in MiniMessage |
+| `plugins/RelicsSMP/relics.yml` | Where each relic is: altar, holder, drop spot, escrow timer. Written by the plugin |
+| `plugins/RelicsSMP/stats.yml` | PRO. Season hold times. Written by the plugin |
+| `plugins/RelicsSMP/license-cache.yml` | PRO. A hash of the last verified key, for the 72-hour grace window. Never the key itself |
+| `plugins/RelicsSMP/custom-relics-example.yml` | PRO 1.1.0+. Three ready-made custom relics to copy. Never loaded on its own |
+
+`relics.yml` is saved after every change, every 30 seconds and on shutdown. `stats.yml` is saved every minute and on shutdown. Saves run off the main thread and are written atomically, so a crash never leaves half a file. Don't edit either file while the server is running.
+
+If `relics.yml` can't be read, Relics SMP keeps a copy named `relics.yml.broken-<time>`, starts every relic at home, and asks you to set the altars again.
+
+## Reload or restart
+
+Use `/relics admin reload` after you edit `config.yml` or `messages.yml`. Restart the server for:
+
+- A new or changed licence key
+- Adding or removing a [custom relic](/relics-smp/custom-relics)
+- Switching between Lite and PRO
+
+Avoid Bukkit `/reload`. Use `/relics admin reload` or a full restart.
+
+## Upgrading
+
+### Lite to PRO
+
+1. Stop the server.
+2. Remove the Lite jar and add the PRO jar.
+3. Add your licence key to `license_key`.
+4. Start the server.
+
+Storm and Inferno keep their altars and state. Set altars for Void, Gravity, Blood and Orbital with `/relics admin setaltar <relic>`.
+
+### PRO 1.0 to 1.1.0
+
+Replace the jar and restart. Your config, relics and stats carry over unchanged. Text that a new version adds falls back to the built-in English when your `messages.yml` doesn't have it yet.
+
+On any restart, a relic that was held when the server stopped gets a fresh offline window that starts from boot. The holder gets it back when they rejoin in time. A relic that was already waiting for an offline holder keeps its timer.
+
+## Support template
+
+```text
+Plugin: Relics SMP (Lite or PRO)
+Version:
+Server software and version:
+Java version:
+Other plugins:
+Steps to reproduce:
+Expected:
+Actual:
+Console log:
+Config snippet:
+```
+
+Post it in the [Discord](https://discord.gg/kgHNjJsB2t).

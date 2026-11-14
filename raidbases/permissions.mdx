@@ -1,0 +1,32 @@
+---
+title: 'Permissions'
+description: 'The three Raid Bases permission nodes and their defaults.'
+---
+
+Raid Bases has three permission nodes. None of them has children.
+
+| Permission | Default | Edition | What it allows |
+| --- | --- | --- | --- |
+| `raidbases.player` | everyone | Both | Use `/raid` at all, see raids, use the tracker, and receive raid news in chat |
+| `raidbases.buy` | everyone | PRO | Buy raids with `/raid buy` |
+| `raidbases.admin` | op | Both | `/raid start`, `/raid stop`, `/raid list`, `/raid reload`, and the Get PRO link in Lite |
+
+## Notes
+
+- `/raid` itself requires `raidbases.player`. An admin who loses `raidbases.player` can't run any `/raid` command, so keep it on staff too.
+- Raid news (rising, bought, ready, unlocked, cracked, held out, collapsed) only goes to players with `raidbases.player`.
+- The boss bar shows to everyone near a fort, whatever their permissions.
+- In Lite, `raidbases.buy` does nothing.
+
+## LuckPerms examples
+
+```text
+# Stop the default group from buying raids (PRO)
+lp group default permission set raidbases.buy false
+
+# Hide raids and raid news from a group
+lp group jail permission set raidbases.player false
+
+# Let builders start and stop raids
+lp group builder permission set raidbases.admin true
+```

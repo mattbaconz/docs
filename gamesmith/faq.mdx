@@ -1,0 +1,107 @@
+---
+title: 'FAQ'
+description: 'Licence, Lite limits, server software, arena resets and common problems.'
+---
+
+## Buying and licence
+
+### Where do I get Gamesmith?
+
+Gamesmith PRO is available on Voxel Shop. Gamesmith Lite, the free edition, is coming soon.
+
+### How do I get my PRO licence key?
+
+Join the [Discord](https://discord.gg/kgHNjJsB2t), run `/verify` to link your purchase, then run `/claim GAMESMITH`. Paste the key into `license_key` in `plugins/Gamesmith/config.yml` and restart. See [Installation](/gamesmith/installation#claim-your-licence-key).
+
+### Does PRO need internet access?
+
+Yes. PRO checks the key on every startup. If the licence server cannot be reached, it starts on its last successful check for up to 72 hours. After that, or with an invalid key, PRO disables itself.
+
+### I changed the key and nothing happened.
+
+The key is only checked on startup. `/gs reload` does not re-check it. Restart the server.
+
+## Lite and PRO
+
+### What does Lite limit?
+
+Lite has the full editor, all 12 triggers, 15 of the 17 actions and all nine presets. It holds three games at a time, presets included. It has no console command or Typewriter actions, no MythicMobs mobs, no money or command rewards, no `/gs top`, no placeholders and no fresh-world matches. See the [comparison](/gamesmith#lite-vs-pro).
+
+### Do my games carry over from Lite to PRO?
+
+Yes. Games are plain files in `plugins/Gamesmith/games/`. Swap the jar, add your key and restart. Your games, stats and settings stay.
+
+### I went from PRO back to Lite and a game says it is not ready.
+
+Games that use PRO actions or rewards show problems such as `Phase fight: Console command is a PRO action.` or `money rewards are PRO` on Lite. Remove those parts in the editor, or switch back to PRO.
+
+## Server software
+
+### Which servers are supported?
+
+Paper `1.20.6` through `26.3`, on Java 21 or newer (Java 25 for Paper `26.x`). Spigot and Folia are not supported.
+
+### Why does the editor ask in chat instead of a form?
+
+Native input forms need Paper `1.21.6` or newer. Older servers ask in chat; type the value, or `cancel`. You can force chat on any version with `editor.input: chat`.
+
+### Can I use Bukkit `/reload`?
+
+Avoid it. Use `/gs reload` for config and game changes, and a full restart for jar updates and the licence key.
+
+## Games and arenas
+
+### `/gs create` wiped part of my build.
+
+Building a preset places its arena where you stand and clears the map's box first. Always build presets in an empty area, such as a flat or void world kept for games. Gamesmith does not undo this; restore from your backup or world-edit tool.
+
+### How big are the preset arenas?
+
+The play areas range from 25 × 27 blocks (Lava Rising) to 53 × 41 blocks (Domination). The boxes the map presets clear are bigger, up to 74 × 59 blocks for Domination. See [Preset games](/gamesmith/presets#space-each-map-needs).
+
+### Can one game run several matches at once?
+
+With the default block reset, a game runs one match at a time. On PRO with AdvancedSlimePaper, switch the game to **Fresh world per match** and up to `instances.max-per-game` matches run side by side. See [Arenas](/gamesmith/arenas#fresh-worlds-pro).
+
+### Can two games share an arena?
+
+Yes, but not at the same time. While one runs, players trying the other see `Another game is using that arena right now.`
+
+### My mob waves clear instantly.
+
+The arena's world is on peaceful, so hostile mobs vanish as they spawn. The console warns about it. Set the world's difficulty to easy or higher.
+
+### Players say a game "isn't ready yet".
+
+The game has problems. Open it with `/gs edit <id>`. The red dye on the hub lists them. Admins also see unfinished games in `/gs list`, marked `not ready`.
+
+### I edited a game file by hand and a rule disappeared.
+
+Check the console after `/gs reload`. Unknown triggers, actions and settings are logged and skipped. Also make sure the `'on':` key is quoted. See [Configuration](/gamesmith/configuration#game-files).
+
+## Players and safety
+
+### What happens to players' items?
+
+Gamesmith saves inventory, XP, health, effects and location when a player joins, and gives it all back when they leave or the match ends. The save is written to disk, so a crash mid-match does not lose it: players get their things back the next time they join.
+
+### Is anything not restored after a crash?
+
+A normal end or `/gs stop` restores everything. After a crash, the arena comes back from its saved journal, with these limits:
+
+- Signs, banners, heads and spawners destroyed during the match come back as blocks, without their text or settings.
+- If the server crashes during the few ticks an arena takes to reset, blocks that changed during that reset can be missed.
+
+### Hopper item moves in my arena are not reset.
+
+If your `paper` config has `hopper.disable-move-event: true`, Gamesmith cannot see hopper moves, so they are neither tracked nor kept inside the arena. Turn that setting off for arenas with hoppers.
+
+### Can players use commands in a match?
+
+Only `/gs` and the commands in `match.allowed-commands` (`msg`, `tell`, `r` and `w` by default). Staff with `gamesmith.bypass` can use everything.
+
+## Support
+
+<Card title="Discord support" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Questions, bug reports and licence keys.
+</Card>

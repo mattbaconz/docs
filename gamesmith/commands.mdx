@@ -1,0 +1,73 @@
+---
+title: 'Commands'
+description: 'Player and admin /gs commands.'
+---
+
+Everything runs through `/gamesmith`, aliased as `/gs`. Tab completion lists the subcommands you can use, game ids and template names.
+
+## Player commands
+
+Players need `gamesmith.play` (everyone has it by default).
+
+| Command | What it does |
+| --- | --- |
+| `/gs` | Opens the game menu. From the console, shows help |
+| `/gs join` | Opens the game menu |
+| `/gs join <game>` | Joins a game |
+| `/gs leave` | Leaves your game. Everything you had comes back |
+| `/gs list` | Lists games with their state and player count. Click a name to join |
+| `/gs top [game]` | **PRO.** Top ten players by wins, for one game or all games. Lite shows what PRO adds |
+| `/gs pro` | Lite: what PRO adds. PRO: confirms PRO is running |
+| `/gs help` | Command help. Admins see the admin commands too |
+
+Players only see games that are ready to play. Admins also see unfinished games in `/gs list`, marked `not ready`.
+
+## Admin commands
+
+Admin commands need `gamesmith.admin` (ops by default).
+
+| Command | What it does |
+| --- | --- |
+| `/gs create <id> [template]` | Makes a new game from a template, built at your feet, and opens the editor. With no template, makes a blank game |
+| `/gs edit <id>` | Opens the editor |
+| `/gs wand` | Gives you the selection wand |
+| `/gs start <id>` | Starts the waiting match now, even below the minimum player count |
+| `/gs stop <id>` | Stops every match of the game. No winner; players and arena come back |
+| `/gs delete <id>` | Asks you to confirm |
+| `/gs delete <id> confirm` | Stops any match of the game, then deletes `games/<id>.yml`. Arena blocks stay |
+| `/gs reload` | Reloads `config.yml`, `messages.yml`, `editor.yml` and every game file |
+
+### `/gs create`
+
+```text
+/gs create <id> [template]
+```
+
+- `<id>` is 1–32 lowercase letters, digits, `-` or `_`. It names the game file and is what players type in `/gs join`.
+- `[template]` is one of `sumo`, `colordrop`, `lavarise`, `skysprint`, `domination`, `outpost`, `spleef`, `koth`, `waves` or `blank` (the default).
+- The arena is placed relative to where you stand. Map templates move you to the new lobby.
+- On Lite, the server holds three games. A fourth gets `Gamesmith Lite holds 3 games.`
+
+See [Preset games](/gamesmith/presets).
+
+### `/gs edit`
+
+You cannot edit while you are in a match (`Leave your game first.`), or while the game is running (`<id> is running.`). Stop it with `/gs stop <id>` first, or wait for it to end.
+
+### `/gs start` and `/gs stop`
+
+`/gs start` needs at least one player waiting in the game: `No waiting players in <id>.` otherwise. `/gs stop` ends matches in any state, including during the countdown.
+
+### `/gs reload`
+
+Reloads the config files and every game from disk, and closes any open editors. Matches already running keep the version of the game they started with. On PRO, the licence key is not checked again; changing `license_key` needs a restart.
+
+Avoid Bukkit `/reload`. Use `/gs reload` or a full restart.
+
+## Console
+
+The console can run `list`, `top`, `pro`, `start`, `stop`, `delete`, `reload` and `help`. Commands that need a player (`join`, `leave`, `create`, `edit`, `wand`) reply `Only players can do that.`
+
+## Commands during a match
+
+Players in a match can only use `/gs` and the commands in `match.allowed-commands` (`msg`, `tell`, `r` and `w` by default). Anything else replies `You can't use that in a game.` Players with `gamesmith.bypass` can use every command. See [Configuration](/gamesmith/configuration#main-config).

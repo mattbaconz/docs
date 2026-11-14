@@ -1,0 +1,121 @@
+---
+title: 'Configuration'
+description: 'Where to change prices, events, crates, seasons, ranks, the scoreboard and more on a Stonkz SMP server.'
+---
+
+Everything in Stonkz SMP is plain plugin config. There is no extra layer to learn. This page tells you which file controls what.
+
+<Warning>
+Stop the server or use the plugin's own reload command after an edit. Do not use Bukkit `/reload`. When you change several files at once, restart.
+</Warning>
+
+## Where things live
+
+| To change | File |
+| --- | --- |
+| Market items and starting prices | `plugins/Stonkz/items.yml` |
+| Market settings (Panic Mode, volatility, menus) | `plugins/Stonkz/config.yml`, `plugins/Stonkz/gui.yml` |
+| Market events (Gold Rush, Lumber Boom and more) | `plugins/Stonkz/events.yml` |
+| Spawner prices | `plugins/3TSpawner/shop.yml` |
+| How spawner loot is priced | `plugins/3TSpawner/economy.yml` (`prices.provider: stonkz`) |
+| Spawner stack and virtual limits | `plugins/3TSpawner/permissions.yml` |
+| World event timing | `plugins/WorldEventsPro/config.yml` (`scheduling`) |
+| Weekly event calendar | `plugins/WorldEventsPro/calendar.yml` |
+| Season length, grace period and archive | `plugins/SeasonManager-Prime/config.yml` |
+| Crate prizes | `plugins/CrazyCrates/crates/Common.yml`, `Rare.yml`, `Stonkz.yml` |
+| AFK Lounge rewards | `plugins/AxAFKZone/zones/afk-lounge.yml` |
+| Random teleport range | `plugins/EzRTP/rtp.yml` |
+| Random teleport cooldowns | `plugins/EzRTP/limits.yml` |
+| Ranks | `plugins/LuckPerms/yaml-storage/groups/` or `/lp editor` |
+| Homes per rank | `sethome-multiple` in `plugins/Essentials/config.yml` |
+| Scoreboard and tab list | `plugins/TAB/config.yml` |
+| `/menu` | `plugins/DeluxeMenus/gui_menus/stonkz_menu.yml` |
+| Spawn protection | WorldGuard's `__global__` region in the `spawn` world |
+| `/shop` and `/worth` shortcuts | `commands.yml` in the server root |
+
+## Market
+
+The market runs on Stonkz. The setup keeps Stonkz's built-in categories and its balanced default prices. Items that would let players craft, smelt or convert their way to free money are disabled in `items.yml`.
+
+Useful defaults in `plugins/Stonkz/config.yml`:
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `panic_price_multiplier` | `0.5` | Price multiplier while an item is in Panic Mode |
+| `panic_duration_seconds` | `300` | How long Panic Mode lasts |
+| `panic_allow_buying` | `false` | Players cannot buy an item while it panics |
+| `volatility.interval_minutes` | `10` | How often random price drift runs |
+| `volatility.max_change_percent` | `0.05` | Largest random drift per run (5%) |
+
+See the [Stonkz listing](https://builtbybit.com/resources/84623/) for the full plugin docs.
+
+## Spawners
+
+3TSpawner's spawner shop sells 27 mobs, each as a physical or a virtual spawner. Some starting prices from `plugins/3TSpawner/shop.yml`:
+
+| Spawner | Price |
+| --- | --- |
+| Chicken | $1,800 |
+| Zombie | $5,000 |
+| Creeper | $12,000 |
+| Iron Golem | $85,000 |
+| Blaze | $250,000 |
+| Warden | $500,000 |
+
+`prices.provider: stonkz` in `economy.yml` makes spawner loot sell at the live Stonkz price. See the [3TSpawner docs](/3tspawner/configuration) for every key.
+
+## World events
+
+```yaml title="plugins/WorldEventsPro/config.yml"
+scheduling:
+  enabled: true
+  interval-minutes: 30
+  max-concurrent-events: 5
+  event-cooldown-minutes: 60
+  events-per-cycle: 3
+world-settings:
+  spawn:
+    enabled: false
+```
+
+Events roll every 30 minutes and never run in the `spawn` world. The weekly calendar is covered on [World events](/stonkz-smp/events).
+
+## Seasons
+
+```yaml title="plugins/SeasonManager-Prime/config.yml"
+season:
+  duration: 30d
+  auto-end: true
+  grace-period: 1h
+world:
+  managed-worlds:
+  - world
+  - world_nether
+  - world_the_end
+  archive-folder: season-archives
+  archive-enabled: true
+```
+
+See [Seasons](/stonkz-smp/seasons) for the season cycle and how to start a fresh map.
+
+## Random teleport
+
+`/rtp` sends players 500 to 2,000 blocks from the world's center:
+
+```yaml title="plugins/EzRTP/rtp.yml"
+radius:
+  min: 500
+  max: 2000
+```
+
+Cooldowns and daily limits per world and per rank are in `plugins/EzRTP/limits.yml`.
+
+## Spawn protection
+
+The whole `spawn` world is protected by WorldGuard's `__global__` region. Players cannot build or fight there and take no damage. Fire spread, TNT, creeper explosions and lava or water flow are off, and mobs do not spawn. Chests, doors and other interactions still work.
+
+To build at spawn, give yourself the WorldGuard bypass, or use the `admin` rank.
+
+## Scoreboard, tab list and menu
+
+These are covered on [Rebranding](/stonkz-smp/rebranding), including which placeholders each scoreboard line uses.

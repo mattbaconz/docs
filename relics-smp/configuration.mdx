@@ -1,0 +1,438 @@
+---
+title: 'Configuration'
+description: 'Every key in config.yml, plus messages.yml, sounds, particles, the menu and reload rules.'
+---
+
+Relics SMP writes two files you edit: `plugins/RelicsSMP/config.yml` for rules and numbers, and `plugins/RelicsSMP/messages.yml` for every line of text. Change either, then run `/relics admin reload`.
+
+A bad value never stops the plugin. It falls back to the shipped default and the console names the key, for example `config.yml reveal.glow-seconds: '-5' is not valid, using the default.` Reload tells you how many values were ignored.
+
+PRO-only keys: `license_key`, `spawning.random`, `spawning.worldevents`, `seasons` and the Void, Gravity, Blood and Orbital relics. Lite reads them and ignores them.
+
+## Licence
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `license_key` | `YOUR_KEY_HERE` | PRO. Your key from Discord `/claim RELICS_SMP`. Restart after changing it. See [Installation](/relics-smp/installation#claim-your-pro-licence) |
+
+## Custody
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `custody.offline-escrow-minutes` | `10` | Minutes a relic waits for its holder after they log out. Then it returns to its altar. Must be above 0 |
+| `custody.allow-drop` | `true` | Let holders drop a relic with Q. A dropped relic is fair game for anyone |
+
+## Reveal
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `reveal.bossbar` | `true` | One boss bar per relic that is out of its altar, shown to everyone |
+| `reveal.interval-seconds` | `300` | Every interval, each holder glows and their coordinates go to chat. `0` turns it off |
+| `reveal.glow-seconds` | `10` | How long holders glow on a reveal. Must be above 0 |
+
+## Protection
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `protection.respect-world-pvp` | `true` | No powers in worlds with PvP off |
+| `protection.respect-worldguard` | `true` | No powers in WorldGuard regions with `pvp` set to `deny` |
+| `protection.spawn-radius` | `-1` | No powers within this many blocks of world spawn, in the main world. `-1` uses `spawn-protection` from `server.properties`. `0` turns it off |
+| `protection.disabled-worlds` | `[]` | No powers at all in these worlds |
+
+See [Where powers work](/relics-smp/how-it-works#where-powers-work).
+
+## Abilities
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `abilities.break-blocks` | `false` | Let Orbital blasts and custom `explode` steps with `power` above 0 break blocks. Storm lightning never breaks blocks |
+
+## Spawning
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `spawning.mode` | `altar` | `altar`: relics wait at their altar. `random` (PRO): relics at home also rain down every interval |
+| `spawning.random.world` | `world` | PRO. World for Relic Rain. Falls back to the first world if missing |
+| `spawning.random.center-x` | `0` | PRO. Centre of the drop circle |
+| `spawning.random.center-z` | `0` | PRO. Centre of the drop circle |
+| `spawning.random.radius` | `1000` | PRO. Radius of the drop circle. Must be above 0 |
+| `spawning.random.interval-minutes` | `30` | PRO. Minutes between rains. `0` stops the timer |
+| `spawning.worldevents.enabled` | `true` | PRO. Drop a waiting relic when a WorldEvents PRO event starts |
+| `spawning.worldevents.events` | `[]` | PRO. Only these event ids or names drop a relic. Empty means any event |
+
+See [Altars and Relic Rain](/relics-smp/spawning).
+
+## Seasons
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `seasons.rewards.<place>` | places `1`, `2`, `3` | PRO. Console commands for each leaderboard place on `/relics admin season end`. `%player%` is the player's name |
+
+The defaults give 2 netherite ingots, 3 diamond blocks and 16 diamonds. See [Seasons](/relics-smp/seasons).
+
+## Hints
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `hints.pro` | `true` | Lite. Show the locked PRO relics to admins on the relic board |
+
+## Titles
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `titles.enabled` | `true` | Big on-screen titles for claims, pickups, Relic Rain and season end |
+| `titles.fade-in-ticks` | `10` | Fade-in time, in ticks |
+| `titles.stay-ticks` | `50` | Time on screen, in ticks. Must be above 0 |
+| `titles.fade-out-ticks` | `15` | Fade-out time, in ticks |
+
+The title text lives in `messages.yml` under `titles:`. Leave both lines of a title empty to skip it.
+
+## Menu
+
+The `/relics` board has 3 rows (slots `0` to `26`), plus one extra row per seven custom relics on PRO.
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `menu.relic-slots` | `[10, 11, 12, 14, 15, 16]` | One slot per built-in relic, in the order storm, inferno, void, gravity, blood, orbital. Six different slots from `0` to `26`, not the info slot |
+| `menu.info-slot` | `22` | Slot for the "How relics work" book |
+| `menu.filler` | `GRAY_STAINED_GLASS_PANE` | Background item |
+| `menu.info` | `BOOK` | Info item |
+| `menu.at-altar` | `GRAY_DYE` | Icon for a relic waiting at its altar |
+| `menu.locked` | `BARRIER` | Lite. Icon for a locked PRO relic |
+
+Materials are Bukkit material names. A name that isn't an item shows as stone. An invalid slot list falls back to the defaults. The title and lore are in `messages.yml` under `menu:`.
+
+## Sounds
+
+Every sound the plugin plays is an entry under `sounds:`:
+
+```yaml
+sounds:
+  claim: { key: ui.toast.challenge_complete, volume: 1.0, pitch: 1.0 }
+```
+
+- `key` is a Minecraft sound id
+- `volume` is 0 or more
+- `pitch` runs from 0.5 to 2
+- `enabled: false` mutes the entry
+
+| Entry | Default sound | When it plays |
+| --- | --- | --- |
+| `claim` | `ui.toast.challenge_complete` | A player claims a relic |
+| `pickup` | `entity.item.pickup` | A player picks up a dropped relic |
+| `cooldown` | `block.note_block.hat` | The caster tries a relic that is recharging |
+| `fizzle` | `block.note_block.bass` | A power finds no target |
+| `vetoed` | `block.note_block.didgeridoo` | The caster stands where powers are blocked |
+| `reveal` | `block.bell.use` | Timed reveal, for everyone |
+| `rain` | `entity.lightning_bolt.thunder` | PRO. Relic Rain, for everyone |
+| `season-end` | `ui.toast.challenge_complete` | PRO. Season end, for everyone |
+| `menu-reset` | `block.beacon.deactivate` | Admin resets a relic from the board |
+| `menu-teleport` | `entity.enderman.teleport` | Admin teleports from the board |
+| `storm-cast` | `item.trident.thunder` | Storm cast |
+| `inferno-cast` | `entity.blaze.shoot` | Inferno cast |
+| `void-blink-out` | `entity.enderman.teleport` | PRO. Void blink, where you leave |
+| `void-blink-in` | `entity.enderman.teleport` | PRO. Void blink, where you land |
+| `gravity-pull` | `block.beacon.power_select` | PRO. Gravity pull |
+| `gravity-launch` | `entity.wind_charge.wind_burst` | PRO. Gravity launch |
+| `blood-drain` | `entity.warden.heartbeat` | PRO. Blood drain |
+| `orbital-lock` | `block.beacon.activate` | PRO. Orbital target marked |
+| `orbital-warning` | `block.note_block.pling` | PRO. Orbital warning, every second |
+| `orbital-blast` | `entity.generic.explode` | PRO. Each Orbital blast |
+| `custom-dash` | `entity.wind_charge.throw` | PRO 1.1.0+. Custom `dash` step |
+| `custom-fireball` | `entity.blaze.shoot` | PRO 1.1.0+. Custom `fireball` thrown |
+| `custom-fireball-hit` | `entity.generic.burn` | PRO 1.1.0+. Custom `fireball` lands |
+| `custom-explode` | `entity.generic.explode` | PRO 1.1.0+. Custom `explode` step |
+
+On PRO 1.1.0+ you can add your own entries for custom relics. See [Custom relics](/relics-smp/custom-relics#sounds-particles-and-effects).
+
+## Particles
+
+Every particle the plugin shows is an entry under `particles:`:
+
+```yaml
+particles:
+  altar-beam: { type: dust, count: 2, color: "#FFD36E", size: 1.4 }
+```
+
+- `type` is a Minecraft particle id
+- `count` is 0 or more. `0` hides it
+- `color` (`#RRGGBB`) and `size` apply to `dust` only
+- `enabled: false` hides the entry
+
+Particles that need block or item data are not supported and are skipped with a console warning.
+
+| Entry | Default | Where it shows |
+| --- | --- | --- |
+| `altar-beam` | `dust`, 2, `#FFD36E`, size 1.4 | The beam over a waiting relic |
+| `altar-sparkle` | `end_rod`, 3 | Sparkles around a waiting relic |
+| `storm-strike` | `electric_spark`, 30 | Each Storm bolt |
+| `inferno-ring` | `flame`, 1 | The Inferno fire ring |
+| `void-trail` | `reverse_portal`, 12 | PRO. Void blink trail |
+| `gravity-pull` | `portal`, 120 | PRO. Gravity pull |
+| `gravity-launch` | `cloud`, 20 | PRO. Gravity launch |
+| `blood-tether` | `dust`, 1, `#AA0000`, size 1.3 | PRO. Blood drain tethers |
+| `blood-heal` | `heart`, 4 | PRO. Blood heal |
+| `orbital-warning` | `dust`, 1, `#FF3C28`, size 1.6 | PRO. Orbital warning beam and ring |
+| `orbital-blast` | `explosion_emitter`, 1 | PRO. Each Orbital blast |
+| `custom-dash` | `cloud`, 12 | PRO 1.1.0+. Custom `dash` step |
+| `custom-explode` | `explosion`, 3 | PRO 1.1.0+. Custom `explode` step |
+| `custom-fireball-trail` | `flame`, 2 | PRO 1.1.0+. Custom fireball in flight |
+| `custom-fireball-hit` | `flame`, 30 | PRO 1.1.0+. Custom fireball impact |
+| `custom-effect` | `witch`, 20 | PRO 1.1.0+. Custom `effect` and `buff` steps |
+
+## Relics
+
+Each relic has a section under `relics:` with its item, boss bar colour, cooldown, passive and power numbers. See [Tune a relic](/relics-smp/relics#tune-a-relic) for the built-ins and [Custom relics](/relics-smp/custom-relics) for your own.
+
+## Messages
+
+`messages.yml` holds every line of text in [MiniMessage](https://docs.advntr.dev/minimessage/format.html): chat, the item tooltip, the relic board, boss bars and titles. Chat lines get the `prefix` automatically. From 1.1.0, keys you leave out fall back to the built-in English, so new lines from an update show up even with an older file.
+
+| Section | What it controls |
+| --- | --- |
+| `prefix` | The chat prefix |
+| `pro-url` | The link `/relics pro` shows on Lite |
+| `relic.<id>` | Each relic's `name`, `symbol`, `active` and `passive` lines |
+| `item.lore` | The relic item's tooltip |
+| Top-level keys such as `claimed`, `dropped`, `revealed`, `rain` | Chat broadcasts and replies |
+| `help`, `help-top`, `admin-help` | `/relics help` |
+| `info.*` | `/relics info` replies |
+| `bossbar.*` | Boss bar text for held, dropped and offline relics |
+| `menu.*` | The relic board title, status lines and lore |
+| `top-*`, `season-ended` | PRO leaderboard and season end |
+| `pro-info`, `pro-owned` | `/relics pro` |
+| `titles.*` | On-screen titles for claim, pickup, Relic Rain and season end |
+
+**Tags you can use.** Every line about a relic takes `<relic>` (its styled name), `<symbol>`, `<key>` (its id), `<active>` and `<passive>`. Lines also get the values that fit them:
+
+| Tag | Used in |
+| --- | --- |
+| `<player>` | Claims, pickups, offline escrow, reveals, `/relics info`, boss bars, status lines, leaderboard rows |
+| `<coords>`, `<world>` | Drops, reveals, `/relics info`, the dropped boss bar, altar set |
+| `<x>`, `<z>` | Relic Rain chat and title |
+| `<minutes>` | Offline escrow broadcast, the board's info book |
+| `<time>` | Time left in escrow, hold times on the leaderboard |
+| `<seconds>` | Cooldown action bar |
+| `<cooldown>`, `<status>`, `<seen>` | Relic board lore |
+| `<place>` | Leaderboard rows |
+| `<count>`, `<error>`, `<list>` | Reload replies. `<list>` also names the valid relic ids when one is unknown |
+| `<input>`, `<usage>` | Unknown relic or player replies, and usage hints |
+| `<link>`, `<url>`, `<name>` | The `/relics pro` link and the locked PRO relic names on Lite |
+
+## Reloading
+
+`/relics admin reload`:
+
+- Reloads `config.yml` and `messages.yml`
+- Rebuilds every altar display
+- Restarts the reveal timer and, on PRO, the Relic Rain timer
+- Replies with how many values were invalid
+
+It does not re-check the licence key, and it can't add or remove custom relics. Restart for those. From 1.1.0, if `config.yml` has a YAML syntax error, reload changes nothing and shows the error.
+
+<Accordion title="Full default config.yml">
+
+```yaml title="plugins/RelicsSMP/config.yml"
+# Relics SMP: six legendary relics, one of each per server.
+# Reload with /relics admin reload. Every number below is yours to tune.
+# PRO only: license_key, spawning.random, spawning.worldevents, seasons,
+# and the Void, Gravity, Blood and Orbital relics.
+
+# PRO: paste the key from Discord /claim, then restart.
+license_key: "YOUR_KEY_HERE"
+
+custody:
+  # Minutes a relic waits for its holder after they log out. Then it returns to its altar.
+  offline-escrow-minutes: 10
+  # Let holders drop a relic with Q. A dropped relic is fair game for anyone.
+  allow-drop: true
+
+reveal:
+  # One boss bar per relic that is out of its altar, shown to everyone.
+  bossbar: true
+  # Every interval each holder glows and their coordinates go to chat. 0 turns it off.
+  interval-seconds: 300
+  glow-seconds: 10
+
+protection:
+  # Relic powers are blocked where PvP is off.
+  respect-world-pvp: true
+  respect-worldguard: true
+  # Blocks powers within this many blocks of world spawn. -1 uses spawn-protection from server.properties, 0 turns it off.
+  spawn-radius: -1
+  disabled-worlds: []
+
+abilities:
+  # Let Storm lightning and Orbital blasts break blocks.
+  break-blocks: false
+
+spawning:
+  # altar: relics wait at their altar for the first right-click.
+  # random (PRO): relics waiting at home also rain down at a random spot every interval.
+  mode: altar
+  random:
+    world: world
+    center-x: 0
+    center-z: 0
+    radius: 1000
+    interval-minutes: 30
+  worldevents:
+    # PRO: drop a waiting relic somewhere random when a WorldEvents PRO event starts.
+    enabled: true
+    # Only these WorldEvents event ids drop a relic. Empty means any event.
+    events: []
+
+seasons:
+  # PRO: commands run for the top holders by /relics admin season end. %player% is the name.
+  rewards:
+    '1':
+      - "give %player% netherite_ingot 2"
+    '2':
+      - "give %player% diamond_block 3"
+    '3':
+      - "give %player% diamond 16"
+
+hints:
+  # Lite: show the locked PRO relics to admins in /relics.
+  pro: true
+
+titles:
+  # Big on-screen titles for claims, pickups, Relic Rain and season end. Text is in messages.yml.
+  enabled: true
+  fade-in-ticks: 10
+  stay-ticks: 50
+  fade-out-ticks: 15
+
+menu:
+  # /relics layout (3 rows, slots 0-26). One slot per relic, in the order storm, inferno, void,
+  # gravity, blood, orbital. Materials are Bukkit material names. Title and lore are in messages.yml.
+  relic-slots: [10, 11, 12, 14, 15, 16]
+  info-slot: 22
+  filler: GRAY_STAINED_GLASS_PANE
+  info: BOOK
+  at-altar: GRAY_DYE
+  locked: BARRIER
+
+# Every sound: key (a Minecraft sound id), volume and pitch (0.5-2). enabled: false mutes one.
+sounds:
+  claim: { key: ui.toast.challenge_complete, volume: 1.0, pitch: 1.0 }
+  pickup: { key: entity.item.pickup, volume: 1.0, pitch: 0.8 }
+  cooldown: { key: block.note_block.hat, volume: 0.4, pitch: 0.7 }
+  fizzle: { key: block.note_block.bass, volume: 0.6, pitch: 0.6 }
+  vetoed: { key: block.note_block.didgeridoo, volume: 0.6, pitch: 0.8 }
+  reveal: { key: block.bell.use, volume: 0.8, pitch: 1.2 }
+  rain: { key: entity.lightning_bolt.thunder, volume: 0.6, pitch: 1.4 }
+  season-end: { key: ui.toast.challenge_complete, volume: 1.0, pitch: 1.0 }
+  menu-reset: { key: block.beacon.deactivate, volume: 0.8, pitch: 1.2 }
+  menu-teleport: { key: entity.enderman.teleport, volume: 0.8, pitch: 1.0 }
+  storm-cast: { key: item.trident.thunder, volume: 1.2, pitch: 1.0 }
+  inferno-cast: { key: entity.blaze.shoot, volume: 1.2, pitch: 0.7 }
+  void-blink-out: { key: entity.enderman.teleport, volume: 1.0, pitch: 0.8 }
+  void-blink-in: { key: entity.enderman.teleport, volume: 1.0, pitch: 1.2 }
+  gravity-pull: { key: block.beacon.power_select, volume: 1.2, pitch: 0.6 }
+  gravity-launch: { key: entity.wind_charge.wind_burst, volume: 1.2, pitch: 0.8 }
+  blood-drain: { key: entity.warden.heartbeat, volume: 1.5, pitch: 1.2 }
+  orbital-lock: { key: block.beacon.activate, volume: 2.0, pitch: 1.4 }
+  orbital-warning: { key: block.note_block.pling, volume: 2.0, pitch: 2.0 }
+  orbital-blast: { key: entity.generic.explode, volume: 2.0, pitch: 0.9 }
+  custom-dash: { key: entity.wind_charge.throw, volume: 1.0, pitch: 0.8 }
+  custom-fireball: { key: entity.blaze.shoot, volume: 1.0, pitch: 1.2 }
+  custom-fireball-hit: { key: entity.generic.burn, volume: 1.0, pitch: 1.0 }
+  custom-explode: { key: entity.generic.explode, volume: 1.2, pitch: 1.1 }
+
+# Every particle: type (a Minecraft particle id), count, and for dust a hex color and size.
+# Particles that need block or item data are not supported. enabled: false hides one.
+particles:
+  altar-beam: { type: dust, count: 2, color: "#FFD36E", size: 1.4 }
+  altar-sparkle: { type: end_rod, count: 3 }
+  storm-strike: { type: electric_spark, count: 30 }
+  inferno-ring: { type: flame, count: 1 }
+  void-trail: { type: reverse_portal, count: 12 }
+  gravity-pull: { type: portal, count: 120 }
+  gravity-launch: { type: cloud, count: 20 }
+  blood-tether: { type: dust, count: 1, color: "#AA0000", size: 1.3 }
+  blood-heal: { type: heart, count: 4 }
+  orbital-warning: { type: dust, count: 1, color: "#FF3C28", size: 1.6 }
+  orbital-blast: { type: explosion_emitter, count: 1 }
+  custom-dash: { type: cloud, count: 12 }
+  custom-explode: { type: explosion, count: 3 }
+  custom-fireball-trail: { type: flame, count: 2 }
+  custom-fireball-hit: { type: flame, count: 30 }
+  custom-effect: { type: witch, count: 20 }
+
+# PRO: add your own relics under relics: next to the six below, built from ability steps.
+# custom-relics-example.yml in this folder has three ready-made ones to copy.
+
+relics:
+  storm:
+    material: BREEZE_ROD
+    bossbar-color: YELLOW
+    cooldown-seconds: 25
+    passive:
+      effects: ["SPEED:0"]
+    ability:
+      range: 32
+      strikes: 5
+      spread: 3
+      radius: 3
+      damage: 4
+      knockback: 1.2
+  inferno:
+    material: BLAZE_ROD
+    bossbar-color: RED
+    cooldown-seconds: 30
+    passive:
+      effects: ["FIRE_RESISTANCE:0"]
+    ability:
+      radius: 8
+      damage: 5
+      fire-seconds: 5
+      knockback: 1.4
+  void:
+    material: ECHO_SHARD
+    bossbar-color: PURPLE
+    cooldown-seconds: 12
+    passive:
+      no-fall-damage: true
+    ability:
+      distance: 12
+      slow-radius: 2.5
+      slow-seconds: 3
+  gravity:
+    material: HEART_OF_THE_SEA
+    bossbar-color: BLUE
+    cooldown-seconds: 30
+    passive:
+      effects: ["JUMP_BOOST:1"]
+      no-fall-damage: true
+    ability:
+      radius: 10
+      pull: 1.1
+      launch: 1.4
+      launch-delay-ticks: 12
+  blood:
+    material: FERMENTED_SPIDER_EYE
+    bossbar-color: RED
+    cooldown-seconds: 35
+    passive:
+      lifesteal-percent: 15
+    ability:
+      radius: 8
+      drain: 8
+  orbital:
+    material: NETHER_STAR
+    bossbar-color: WHITE
+    cooldown-seconds: 60
+    passive:
+      effects: ["RESISTANCE:0"]
+    ability:
+      range: 48
+      warning-seconds: 3
+      blasts: 4
+      radius: 4
+      damage: 10
+```
+
+This is the 1.1.0 file. The 1.0 jars ship the same keys without the `custom-*` sounds and particles and the custom relics comment. The comment on `break-blocks` mentions Storm, but Storm's lightning is visual only and never breaks blocks.
+
+</Accordion>

@@ -1,0 +1,66 @@
+---
+title: 'Lite vs PRO'
+description: 'What Raid Bases Lite and Raid Bases PRO each do, side by side.'
+---
+
+Raid Bases comes in two editions built from the same code. **Lite** is free. **PRO** is paid and needs a licence key.
+
+The core raid is the same in both: forts rise, guards fight, the vault cracks, the loot spills and the land heals. Safety and cleanup are never cut down in Lite.
+
+## Feature comparison
+
+| Feature | Lite | PRO |
+| :-- | :---: | :---: |
+| Forts rise, guards, vault, loot, collapse | ✅ | ✅ |
+| Land journal, block-for-block restore, crash recovery | ✅ | ✅ |
+| Site rules (no player land, no storage, no pets) | ✅ | ✅ |
+| Tracker and boss bar | ✅ | ✅ |
+| All 11 generated fort layouts | ✅ | ✅ |
+| Timer and admin-started raids | ✅ | ✅ |
+| WorldEvents hook | First tier only | Any tier you map |
+| Tiers | First tier in `config.yml` | All tiers |
+| Raids standing at once | 1 | `max-active` (default 3) |
+| `/raid buy` with Vault money | ❌ | ✅ |
+| Wall HP (fort blocks take several hits) | ❌ | ✅ |
+| Your own `.schem` forts | ❌ | ✅ |
+| Item loot | ✅ | ✅ |
+| Money rewards (Vault) | ❌ | ✅ |
+| Command rewards | ❌ | ✅ |
+| PlaceholderAPI placeholders | ❌ | ✅ |
+| Licence key required | ❌ | ✅ |
+
+## What Lite runs
+
+- **One tier:** the first tier in `config.yml`. That is the Outlaw Hideout by default.
+- **One raid at a time:** `max-active` is ignored.
+- **Every built-in layout:** the schedule picks from the tier's `layouts`, and an admin can start any of the 11 with `/raid start <tier> <layout>`.
+- **Items only:** `price`, `money`, `commands` and `wall-hp` in a tier are ignored.
+
+When someone reaches for a PRO feature in Lite, such as a higher tier, `/raid buy` or a `schem:` fort, Raid Bases says it is a PRO feature. Admins also see a **Get PRO** link. Turn that link off with `pro-hints: false`. `/raid pro` lists what PRO adds, with the Get PRO link, for anyone who runs it. `pro-hints` doesn't change that.
+
+## What PRO adds
+
+<CardGroup cols={2}>
+  <Card title="Every tier, several raids" icon="layer-group" href="/raidbases/forts-and-tiers">
+    Bandit Stronghold, Warlord Fortress and Nightmare Bastion, up to `max-active` raids at once.
+  </Card>
+  <Card title="Wall HP" icon="shield-halved" href="/raidbases/defenses#wall-hp-pro">
+    Fort blocks take several hits per tier, with the crack showing as you swing.
+  </Card>
+  <Card title="/raid buy" icon="coins" href="/raidbases/buying-and-rewards">
+    Players spend Vault money to call in a raid. Refunded if no land is found.
+  </Card>
+  <Card title="Money and command rewards" icon="gift" href="/raidbases/buying-and-rewards#rewards">
+    Pay everyone at the vault and run console commands for each of them.
+  </Card>
+  <Card title="Custom forts" icon="compass-drafting" href="/raidbases/custom-forts">
+    Raid your own WorldEdit `.schem` builds.
+  </Card>
+  <Card title="PlaceholderAPI" icon="code" href="/raidbases/placeholders">
+    Active raids, next raid timer and the nearest raid's details.
+  </Card>
+</CardGroup>
+
+## Upgrading
+
+Swap the Lite jar for the PRO jar, add your licence key and restart. Your config and messages carry over. See [Installation](/raidbases/installation#upgrading-from-lite-to-pro).

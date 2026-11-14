@@ -1,0 +1,83 @@
+---
+title: "What's inside"
+description: 'Every plugin, world and file in the Stonkz SMP zip.'
+---
+
+Stonkz SMP is a zip with a ready-made `server` folder. It holds 28 plugin jars with their configs, the Stonkz Exchange spawn world and a small datapack. Paper itself is not included.
+
+## Package layout
+
+| Path | What it is |
+| --- | --- |
+| `server/plugins/` | All plugin jars and their configured folders |
+| `server/world/dimensions/minecraft/spawn/` | The Stonkz Exchange spawn world (a void world) |
+| `server/world/datapacks/stonkzsmp/` | Datapack that catches players who fall off the spawn island and puts them back |
+| `server/commands.yml` | Adds the `/shop` and `/worth` shortcuts |
+| `README-INSTALL.md` | The install guide |
+| `THIRD-PARTY-LICENSES.md` | Licences and source links for the free plugins |
+| `rebrand.bat`, `rebrand.ps1` | Puts your server name and address on the scoreboard, tab list and menu |
+
+No licence keys ship in the zip. You claim your own in Discord. See [Licence keys](/stonkz-smp/licence-keys).
+
+## Premium plugins
+
+These four are MattBaconz plugins. Each needs its own key, and all four keys come with the Stonkz SMP purchase.
+
+| Plugin | Version in 1.0.1 | Its job in the setup |
+| --- | --- | --- |
+| **Stonkz** | 1.4.45 | The live market: `/shop`, `/sell`, `/sellall`, `/worth`, `/portfolio`, Panic Mode, limit orders and market events |
+| **3TSpawner** | 1.0.9 | Spawner shop with 27 mobs, physical and virtual spawners, storage and selling. Loot sells at live Stonkz prices |
+| **WorldEvents PRO** | 1.2.18 | 100+ world events, a new round every 30 minutes, plus a weekly calendar |
+| **SeasonManager PRIME** | 1.1.3 | 30-day seasons with stats, a countdown boss bar, leaderboards and a world archive |
+
+Want the full docs for a single plugin? See [3TSpawner](/3tspawner/index) and [SeasonManager](/seasonmanager/index), or [Stonkz on BuiltByBit](https://builtbybit.com/resources/84623/).
+
+## Free plugins
+
+Every free plugin is bundled unmodified under a licence that allows redistribution. The licence and source link for each one are in `THIRD-PARTY-LICENSES.md`.
+
+### Base
+
+| Plugin | Version | Used for |
+| --- | --- | --- |
+| LuckPerms | 5.5.71 | Ranks and permissions |
+| VaultUnlocked | 2.20.2 | Economy bridge between plugins |
+| PlaceholderAPI | 2.12.3 | Placeholders on the scoreboard, menu and holograms |
+| EssentialsX | 2.22.0 | Homes, TPA, `/pay`, `/baltop`, `/back`, kits and basics |
+| EssentialsX Chat | 2.22.0 | Chat format with rank prefixes |
+| EssentialsX Spawn | 2.22.0 | Spawn point at the Exchange |
+| TAB | 6.1.2 | Scoreboard and tab list |
+| WorldEdit | 7.4.5 | Building tools |
+| WorldGuard | 7.0.18 | Spawn protection |
+| CoreProtect | 24.0 | Block logging and rollback |
+| spark | 1.10.173 | Performance profiling |
+| Multiverse-Core | 5.7.3 | Loads the `spawn` world |
+
+### Donut layer
+
+| Plugin | Version | Used for |
+| --- | --- | --- |
+| CrazyAuctions | 1.7.0 | `/ah` auction house |
+| Orderium | 2.4.1 | `/orders` buy orders |
+| PacketEvents | 2.14.0 | Library needed by Orderium and EternalCombat |
+| CrazyCrates | 26.1.2-ba1cc9b | Common, Rare and Stonkz crates |
+| EzRTP | 3.4.3 | `/rtp` with an Overworld, Nether and End picker |
+| UltimateTeams | 5.0.4 | `/team` |
+| AxAFKZone | 1.13.0 | The AFK Lounge rewards |
+| EternalCombat | 2.5.2 | Combat tag |
+| AsBounty | 1.0.0 | `/bounty` |
+| DeluxeMenus | 1.14.1 | The `/menu` main menu |
+| FancyNpcs | 2.12.1 | The four spawn NPCs |
+| FancyHolograms | 2.12.0 | Live price boards and station titles at spawn |
+
+## What the setup adds on top
+
+The plugins are only half of it. The setup also ships:
+
+- **The Stonkz Exchange** spawn build, with NPCs, holograms, crates and the AFK Lounge already placed. See [Spawn](/stonkz-smp/spawn).
+- **A tuned market.** Stonkz's balanced default prices, with items disabled where they would create an endless money loop.
+- **Spawner prices and the Stonkz price link** in 3TSpawner, so spawner loot sells at the live market price.
+- **An event calendar** in WorldEvents PRO, with no events at spawn.
+- **A 30-day season** in SeasonManager PRIME, waiting in pre-season until you start it.
+- **Four ranks** with prefixes and perks. See [Ranks](/stonkz-smp/ranks).
+- **Scoreboard, tab list, chat format and `/menu`**, styled to match.

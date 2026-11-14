@@ -1,0 +1,250 @@
+---
+title: 'Configuration'
+description: 'Every key in config.yml and messages.yml, with defaults.'
+---
+
+Raid Bases writes `plugins/RaidBases/config.yml` and `messages.yml` on first start. Text and colours use [MiniMessage](https://docs.advntr.dev/minimessage/format.html).
+
+Run `/raid reload` after you edit them. Raids already standing keep the settings they started with. The licence key is only read on startup.
+
+## General
+
+```yaml title="plugins/RaidBases/config.yml"
+license_key: ""
+
+worlds:
+  - world
+
+max-active: 3
+
+pro-hints: true
+
+particles: true
+```
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `license_key` | `""` | PRO only: your licence key. Leave it empty in Lite. See [Installation](/raidbases/installation#claim-your-pro-licence) |
+| `worlds` | `[world]` | Worlds raids may rise in. Empty means the server's first world |
+| `max-active` | `3` | PRO: raids standing at once. Lite always runs one |
+| `pro-hints` | `true` | Lite: show admins a Get PRO link when they reach for a PRO feature. Players never get this hint. `/raid pro` shows the link either way |
+| `particles` | `true` | Dust while forts rise and fall, sparks at the vault, the burst when it cracks |
+
+## Schedule
+
+```yaml title="plugins/RaidBases/config.yml"
+schedule:
+  enabled: true
+  every-minutes: 45
+  jitter-minutes: 10
+  min-players: 2
+  tiers:
+    easy: 6
+    medium: 3
+    hard: 1
+    nightmare: 0
+```
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `enabled` | `true` | Raise raids on a timer |
+| `every-minutes` | `45` | A raid rises about this often |
+| `jitter-minutes` | `10` | Random plus or minus on each wait |
+| `min-players` | `2` | Skip a turn when fewer players are online |
+| `tiers` | see above | How often each tier comes up, as weights. `0` means never on the schedule |
+
+With these weights, six in ten scheduled raids are Outlaw Hideouts, three are Bandit Strongholds and one is a Warlord Fortress. A tier you leave out of `tiers` has weight `0`. If `tiers` is empty, every tier is equally likely. Lite always picks its first tier.
+
+A skipped or failed turn waits for the next one. `/raid reload` restarts the wait.
+
+## WorldEvents
+
+See [WorldEvents](/raidbases/worldevents) for `worldevents.enabled`, `min-distance`, `max-distance` and `events`.
+
+## Site
+
+See [Where forts rise](/raidbases/where-forts-rise) for what each rule does.
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `site.center` | `[0, 0]` | x, z the search ring is centred on |
+| `site.min-distance` | `500` | Inner edge of the ring, in blocks |
+| `site.max-distance` | `3000` | Outer edge of the ring |
+| `site.player-distance` | `64` | No fort rises within this many blocks of a player |
+| `site.max-inhabited-minutes` | `15` | Chunks where players spent longer than this are refused |
+| `site.max-height-spread` | `6` | Most the ground may rise and fall under the fort |
+| `site.max-wet-columns` | `0` | Columns of water or lava allowed under the fort |
+| `site.attempts` | `24` | Spots tried before a raid gives up for this turn |
+| `site.generate-chunks` | `true` | Generate chunks that don't exist yet. Turn off on pre-generated worlds |
+| `site.margin` | `4` | Open ground kept around the fort, in blocks (0 to 16) |
+| `site.foundation-depth` | `10` | How far down the foundation fills gaps under the fort (1 to 32) |
+
+## Build, vault, announcements, boss bar
+
+```yaml title="plugins/RaidBases/config.yml"
+build:
+  rise-seconds: 6
+  collapse-seconds: 5
+
+vault:
+  radius: 4.5
+
+announce:
+  enabled: true
+  round: 25
+
+bossbar:
+  range: 96
+  colors:
+    building: yellow
+    active: red
+    cracking: purple
+    looted: green
+    collapsing: white
+```
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `build.rise-seconds` | `6` | Seconds a fort takes to rise |
+| `build.collapse-seconds` | `5` | Seconds it takes to come down |
+| `vault.radius` | `4.5` | Players this close to the vault crack it |
+| `announce.enabled` | `true` | Chat news for every raid. `false` silences all raid broadcasts |
+| `announce.round` | `25` | Announced coordinates are rounded to this many blocks |
+| `bossbar.range` | `96` | Players this close to a fort see its boss bar |
+| `bossbar.colors.*` | see above | Colour per phase: `pink`, `blue`, `red`, `green`, `yellow`, `purple` or `white` |
+
+To silence one broadcast instead of all of them, set that message to `""` in `messages.yml`.
+
+## Sounds
+
+Each sound has a `key`, `volume` and `pitch`. Keys come from the [Minecraft sound list](https://minecraft.wiki/w/Sounds.json), and resource pack sounds work too. Set `key: ""` to mute one.
+
+| Sound | Default key | Plays when |
+| --- | --- | --- |
+| `rise` | `block.stone.place` | While a fort rises |
+| `ready` | `event.raid.horn` | The guards are up |
+| `unlocked` | `block.beacon.activate` | The vault unlocks |
+| `crack-tick` | `block.note_block.pling` | Each second someone cracks the vault. The pitch rises with progress, so its `pitch` setting is not used |
+| `cracked` | `entity.generic.explode` | The vault bursts |
+| `loot` | `entity.player.levelup` | The loot spills |
+| `collapse` | `entity.wither.break_block` | The collapse starts |
+| `collapse-rumble` | `block.gravel.break` | While a fort comes down |
+| `click` | `ui.button.click` | Tracker on, raid bought |
+| `denied` | `entity.villager.no` | A purchase is refused (not enough money, or no economy) |
+| `wall-hit` | `entity.zombie.attack_iron_door` | PRO: a wall block takes a hit |
+
+## Tiers
+
+Tiers live under `tiers`, easiest first. The key (`easy`, `medium`, …) is what commands and the schedule use. Lite runs only the first tier in the file. See [Forts and tiers](/raidbases/forts-and-tiers) for the four defaults.
+
+```yaml title="plugins/RaidBases/config.yml"
+tiers:
+  easy:
+    name: "<gradient:#ffb347:#ffd27a>Outlaw Hideout</gradient>"
+    layouts: [outpost, camp, hideout]
+    palette:
+      variation: 0.15
+      palisade: [spruce_log, stripped_spruce_log]
+      palisade-top: spruce_fence
+      floor: spruce_planks
+      pillar: spruce_log
+      banner: red
+      fire: campfire
+      tent: [red_wool, white_wool, brown_wool]
+      foundation: cobblestone
+    guards:
+      - type: pillager
+        count: 4
+        post: tower
+        name: "<red>Outlaw Lookout"
+      - type: vindicator
+        count: 2
+        post: yard
+        name: "<red>Outlaw Brute"
+    unlock-guards-left: 1
+    crack-seconds: 20
+    crack-decay: 0.5
+    time-limit-minutes: 15
+    loot-grace-seconds: 45
+    loot:
+      - item: iron_ingot
+        amount: 6-14
+        chance: 1.0
+    wall-hp: 2
+    price: 2500
+    money: 50-150
+    commands: []
+```
+
+| Field | Default if missing | Meaning |
+| --- | --- | --- |
+| `name` | the tier key | MiniMessage name for chat and the boss bar |
+| `layouts` | `[outpost]` | Forts picked at random per raid. Built-in layout names, or `schem:<name>` in PRO |
+| `palette` | built-in blocks | Blocks per part of the fort. See [Palettes](/raidbases/forts-and-tiers#palettes) |
+| `guards` | none | Guard entries. See [Guards](/raidbases/defenses#posts) |
+| `unlock-guards-left` | `0` | The vault opens once this many guards or fewer are alive |
+| `crack-seconds` | `30` | Seconds players must hold the vault |
+| `crack-decay` | `0.5` | Crack progress lost per second when nobody is at the vault |
+| `time-limit-minutes` | `20` | The fort gives up and collapses after this long |
+| `loot-grace-seconds` | `40` | Time to grab the loot before the collapse |
+| `loot` | none | Item loot. See [Item loot](/raidbases/buying-and-rewards#item-loot) |
+| `wall-hp` | `1` | PRO: hits a fort block takes before it breaks. `1` is normal. TNT ignores it |
+| `price` | `0` | PRO: what `/raid buy` costs. `0` means it can't be bought |
+| `money` | `0` | PRO: money for each player at the vault when it cracks, like `100-250`. Use whole numbers |
+| `commands` | `[]` | PRO: console commands for each player at the vault. `{player}` and `{tier}` are replaced |
+
+An unknown layout name is skipped with a console warning. A guard `type` that isn't a mob, a loot `item` that isn't an item and an unknown gear slot are also logged and skipped.
+
+## `messages.yml`
+
+Every chat line, boss bar and action bar text is in `messages.yml`. Missing keys fall back to the defaults inside the jar, so new keys from updates work without edits.
+
+```yaml title="plugins/RaidBases/messages.yml"
+prefix: "<gradient:#ff3b30:#ffb347><bold>⚔ Raid</bold></gradient> <dark_gray>»</dark_gray> "
+
+rising: "<tier> <gray>is rising near</gray> <white><x>, <z></white> <gray>in <world>.</gray> <click:run_command:'/raid track <id>'><hover:show_text:'<gray>Point my compass at it'><aqua>[Track]</aqua></hover></click>"
+ready: "<tier> <gray>is up, guarded by</gray> <white><guards></white> <gray>raiders. Clear them out, then hold the vault.</gray>"
+```
+
+### Sections
+
+| Section | What it holds |
+| --- | --- |
+| `prefix` | The prefix in front of every chat message |
+| `pro-url` | Where Lite's Get PRO links point |
+| `rising`, `bought`, `ready`, `unlocked`, `cracked`, `expired`, `collapsed` | Server-wide raid news. Set one to `""` to turn it off |
+| `bar.*` | Boss bar text per phase |
+| `phase.*` | Phase names in `/raid` and `/raid list` |
+| `overview.*` | `/raid` output |
+| `track.*` | Tracker messages and the action-bar compass |
+| `help`, `help-buy`, `help-admin` | `/raid help` |
+| `list.*`, `start.*`, `stop.*`, `reload.*` | Admin command replies |
+| `protect.*` | Replies when a player breaks or places a block a fort protects |
+| `buy.*`, `reward.money` | PRO purchase and reward replies |
+| `pro.*` | Edition info and Lite's PRO hints |
+| `no-permission`, `player-only`, `unknown`, `unknown-raid` | General replies |
+
+### Placeholders in messages
+
+Placeholders use angle brackets. Each message gets the ones that make sense for it.
+
+| Placeholder | Meaning | Used in |
+| --- | --- | --- |
+| `<tier>` | The tier's coloured name | Raid news, boss bar, tracker, list |
+| `<id>` | Raid number | `rising`, overview, list, start, stop |
+| `<x>`, `<z>` | Rounded location | `rising` |
+| `<x>`, `<y>`, `<z>` | Exact location | `list.line`, `start.placed` |
+| `<world>` | World name | `rising`, `list.line`, `start.placed`, `track.other-world` |
+| `<player>` | A player name | `bought`, `cracked` |
+| `<guards>` | Guards alive | `ready`, `bar.active`, `list.line` |
+| `<seconds>` | Loot grace seconds | `cracked` |
+| `<time>` | Time left, or time to the next raid | `bar.*`, `list.*`, `overview.none-next` |
+| `<percent>` | Vault crack progress | `bar.cracking` |
+| `<phase>` | Phase name | `overview.line`, `list.line` |
+| `<where>` | Direction and distance, or the world | `overview.line` |
+| `<arrow>`, `<distance>` | Compass arrow and blocks away | `track.bar` |
+| `<count>`, `<max>`, `<edition>` | Raid counts and the edition | `overview.header`, `list.header`, `start.full`, `stop.all` |
+| `<layout>`, `<layouts>`, `<tiers>`, `<name>`, `<reason>` | Admin detail. In `reload.done`, `<tiers>` is the number of tiers | `list.line`, `start.*`, `buy.*`, `reload.done` |
+| `<price>`, `<money>` | Amounts | `buy.*`, `reward.money` |
+| `<pro-url>` | The `pro-url` value | `pro.*` |
+| `<label>` | The command label used | `unknown` |

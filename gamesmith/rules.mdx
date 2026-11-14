@@ -1,0 +1,160 @@
+---
+title: 'Rules'
+description: 'All 12 triggers and 17 actions, their settings, targets and text placeholders.'
+---
+
+A rule belongs to one phase. It has one trigger ("when this happens") and a list of actions ("do these things"). Rules only run while their phase is the current one.
+
+```yaml title="A rule in a game file"
+- when: {trigger: in-zone, zone: hill, every: 1, contested: pause}
+  do:
+  - {action: score, amount: 1, target: self}
+  - {action: actionbar, text: '<gold>+1 on the hill', target: self}
+```
+
+You build rules in the editor under **Phases & rules**. The keys below are what the game file stores.
+
+## Triggers
+
+| Trigger | Key | Settings (default) | Runs when |
+| --- | --- | --- | --- |
+| Phase starts | `phase-start` | none | This phase begins |
+| Phase ends | `phase-end` | none | This phase runs out of time. Not when a rule moves on early |
+| Every few seconds | `every` | `seconds` 10 (1–3600) | Repeats while the phase runs |
+| Player dies | `death` | none | A player would die |
+| Player kills a player | `kill` | none | Runs for the killer |
+| Player kills a game mob | `mob-kill` | `mob` (empty = any) | A player kills a mob this game spawned |
+| All game mobs are dead | `mobs-cleared` | none | Every mob this game spawned is dead |
+| Player enters a zone | `enter-zone` | `zone` | Once each time a player steps in |
+| Player holds a zone | `in-zone` | `zone`, `every` 1 (1–60), `contested` `pause` or `share` | Every few seconds for players inside |
+| Player falls below a height | `fall-below` | `y` 0 (-64 to 320) | A player drops under this Y level |
+| Player breaks a block | `block-break` | `block` (empty = any) | A player breaks a block they may break |
+| Player reaches a score | `score-reached` | `score` 10 (1–100000) | Once, when a player's score reaches the number |
+
+### Trigger details
+
+- **Player dies:** players never really die in a match. There are no drops and no respawn screen; they are healed and the death rules run. With no death rule in the phase, the player is eliminated.
+- **Player kills a player:** the kill counts for the last player who hit the victim within `match.kill-credit-seconds` (10 by default).
+- **Player holds a zone:** with `contested: pause`, nobody scores while players from different sides share the zone. With `share`, everyone inside scores. In free-for-all, every player is their own side.
+- **Player falls below a height:** dropping out through the bottom of the arena counts too. When you build a preset, its heights move with the arena.
+- **Player kills a game mob** and **All game mobs are dead** only count mobs the game spawned with the **Spawn mobs** action.
+
+## Actions
+
+| Action | Key | Settings (default) | Edition |
+| --- | --- | --- | --- |
+| Chat message | `message` | `text`, `target` | Lite and PRO |
+| Title | `title` | `text`, `subtitle`, `target` | Lite and PRO |
+| Action bar | `actionbar` | `text`, `target` | Lite and PRO |
+| Sound | `sound` | `sound` (`entity.experience_orb.pickup`), `target` | Lite and PRO |
+| Change score | `score` | `amount` 1 (-1000 to 1000), `target` | Lite and PRO |
+| Eliminate | `eliminate` | `target` | Lite and PRO |
+| Respawn | `respawn` | `delay` 3 (0–60 seconds), `target` | Lite and PRO |
+| Teleport | `teleport` | `marker` (`spawn`), `target` | Lite and PRO |
+| Give kit | `kit` | `target` | Lite and PRO |
+| Potion effect | `effect` | `effect` (`speed`), `seconds` 5 (1–3600), `level` 1 (1–10), `target` | Lite and PRO |
+| Spawn mobs | `spawn` | `mob` (`ZOMBIE`), `count` 3 (1–100), `marker` (`mob-spawn`), `fallback` | Lite and PRO |
+| Next phase | `next-phase` | none | Lite and PRO |
+| Go to phase | `goto-phase` | `phase` | Lite and PRO |
+| End the game | `end` | `winner`: `auto`, `player`, `team`, `top` or `none` | Lite and PRO |
+| Fill a zone | `fill` | `zone`, `block` (`AIR`) | Lite and PRO |
+| Console command | `command` | `command`, `target` | **PRO** |
+| Typewriter entry | `typewriter` | `entry`, `target` | **PRO** |
+
+### Action details
+
+- **Eliminate:** the player is out. Their inventory is cleared and they watch from the lobby in spectator mode until the match ends.
+- **Respawn:** the player waits `delay` seconds as a spectator, then returns to a spawn with full health and the kit. A delay of 0 is instant.
+- **Teleport:** to a marker. Team games use the team's own list first (`spawn-red` before `spawn`). Players take turns through a marker's positions.
+- **Spawn mobs:** spawns `count` mobs spread over the marker's positions. Vanilla mobs target the nearest player still in. A `mythic:<id>` mob needs PRO and MythicMobs; when it cannot spawn, the `fallback` vanilla mob spawns instead. See [Integrations](/gamesmith/integrations#mythicmobs-pro).
+- **End the game:** `auto` uses the game's win rule. `player` makes the player who triggered the rule the winner, or their team in a team game. `team` does the same. With no triggering player (for example under **Phase starts**), `player` and `team` end with no winner. `top` picks the highest score among players still in. `none` ends with no winner.
+- **Fill a zone:** sets every block in a zone, up to 32,768 blocks. The arena reset puts them back.
+- **Next phase:** moves on now. After the last phase, the game ends with the win rule.
+- **Console command (PRO):** runs as the console. `{player}` becomes the target's name.
+- **Typewriter entry (PRO):** starts a Typewriter dialogue, cinematic or action for the player. Entry ids use letters, digits, `_`, `.`, `:` and `-`.
+
+When an action ends the match, the rest of the rule is skipped, except chat messages, titles, action bars and sounds. So "X crossed the line first!" still shows after the **End the game** action.
+
+## Targets
+
+Most actions have a `target`:
+
+| Target | Who it reaches |
+| --- | --- |
+| `self` | The player the rule fired for (default) |
+| `all` | Everyone in the match |
+| `team` | The player and their teammates |
+| `others` | Everyone except the player |
+
+Triggers with no player of their own (**Phase starts**, **Phase ends**, **Every few seconds**, **All game mobs are dead**) reach everyone. The editor sets `target: all` when you add an action to one of them.
+
+Chat messages, titles, action bars and sounds also reach eliminated players who are watching. Other actions only touch players still in.
+
+## Text placeholders
+
+Chat messages, titles and action bars accept MiniMessage and these placeholders:
+
+| Placeholder | Becomes |
+| --- | --- |
+| `<player>` | The player the rule fired for, such as "Ann fell in!". For triggers with no player of their own, the reader's name |
+| `<score>` | The reader's own score |
+| `<phase>` | The current phase's name |
+| `<time>` | Time left in the phase, such as `1:30`. Empty in a phase with no time limit |
+| `<game>` | The game's name |
+
+## Examples from the presets
+
+<AccordionGroup>
+  <Accordion title="Spleef: fall into the pit and you are out">
+    ```yaml
+    - when: {trigger: fall-below, y: 5}
+      do:
+      - {action: eliminate, target: self}
+      - {action: message, text: '<red><player> fell into the pit!', target: all}
+      - {action: sound, sound: entity.player.splash, target: all}
+    ```
+  </Accordion>
+  <Accordion title="Mob Waves: next wave when the mobs are dead">
+    ```yaml
+    - when: {trigger: mobs-cleared}
+      do:
+      - {action: message, text: '<green>Wave cleared!', target: all}
+      - {action: next-phase}
+    ```
+  </Accordion>
+  <Accordion title="Lava Rising: the lava climbs, survivors score">
+    ```yaml
+    - when: {trigger: phase-start}
+      do:
+      - {action: fill, zone: lava-1, block: LAVA}
+      - {action: actionbar, text: '<red>The lava is rising!', target: all}
+    - when: {trigger: every, seconds: 5}
+      do:
+      - {action: score, amount: 1, target: all}
+    ```
+  </Accordion>
+  <Accordion title="Sky Sprint: first through the finish wins">
+    ```yaml
+    - when: {trigger: enter-zone, zone: finish}
+      do:
+      - {action: score, amount: 1, target: self}
+      - {action: message, text: '<gold><player> crossed the line first!', target: all}
+      - {action: end, winner: player}
+    ```
+  </Accordion>
+  <Accordion title="Domination: takedowns score, the dead respawn">
+    ```yaml
+    - when: {trigger: kill}
+      do:
+      - {action: score, amount: 3, target: self}
+      - {action: actionbar, text: '<gold>+3 for the takedown', target: self}
+    - when: {trigger: death}
+      do:
+      - {action: respawn, delay: 3, target: self}
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+A rule loop that jumps between phases more than 64 times in one second (for example, two phases that each move on as they start) ends the match with no winner.
+</Note>

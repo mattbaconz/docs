@@ -1,0 +1,94 @@
+---
+title: 'Arenas'
+description: 'Arena regions, lobby and spawn markers, zones, arena protection, block resets and PRO fresh-world matches.'
+---
+
+Every game has one arena: a box in one world, plus named positions (markers) and named boxes (zones) inside it. You set all of it from the **Arena** menu in the editor, using the wand and where you stand.
+
+## The region
+
+The region is everything a match may change. Set it from a wand selection with **Set arena region**.
+
+- Blocks inside the region are restored after every match.
+- Players stay inside it for the whole match. Anyone who walks out (in the lobby, during the countdown, as a spectator or mid-match) is sent back.
+- The lobby and every spawn must be inside it.
+- Make it tall enough. A player who drops out through the bottom counts as falling below any **Player falls below a height** level under it.
+
+A preset sets its region for you when you build it.
+
+## Markers
+
+Markers are named lists of positions. Each position stores where you stood and the way you faced, rounded to 45 degrees.
+
+| Marker | Set with | Used for |
+| --- | --- | --- |
+| `lobby` | **Set lobby here** | Waiting before the match and watching after elimination. One position |
+| `spawn` | **Add spawn here** | Start points and respawns. Players take turns through the list |
+| `spawn-<team>` | **Add team spawn here** | A team's own spawns, for example `spawn-red`. Falls back to `spawn` |
+| `mob-spawn` | **Add mob spawn here** | The default marker for the **Spawn mobs** action |
+
+The **Teleport** and **Spawn mobs** actions can use any marker. Presets bring their own: Outpost Raid uses `wall`, `yard` and `boss` for its three stages. To add a marker with a new name, edit the game file (see [Configuration](/gamesmith/configuration#game-files)).
+
+Shift-right-click a marker in the **Arena** menu to clear it.
+
+## Zones
+
+Zones are named boxes that rules can use: a hill to hold, a finish line, a jump pad, a floor that drops away.
+
+1. Select the box with the wand.
+2. Click **New zone from selection** and type a name (lowercase letters, digits, `-` or `_`, up to 24 characters).
+
+Click an existing zone to replace it with your current selection. Shift-right-click to delete it.
+
+Zones are used by **Player enters a zone**, **Player holds a zone** and **Fill a zone**.
+
+## Preview
+
+**Preview** in the **Arena** menu outlines the region, the zones and your current wand selection with particles, marks every marker position, and puts floating labels on markers and zones. Only you see them, and only while you are editing the game. It is on by default.
+
+## Arena protection
+
+While a match is playing or resetting in an arena:
+
+- Players outside the match cannot break or place blocks in it, unless they have `gamesmith.admin`.
+- Players in the match follow the current phase's rules: **Place blocks**, **Breakable blocks** and **Item and block drops**.
+- Explosions, fluids, fire, pistons, dispensers and hoppers cannot carry changes across the region's edge.
+- Natural mob spawns and spawn eggs are blocked inside it.
+- When the match ends, the mobs it spawned and the items and vehicles players brought in are removed, even if they left the arena. Loose items and projectiles inside the arena are cleared too.
+
+## Resetting the arena
+
+### Put blocks back (default)
+
+Gamesmith remembers each block the match changes. When the match ends, it puts them back, `restore.blocks-per-tick` at a time (500 by default), so a big reset does not freeze the server. Players who try to join during the reset see `The arena is being reset. Try again in a few seconds.`
+
+The block journal is saved every `match.journal-save-seconds` (10 by default). If the server crashes mid-match, the arena is restored on the next start, after its world loads.
+
+In this mode a game runs one match at a time. Two games can share one arena, just not at the same time: the second gets `Another game is using that arena right now.`
+
+### Fresh worlds (PRO)
+
+On an [AdvancedSlimePaper](https://github.com/InfernalSuite/AdvancedSlimePaper) server, PRO can run each match in its own copy of the arena instead.
+
+- Several matches of the same game run side by side, up to `instances.max-per-game` (10 by default).
+- The arena itself is never touched. Each match world is dropped when the match ends, with nothing to put back.
+
+To turn it on:
+
+<Steps>
+  <Step title="Open Settings">
+    `/gs edit <id>`, then **Settings**.
+  </Step>
+  <Step title="Switch the arena reset">
+    Click **Arena reset** to switch from **Put blocks back** to **Fresh world per match**. Gamesmith builds the template straight away. Chat says `Copying the arena into a template…`, then `✔ Template ready.`
+  </Step>
+  <Step title="Rebuild after you change the arena">
+    Matches copy the arena as it was when the template was built. After you change blocks in the arena, click **Build template** again.
+  </Step>
+</Steps>
+
+Building copies `instances.blocks-per-tick` blocks per tick (4000 by default). Lower it if building causes lag. Templates are stored in `plugins/Gamesmith/data/instances/`.
+
+<Note>
+On Lite, the **Arena reset** tile shows as PRO. On PRO without AdvancedSlimePaper, it says the game needs an AdvancedSlimePaper server. A fresh-world game cannot be joined until its template is built.
+</Note>

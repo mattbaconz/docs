@@ -1,0 +1,138 @@
+---
+title: 'Installation'
+description: 'Install Gamesmith on Paper, add your PRO licence key and build your first game.'
+---
+
+## Requirements
+
+- **Server software:** Paper `1.20.6` through `26.3`. Spigot and Folia are not supported.
+- **Java:** 21 or newer. Paper `26.x` servers need Java 25.
+- **PRO only:** a licence key and internet access for the licence check.
+- **Optional:** MythicMobs, Typewriter, Vault with an economy plugin, PlaceholderAPI, AdvancedSlimePaper. See [Integrations](/gamesmith/integrations).
+
+No other plugins are required. Missing optional plugins never stop Gamesmith from starting.
+
+## Install the jar
+
+<Steps>
+  <Step title="Stop the server">
+    Avoid Bukkit `/reload`. Install and update plugins with a full restart.
+  </Step>
+  <Step title="Add the jar">
+    Place `Gamesmith-PRO-1.0.0.jar` (or `Gamesmith-Lite-1.0.0.jar`) in the `plugins` folder. Use one edition, not both.
+  </Step>
+  <Step title="Start the server once">
+    Gamesmith writes `plugins/Gamesmith/` with `config.yml`, `messages.yml` and `editor.yml`. Lite is ready now. PRO stops itself until you add a key.
+  </Step>
+</Steps>
+
+## Claim your licence key
+
+Gamesmith PRO needs a licence key. Lite does not.
+
+<Steps>
+  <Step title="Join Discord and verify">
+    Join the [support Discord](https://discord.gg/kgHNjJsB2t) and run `/verify` to link your Voxel Shop account to your purchase.
+  </Step>
+  <Step title="Claim the key">
+    Run `/claim GAMESMITH`. The bot gives you your key.
+  </Step>
+  <Step title="Paste it into config.yml">
+    Open `plugins/Gamesmith/config.yml` and replace the placeholder.
+
+    ```yaml title="plugins/Gamesmith/config.yml"
+    license_key: "PASTE-YOUR-KEY-HERE"
+    ```
+  </Step>
+  <Step title="Restart the server">
+    The key is checked when the plugin enables. `/gs reload` does not re-check it, so a new key needs a restart.
+  </Step>
+</Steps>
+
+<Warning>
+PRO needs internet access on startup. It sends the key to the licence server (`matt-drm.vercel.app`) and looks up the server's public IP (`checkip.amazonaws.com`) to identify the machine. If the licence server cannot be reached, PRO starts on a cached check for up to 72 hours after the last successful check with the same key. An invalid key never starts.
+</Warning>
+
+What the console says:
+
+| Console line | Meaning |
+| --- | --- |
+| `Licence verified.` | The key is good. PRO is running. |
+| `No licence key found. Run /claim GAMESMITH ...` | `license_key` is empty or still `YOUR_KEY_HERE`. |
+| `Invalid licence key. Gamesmith PRO will not start.` | The licence server rejected the key. Check you pasted all of it. |
+| `Unable to verify the licence. Gamesmith PRO will not start.` | The server could not reach the licence server and has no recent cached check. |
+| `Licence server unreachable; using the cached verification for this key.` | Running on the 72-hour cache. |
+
+After a failed check, the console prints `Gamesmith PRO licence check failed. Disabling.` and the plugin turns itself off.
+
+<Card title="Join Discord" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Run `/verify`, then `/claim GAMESMITH`.
+</Card>
+
+## First checks
+
+On a good start the console prints one summary line:
+
+```text
+Gamesmith PRO 1.0.0: 0 game(s), native forms.
+```
+
+`native forms` means the editor asks for names and numbers in a native input form (Paper `1.21.6` and newer). Older servers print `chat input` and ask in chat instead.
+
+PRO also prints a line for each optional plugin it found:
+
+```text
+Registered PlaceholderAPI placeholders %gamesmith_...%.
+MythicMobs found: mythic:<id> mobs are on.
+Typewriter found: the Typewriter action is on.
+AdvancedSlimePaper found: fresh-world matches are on.
+```
+
+## Make your first game
+
+Stand in an open, empty area. Then run:
+
+```text
+/gs create lava lavarise
+```
+
+Gamesmith builds the Lava Rising map around you, moves you to its lobby and opens the editor. The hub shows **Ready to play**. Click **Test** to start a match on your own, or close the editor and have players run `/gs join lava`.
+
+<Warning>
+`/gs create` with a template places blocks where you stand. Templates with a map clear the map's whole box first. Run it in an empty area, such as a flat or void world set aside for games. If the map does not fit between the world's height limits, Gamesmith says `That map doesn't fit at this height` and builds nothing. See [the space each map needs](/gamesmith/presets#space-each-map-needs).
+</Warning>
+
+Template names: `sumo`, `colordrop`, `lavarise`, `skysprint`, `domination`, `outpost`, `spleef`, `koth`, `waves` and `blank`. See [Preset games](/gamesmith/presets), or [Build a game](/gamesmith/build-a-game) to start from `blank`.
+
+## Files written
+
+| Path | Purpose |
+| --- | --- |
+| `plugins/Gamesmith/config.yml` | Licence key, editor input, match timings, resets, fresh worlds, sounds |
+| `plugins/Gamesmith/messages.yml` | Every chat line, title and boss bar text (MiniMessage) |
+| `plugins/Gamesmith/editor.yml` | Editor button names, lore, materials and slots |
+| `plugins/Gamesmith/games/<id>.yml` | One file per game, written by the editor |
+| `plugins/Gamesmith/data/stats.yml` | Wins and games played per player and game |
+| `plugins/Gamesmith/data/snapshots/` | Saved player state while someone is in a match |
+| `plugins/Gamesmith/data/journals/` | Arena block changes, for recovery after a crash |
+| `plugins/Gamesmith/data/instances/` | PRO on AdvancedSlimePaper: fresh-world templates |
+| `plugins/Gamesmith/license-cache.yml` | PRO: when the key was last verified (stores a hash, never the key) |
+
+Keys added to `messages.yml` and `editor.yml` in later versions fall back to the copy inside the jar, so you do not have to merge them by hand.
+
+## Support template
+
+```text
+Plugin: Gamesmith (PRO or Lite)
+Version:
+Server version:
+Java version:
+Other plugins:
+Game id and template:
+Steps to reproduce:
+Expected:
+Actual:
+Console log:
+```
+
+Attach the game's `games/<id>.yml` when a game behaves wrong.

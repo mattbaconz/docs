@@ -1,0 +1,102 @@
+---
+title: 'FAQ'
+description: 'Live servers, veterans, Vault, networks, resets, the welcome screen, licence keys and versions.'
+---
+
+## Setup
+
+### Can I add FirstHour to a server that already has players?
+
+Yes. Players FirstHour has never seen, who already have 30 or more minutes of playtime, count as veterans. They get no path and stay out of your new-player stats. Change the limit with `new-players.auto-skip-playtime-minutes`, or set it to `-1` to treat everyone as new.
+
+### Do I need Vault?
+
+No. Without Vault, item and command rewards work. Money rewards and `earn` steps need Vault plus an economy plugin. FirstHour looks for the economy once every plugin has loaded, and the console says whether it found one.
+
+### Which preset should I start with?
+
+Survival is the default and works on Lite. Economy SMP and Lifesteal are PRO presets. Load one with `/firsthour preset <name>`, then point any `go_to` steps at real places on your map.
+
+### How do I test it on my own account?
+
+Stay online and run `/firsthour reset <yourname>`. You start over as a brand-new player with the welcome screen, the path and every reward.
+
+## Players
+
+### Do players have to press Start?
+
+No. The path starts on the first join. Start shows the first goal with a title and a sound, but progress counts either way.
+
+### Can players skip it?
+
+Yes, with `/firsthour skip`, if they have `firsthour.skip` (everyone, by default). Skipping ends their goals, timed rewards and come-back rewards. Remove the permission to make the path mandatory.
+
+### Can a reward be farmed by rejoining?
+
+No. Step rewards, timed rewards and day rewards each pay once per player. Only `/firsthour reset` starts a player over.
+
+### What do players on a 1.21.4 server see instead of the dialog?
+
+A title and a chat welcome with a clickable **[Start]** line. Everything else works the same.
+
+## Editions
+
+### What's the difference between Lite and PRO?
+
+Lite runs one path of up to 6 steps, timed rewards, a Day 2 reward, and new players plus Day-1 return on the dashboard. PRO adds unlimited paths and steps, the Economy SMP and Lifesteal presets, Stonkz, WorldEvents PRO and Relics SMP steps, veterans say hi, days 2 to 7, the full dashboard, cohorts, CSV export and placeholders. See [Lite vs PRO](/firsthour/lite-vs-pro).
+
+### Will I lose my setup when I upgrade?
+
+No. Swap the Lite jar for the PRO jar, add your key and restart. `players.db`, `paths.yml` and your settings carry over.
+
+### Where do I get my PRO licence key?
+
+Join the [Discord](https://discord.gg/kgHNjJsB2t), run `/verify` to link your purchase, then `/claim FIRST_HOUR`. Paste the key into `license_key` in `plugins/FirstHour/config.yml` and restart.
+
+### Does PRO need internet access?
+
+Yes, at startup. FirstHour PRO checks the key with the licence server when it enables. If the licence server is down, it starts only when this same key was verified in the last 72 hours. Lite never phones home for a licence.
+
+### I changed the key and nothing happened.
+
+`/firsthour reload` does not re-check the key. Restart the server.
+
+## Stats
+
+### Why is my Day-1 rate `n/a`?
+
+The rate only counts new players whose window has closed: 48 hours after their first join for Day-1, 8 days for Day-7. On a fresh install it reads `n/a` until the first players get there.
+
+### When does a player count as having quit on a goal?
+
+When they've been offline for 24 hours without finishing the path. The goal they were on gets the quit.
+
+### Can I get the raw numbers?
+
+On PRO, `/firsthour stats export` writes a CSV with one row per join date to `plugins/FirstHour/exports/`. `/firsthour stats cohorts` prints the last 14 join dates in chat. See [Retention dashboard](/firsthour/dashboard).
+
+## Technical
+
+### Which versions does it support?
+
+Paper 1.21.4 and 26.1.2, with Java 21 or newer. Paper 26.1 needs Java 25.
+
+### Does it work on Spigot or Folia?
+
+No. FirstHour uses Paper's API and does not support Folia.
+
+### Does it work across a network?
+
+Each server keeps its own `players.db`. Progress, rewards and stats are per server, not shared across a proxy. Install it on the server new players land on.
+
+### Where is the data?
+
+`plugins/FirstHour/players.db`, a local SQLite file with one row per player. It saves every 10 seconds and when a player leaves, off the main thread.
+
+### Can I use Bukkit `/reload`?
+
+Don't. Use `/firsthour reload` for config, messages and paths, or restart the server.
+
+<Card title="Discord support" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Questions, bug reports and licence keys.
+</Card>

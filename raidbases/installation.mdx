@@ -1,0 +1,151 @@
+---
+title: 'Installation'
+description: 'Install Raid Bases on Paper, add your PRO licence key and raise your first fort.'
+---
+
+## Requirements
+
+- **Server software:** Paper `1.20.6` through `26.3`. Spigot and Folia are not supported.
+- **Java:** 21 or newer. Paper 26.x servers need Java 25.
+- **Required plugins:** none.
+- **Optional:** Vault plus an economy plugin, PlaceholderAPI, WorldEvents (Core or PRO).
+- **PRO only:** a licence key and an internet connection for the licence check.
+
+WorldEdit is **not** needed, not even for custom forts. Raid Bases reads `.schem` files itself.
+
+<Warning>
+Do not use Bukkit `/reload` or a plugin manager to reload Raid Bases. Use `/raid reload` for config and message changes, or a full restart.
+</Warning>
+
+## Install Raid Bases
+
+<Steps>
+  <Step title="Add the jar">
+    Stop the server. Put `RaidBases-PRO-1.0.0.jar` or `RaidBases-Lite-1.0.0.jar` in your `plugins` folder. Use one edition, not both.
+  </Step>
+  <Step title="Start once">
+    Start the server so Raid Bases writes `plugins/RaidBases/`. The PRO jar stops itself on this first start because it has no licence key yet. That is expected.
+  </Step>
+  <Step title="Add your licence key (PRO)">
+    Follow [Claim your PRO licence](#claim-your-pro-licence) below, then paste the key into `license_key`.
+  </Step>
+  <Step title="Pick your raid world">
+    Open `plugins/RaidBases/config.yml`. Check that `worlds` names your survival world. The default is `world`.
+  </Step>
+  <Step title="Restart">
+    Start the server again. The console confirms the edition, the number of tiers, how many raids can stand at once and the schedule.
+  </Step>
+</Steps>
+
+```yaml title="plugins/RaidBases/config.yml"
+# RaidBases PRO only: your licence key. Leave empty in RaidBases Lite.
+license_key: "PASTE-YOUR-KEY-HERE"
+
+# Worlds raids may rise in. Empty means the server's first world.
+worlds:
+  - world
+```
+
+## Claim your PRO licence
+
+Raid Bases PRO needs a licence key. Raid Bases Lite does not.
+
+<Steps>
+  <Step title="Join the Discord">
+    Join [discord.gg/kgHNjJsB2t](https://discord.gg/kgHNjJsB2t).
+  </Step>
+  <Step title="Verify your purchase">
+    Run `/verify` to link the store account you bought Raid Bases PRO with. You get the Raid Bases role.
+  </Step>
+  <Step title="Claim the key">
+    Run `/claim RAIDBASES`. The bot gives you your key.
+  </Step>
+  <Step title="Paste and restart">
+    Paste the key into `license_key` in `plugins/RaidBases/config.yml`, then restart the server.
+  </Step>
+</Steps>
+
+The key is checked once, when the server starts. `/raid reload` does not check it again, so restart after you change the key.
+
+**Your server needs internet access for the licence check.** On startup Raid Bases PRO sends the key to the licence server at `matt-drm.vercel.app` and looks up the server's public IP at `checkip.amazonaws.com` to identify the machine. It tries three times.
+
+- **Valid key:** the console logs `Licence verified.` and PRO starts.
+- **Empty key or `YOUR_KEY_HERE`:** the console explains how to claim one, and Raid Bases disables itself.
+- **Invalid key:** the console logs `Invalid licence key. RaidBases PRO will not start.`
+- **Licence server unreachable:** PRO still starts if the same key passed a check in the last 72 hours. Raid Bases keeps a hash of the key in `license-cache.yml`, never the key itself.
+- **Unreachable, with no check in the last 72 hours:** the console logs `Unable to verify the licence. RaidBases PRO will not start.`
+
+<Card title="Join Discord" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Claim your key with `/claim RAIDBASES` and get support.
+</Card>
+
+## Your first raid
+
+As an operator, in your raid world:
+
+```text
+/raid start here
+```
+
+This raises a fort of your first tier right where you stand. It rises in about six seconds, then the guards spawn and chat announces it. Anyone left inside a wall is lifted to the surface.
+
+Do this out in the open. Raid Bases still refuses a spot with chests, furnaces or other block entities, item frames, armor stands, minecarts, boats, or named or tamed mobs inside the fort's area.
+
+To try a bigger fort (PRO), name the tier and the layout:
+
+```text
+/raid start here hard ziggurat
+```
+
+Then check what is running and clean up:
+
+```text
+/raid list
+/raid stop all
+```
+
+`/raid stop all` brings every fort down with the normal collapse, and the land comes back.
+
+<Tip>
+`/raid start` without `here` searches the configured ring for good land, the same way the schedule does. It can take a few seconds while chunks load.
+</Tip>
+
+## The schedule
+
+Out of the box a raid rises about every 45 minutes (give or take 10), as long as at least two players are online. Change this under `schedule` in `config.yml`. See [Configuration](/raidbases/configuration#schedule).
+
+## Files Raid Bases writes
+
+| Path | Purpose |
+| --- | --- |
+| `plugins/RaidBases/config.yml` | Licence key, worlds, schedule, site rules, tiers, guards, loot, sounds. Written on first start |
+| `plugins/RaidBases/messages.yml` | Every chat line, boss bar and action bar text (MiniMessage). Written on first start |
+| `plugins/RaidBases/journals/` | The saved land under each standing fort, made when the first raid rises. Leave these files alone |
+| `plugins/RaidBases/forts/` | PRO: your `.schem` forts. Made once PRO starts with a valid key |
+| `plugins/RaidBases/license-cache.yml` | PRO: the last successful licence check (a hash, not the key) |
+
+## Upgrading from Lite to PRO
+
+Both editions use the same `config.yml` and `messages.yml`.
+
+1. Stop the server.
+2. Replace `RaidBases-Lite-1.0.0.jar` with `RaidBases-PRO-1.0.0.jar`.
+3. Add your key to `license_key`.
+4. Start the server.
+
+Your tiers, loot and messages carry over. The higher tiers, `max-active`, prices, wall HP, money and commands start working at once.
+
+## Support template
+
+```text
+Plugin: Raid Bases (PRO or Lite)
+Version:
+Server version:
+Java version:
+Other plugins:
+Steps to reproduce:
+Expected:
+Actual:
+Console log:
+Config snippet:
+```

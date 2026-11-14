@@ -1,0 +1,96 @@
+---
+title: 'FAQ'
+description: 'Licence, editions, custom relics, keepInventory, block damage, platforms and more.'
+---
+
+## Editions and licence
+
+### What's the difference between Lite and PRO?
+
+Lite is free and has the Storm and Inferno relics with the full hunt: altars, boss bars, reveals, death drops, offline escrow and the no-stash rules. PRO adds Void, Gravity, Blood and Orbital, Relic Rain, the WorldEvents PRO hook, seasons, PlaceholderAPI, admin give and spawn, and custom relics from 1.1.0. See [Lite vs PRO](/relics-smp#lite-vs-pro).
+
+### Can I move from Lite to PRO?
+
+Yes. Swap the jar, add your licence key and restart. Storm and Inferno keep their altars and state. See [Upgrading](/relics-smp/installation#upgrading).
+
+### How do I get my licence key?
+
+Join the [Discord](https://discord.gg/kgHNjJsB2t), run `/verify`, then `/claim RELICS_SMP`. Paste the key into `license_key` in `plugins/RelicsSMP/config.yml` and restart.
+
+### PRO disabled itself on startup. Why?
+
+Check the console:
+
+- `No licence key found.` means `license_key` is empty or still `YOUR_KEY_HERE`
+- `Invalid licence key.` means the key is wrong. Copy it again from Discord
+- `Unable to verify the licence.` means the server couldn't reach the licence server and has no successful check with this key in the last 72 hours. Allow outbound internet access and restart
+
+`/relics admin reload` never re-checks the key. Restart after you change it.
+
+### Which version has custom relics?
+
+PRO 1.1.0 and newer. Lite ignores custom relics. See [Custom relics](/relics-smp/custom-relics).
+
+## Gameplay
+
+### Does keepInventory stop relics dropping?
+
+No. Relics drop where you die even with keepInventory on. The rest of your items follow your normal rules.
+
+### Can players hide a relic in an ender chest or shulker box?
+
+No. Containers, bundles, item frames, armor stands and item-holding blocks all refuse relics. A relic that still ends up in a container is removed and sent home. See [No stashing](/relics-smp/how-it-works#no-stashing).
+
+### What if the holder logs out and never comes back?
+
+The relic waits `custody.offline-escrow-minutes` (default 10), then returns to its altar for the next claim.
+
+### Can one player hold more than one relic?
+
+Yes. Every passive they carry applies, and each relic keeps its own cooldown. In PRO, each held relic adds to their season hold time.
+
+### Do powers hit mobs?
+
+Yes. Powers hit players and mobs. They never hit the caster, the caster's own pets, armor stands, creative or spectator players, or players standing where PvP is off.
+
+### Do relics break blocks or grief bases?
+
+Not by default. Storm lightning is visual only and never starts fires. Orbital blasts and custom `explode` steps break blocks only when you set `abilities.break-blocks: true`.
+
+### Do powers work in spawn and safe zones?
+
+No. Powers are blocked where PvP is off: worlds with PvP off, WorldGuard regions with `pvp deny`, worlds in `protection.disabled-worlds` and the spawn area. See [Where powers work](/relics-smp/how-it-works#where-powers-work).
+
+### Can I turn one of the six relics off?
+
+There's no switch for the built-ins. A relic with no altar can't be claimed from an altar. In PRO, Relic Rain and WorldEvents drops can still pick a relic that waits at home. Custom relics take `enabled: false`.
+
+### Does a restart lose relics?
+
+No. Relic state is saved to `relics.yml`. Dropped relics stay where they were. Altar displays rebuild when their chunk loads. A relic that was held when the server stopped gets a fresh offline window from boot. Cooldowns start fresh after a restart.
+
+## Platforms
+
+### Does Relics SMP run on Spigot or Folia?
+
+No. It needs Paper. It uses Paper APIs and does not declare Folia support. It's tested on Paper 1.21.4 and 26.1.
+
+### Which Java version do I need?
+
+Java 21 or newer, or whatever your Paper build needs.
+
+### Can I use Bukkit `/reload`?
+
+Avoid it. Use `/relics admin reload` for config and message changes, or restart.
+
+### Does it collect data?
+
+Relics SMP uses [bStats](https://bstats.org) for anonymous usage counts. Opt out for every plugin in `plugins/bStats/config.yml`.
+
+## Support
+
+Include your edition and version, server software and version, Java version, plugin list, steps to reproduce and the console log.
+
+<Card title="Discord support" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Licence claims, questions and support.
+</Card>

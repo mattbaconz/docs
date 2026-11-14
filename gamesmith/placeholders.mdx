@@ -1,0 +1,41 @@
+---
+title: 'Placeholders'
+description: 'PRO PlaceholderAPI placeholders for wins, games played, the current game, phase and score.'
+---
+
+<Note>
+Placeholders are a **Gamesmith PRO** feature. They need [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/). Gamesmith registers its own expansion, so there is nothing to download with `/papi ecloud`.
+</Note>
+
+When PlaceholderAPI is installed, PRO logs `Registered PlaceholderAPI placeholders %gamesmith_...%.` at startup.
+
+| Placeholder | Returns |
+| --- | --- |
+| `%gamesmith_wins%` | Total wins across all games |
+| `%gamesmith_wins_<game>%` | Wins in one game, by game id. Example: `%gamesmith_wins_lava%` |
+| `%gamesmith_played%` | Total games played |
+| `%gamesmith_played_<game>%` | Games played of one game. Example: `%gamesmith_played_lava%` |
+| `%gamesmith_game%` | The name of the game the player is in, as plain text. Empty when not in a game |
+| `%gamesmith_phase%` | The current phase's name, as plain text. Empty when not in a game |
+| `%gamesmith_score%` | The player's score in the current match. `0` when not in a game |
+
+`wins` and `played` work for offline players too. `game`, `phase` and `score` need the player online.
+
+Wins and games played come from `plugins/Gamesmith/data/stats.yml`. A match counts once it ends, for every player still in it.
+
+## Ideas
+
+- A scoreboard or tab line: `Wins: %gamesmith_wins%`.
+- A hologram over a game's join sign: `Lava Rising wins: %gamesmith_wins_lava%`.
+- A rank-up requirement on total wins.
+
+## Leaderboard command
+
+PRO also has a chat leaderboard:
+
+```text
+/gs top          top ten across all games
+/gs top lava     top ten in one game
+```
+
+Players are ranked by wins. Ties go to the player with fewer games played.

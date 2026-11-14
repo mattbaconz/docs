@@ -1,0 +1,74 @@
+---
+title: 'Commands'
+description: 'Every /firsthour subcommand for players and admins, with permissions and console support.'
+---
+
+FirstHour has one command, `/firsthour`, with the alias `/fh`. Using it at all needs `firsthour.use`, which everyone has by default.
+
+`/firsthour help` (or any unknown subcommand) lists the commands. Admins with `firsthour.admin` see the admin list.
+
+## Player commands
+
+| Command | Permission | Console | What it does |
+| --- | --- | --- | --- |
+| `/firsthour` | `firsthour.use` | Prints help | Your current goal, its hint, and the time to your next timed reward |
+| `/firsthour skip` | `firsthour.skip` | No | Skip the new-player goals. This also ends your timed and come-back rewards |
+| `/firsthour greet <player>` | `firsthour.veteran` | No | Greet a new player for a reward. **PRO** |
+| `/firsthour pro` | `firsthour.use` | Yes | What PRO adds, with a link. On PRO, confirms everything is unlocked |
+| `/firsthour help` | `firsthour.use` | Yes | The command list |
+
+`/firsthour start` is what the chat welcome's **[Start]** button runs. It shows your current goal with a title and a sound. You don't need to type it.
+
+What `/firsthour` replies with depends on where you are:
+
+- On the path: `Goal 2/6 │ Craft a crafting table`, then the hint
+- Finished: `You finished every goal.`
+- Skipped, or a veteran from before FirstHour: `You skipped the new-player goals.`
+- No path for you: `There are no goals for you right now.`
+
+## Admin commands
+
+All admin commands need `firsthour.admin` (op by default).
+
+| Command | Console | What it does |
+| --- | --- | --- |
+| `/firsthour stats` | Yes | Open the retention menu and print the chat summary. The console gets the chat summary |
+| `/firsthour stats chat` | Yes | The chat summary only |
+| `/firsthour stats cohorts` | Yes | The last 14 join dates: new players, Day-1, Day-7, finished. **PRO** |
+| `/firsthour stats export` | Yes | Write the last 30 days to a CSV in `plugins/FirstHour/exports/`. **PRO** |
+| `/firsthour preset <name>` | Yes | Replace `paths.yml` with `survival`, `economysmp` or `lifesteal`, keeping the old file as `paths.yml.bak`. Economy SMP and Lifesteal are **PRO** |
+| `/firsthour reset <player>` | Yes | Wipe a player's FirstHour data. Online players start over as brand-new players |
+| `/firsthour reload` | Yes | Reload `config.yml`, `messages.yml` and `paths.yml` |
+
+### stats
+
+See [Retention dashboard](/firsthour/dashboard) for what each number means. On Lite, `cohorts` and `export` reply that they're PRO features.
+
+### preset
+
+```text
+/firsthour preset economysmp
+```
+
+Replies with the step count, the backup file name and the warning count. See [Presets](/firsthour/paths#presets).
+
+### reset
+
+`/firsthour reset <player>` deletes the player's row in `players.db`.
+
+- **Online players** start over at once as brand-new players: welcome screen, path, step rewards, timed and come-back rewards. Use this to test the new-player flow on your own account.
+- **Offline players** are looked up by the last name FirstHour saw. On their next join, FirstHour treats them like a player it has never seen, so the [veteran rule](/firsthour/configuration#new-players) applies: with 30 or more minutes of playtime, they come back as a veteran. Reset them while they're online to give them the path again.
+
+<Warning>
+A player who starts over counts as a new player again in your stats, from the moment they restart.
+</Warning>
+
+### reload
+
+Reloads `config.yml`, `messages.yml` and `paths.yml`, then re-checks every online player against the new paths. Bad values fall back to their defaults. If anything was rejected, chat says `Reloaded with N warning(s); see the console.`
+
+`/firsthour reload` does not re-check the PRO licence key. Change the key, then restart.
+
+## Tab completion
+
+Players see `skip`, `greet`, `pro` and `help`. Admins also see `stats`, `reset`, `reload` and `preset`, plus preset names, `stats` views and player names.

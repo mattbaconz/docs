@@ -1,0 +1,40 @@
+---
+title: 'Permissions'
+description: 'The four FirstHour permission nodes, their defaults, and what each one unlocks.'
+---
+
+FirstHour has four permission nodes. Three are on for everyone by default. The admin node is op only.
+
+| Permission | Default | What it unlocks |
+| --- | --- | --- |
+| `firsthour.use` | true | `/firsthour` and its alias `/fh`. Needed for every subcommand, admin ones included |
+| `firsthour.skip` | true | `/firsthour skip` |
+| `firsthour.veteran` | true | "Say hi" pings for new players, and greeting rewards. **PRO** |
+| `firsthour.admin` | op | `/firsthour stats`, `reset`, `reload` and `preset`, the admin help, and clicks in the stats menu |
+
+## Notes
+
+- **Removing `firsthour.use`** blocks the whole `/firsthour` command. Players still get the welcome screen, the bossbar and their rewards. On servers without the native dialog, the chat welcome's **[Start]** button runs `/firsthour start`, so it needs `firsthour.use` too.
+- **Removing `firsthour.skip`** makes the path mandatory. Skipping also ends a player's timed and come-back rewards, which is a good reason to keep new players on the path.
+- **`firsthour.veteran`** only matters on PRO. A player with it still gets no pings while they're on their own new-player path.
+- **`firsthour.admin`** is checked again on every click in the stats menu. A player without it has the menu closed.
+
+## Path permissions (PRO)
+
+On PRO, each path in `paths.yml` can set its own `permission:`. A new player gets the first path they have permission for. These are your own nodes, not FirstHour's. See [Several paths](/firsthour/paths#several-paths-pro).
+
+## LuckPerms examples
+
+```text
+# Make the path mandatory
+lp group default permission set firsthour.skip false
+
+# Keep new staff out of buddy pings
+lp group helper permission set firsthour.veteran false
+
+# Let senior staff read the dashboard and reset players
+lp group admin permission set firsthour.admin true
+
+# Send VIPs down their own path (PRO, with permission: "server.vip" on the path)
+lp group vip permission set server.vip true
+```

@@ -1,0 +1,96 @@
+---
+title: 'FAQ'
+description: 'Licence keys, versions, hosting, seasons and other common Stonkz SMP questions.'
+---
+
+## Buying and keys
+
+### Do I need to buy the four premium plugins separately?
+
+**No.** Stonkz, 3TSpawner, WorldEvents PRO and SeasonManager PRIME are all in the zip. Your purchase gives you the **Stonkz SMP** role in Discord, and that role unlocks `/claim` for all four keys. See [Licence keys](/stonkz-smp/licence-keys).
+
+### Why do four plugins disable on the first start?
+
+They have no licence key yet. Paste all four keys, then restart. SeasonManager PRIME may print a long error before its key is set. It stops once the key is in.
+
+### Does the server need internet access?
+
+**Yes.** The four premium plugins check their keys with our licence server on startup. They also look up the server's public IP to identify the machine. Allow `matt-drm.vercel.app` and `checkip.amazonaws.com` if your host filters outgoing traffic.
+
+### A plugin's licence message names a different Discord. Which one do I use?
+
+Use [discord.gg/kgHNjJsB2t](https://discord.gg/kgHNjJsB2t) for all four keys and for support.
+
+## Versions and hosting
+
+### Which server version does it need?
+
+**Paper 26.1.2** with **Java 25**. The bundled plugins are pinned to that version. Paper is not in the zip, so [download it from PaperMC](https://papermc.io/downloads/paper).
+
+### Does it run on Folia, Spigot or Purpur?
+
+It is built and tested on Paper 26.1.2 only. Folia is not supported, because several bundled plugins, including EssentialsX and WorldGuard, do not run on Folia.
+
+### Which clients can join?
+
+Players join with Java Edition on the same version as the server. ViaVersion and Geyser are not included. Add them yourself if you want other versions or Bedrock players.
+
+### Can I install it on a host panel like Pterodactyl?
+
+**Yes.** The zip unpacks correctly on Linux hosts. Move the contents of `server` into your server's root folder. `rebrand.bat` is Windows only, so edit the three branding lines by hand. See [Rebranding](/stonkz-smp/rebranding).
+
+### How much RAM do I need?
+
+4 GB or more for the server.
+
+### My world isn't called `world`. What do I do?
+
+Move `world/dimensions/minecraft/spawn` and `world/datapacks/stonkzsmp` into your own world folder. See [Installation](/stonkz-smp/installation#if-your-world-is-not-called-world).
+
+## Running the server
+
+### Can I try it first?
+
+**Yes.** Join the demo server at `play.stonkz.space`.
+
+### Does `/season next` wipe the world?
+
+**No.** It archives the world to `season-archives/` and moves to the next season. Your map stays. For a fresh map, follow [Start a new map](/stonkz-smp/seasons#start-a-new-map).
+
+### Does money reset between seasons?
+
+Not by itself. Balances are not stored in the world. If you want a full economy reset, reset balances with EssentialsX's `/eco` command before you start the new season.
+
+### Is there a shards currency?
+
+**No.** There is one currency, money. The AFK Lounge pays $500 or a Common crate key every 5 minutes.
+
+### Where do I change prices?
+
+Market items and prices are in `plugins/Stonkz/items.yml`. Spawner prices are in `plugins/3TSpawner/shop.yml`. See [Configuration](/stonkz-smp/configuration).
+
+### How do I give a player a rank?
+
+Run `lp user <player> parent set vip` in the console. Use `mvp` or `admin` for the other ranks. See [Ranks](/stonkz-smp/ranks).
+
+### Can I add or remove plugins?
+
+**Yes.** It is a normal Paper server with normal plugin configs. If you remove a plugin, also remove anything that points to it, such as its button in `/menu` or its line on the scoreboard.
+
+### Can I use Bukkit `/reload`?
+
+**No.** Restart the server, or use a plugin's own reload command such as `/tab reload`, `/dm reload` or `/crates reload`.
+
+## Updates and support
+
+### How do I update from 1.0 to 1.0.1?
+
+Swap one jar: delete `plugins/Stonkz-1.4.44.jar` and copy in `Stonkz-1.4.45.jar` from the new download. See [Updating](/stonkz-smp/updating).
+
+### Where do I get help?
+
+Open a ticket in our [Discord](https://discord.gg/kgHNjJsB2t). Include your `logs/latest.log`, and leave your licence keys out of anything you paste.
+
+<Card title="Discord support" icon="discord" href="https://discord.gg/kgHNjJsB2t">
+  Claim your keys and get help.
+</Card>

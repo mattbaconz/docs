@@ -1,0 +1,75 @@
+---
+title: 'Licence keys'
+description: 'Claim the four premium plugin keys that come with Stonkz SMP and paste them into the right files.'
+---
+
+Stonkz SMP includes four premium plugins. Each one checks its own licence key on startup. Your purchase comes with all four keys. You claim them yourself in Discord.
+
+| Plugin | `/claim` pick | File | Setting |
+| --- | --- | --- | --- |
+| Stonkz | **Stonkz** (`84623`) | `plugins/Stonkz/config.yml` | `license_key` |
+| 3TSpawner | **3TSpawner** (`3TSPAWNER`) | `plugins/3TSpawner/config.yml` | `license_key` |
+| WorldEvents PRO | **WorldEvents Pro** (`88756`) | `plugins/WorldEventsPro/config.yml` | `license-key` |
+| SeasonManager PRIME | **SeasonManager** (`91234`) | `plugins/SeasonManager-Prime/config.yml` | `license_key` |
+
+## Claim your keys
+
+<Steps>
+  <Step title="Join Discord">
+    Join our [Discord](https://discord.gg/kgHNjJsB2t).
+  </Step>
+  <Step title="Verify your purchase">
+    Run `/verify` to link the store account you bought Stonkz SMP with. You get the **Stonkz SMP** role. That one role unlocks `/claim` for all four plugins.
+  </Step>
+  <Step title="Claim each plugin">
+    Run `/claim` and pick **Stonkz** from the list. Do the same for **3TSpawner**, **WorldEvents Pro** and **SeasonManager**. You can also type the code from the table above.
+  </Step>
+  <Step title="Paste the keys">
+    Open each file from the table and paste the key between the quotes.
+  </Step>
+  <Step title="Restart">
+    Restart the server. Each plugin checks its key on startup.
+  </Step>
+</Steps>
+
+The keys go in like this:
+
+```yaml title="plugins/Stonkz/config.yml"
+license_key: 'MATT-XXXX-XXXX'
+```
+
+```yaml title="plugins/WorldEventsPro/config.yml"
+license-key: 'MATT-XXXX-XXXX'
+```
+
+<Warning>
+WorldEvents PRO is the odd one out: its setting is `license-key` with a hyphen. Stonkz, 3TSpawner and SeasonManager PRIME use `license_key` with an underscore.
+</Warning>
+
+## Internet access
+
+The four premium plugins need internet access for their licence checks. On startup each one:
+
+- checks its key with our licence server (`matt-drm.vercel.app`), and
+- looks up the server's public IP (`checkip.amazonaws.com`) to identify the machine.
+
+If your host blocks outgoing connections, allow those two addresses.
+
+## Before you add keys
+
+On the first start, before any keys are set, the four premium plugins disable themselves. The rest of the server still boots. SeasonManager PRIME may print a long error in the console at that point. It stops once its key is set.
+
+Paste all four keys, then restart. If one plugin still disables, check:
+
+- the key is in the right file (see the table),
+- the setting name is exact (`license-key` for WorldEvents PRO, `license_key` for the rest),
+- the key is inside quotes with no extra spaces,
+- the server can reach the internet.
+
+<Note>
+All four keys come from the same Discord: [discord.gg/kgHNjJsB2t](https://discord.gg/kgHNjJsB2t). Use that server even if a plugin's console message names a different invite.
+</Note>
+
+## Keys are never in the zip
+
+The download ships with every key blank. Keep your keys private. Do not post `config.yml` files with a key in them when you ask for help.

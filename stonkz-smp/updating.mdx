@@ -1,0 +1,46 @@
+---
+title: 'Updating'
+description: 'Update a running Stonkz SMP server from 1.0 to 1.0.1 without touching your configs or player data.'
+---
+
+Stonkz SMP 1.0.1 changes one plugin jar. You swap that file, and your configs, market and player data stay as they are.
+
+## 1.0.1
+
+**Fixed:** stock graph maps (`/stonkz map <item>`) no longer cut off their Low and High prices once an item costs $100 or more. The setup now ships **Stonkz 1.4.45**.
+
+That is the only change. Every other file in 1.0.1 is the same as in 1.0.
+
+### Update from 1.0
+
+<Steps>
+  <Step title="Stop the server">
+    Stop your server.
+  </Step>
+  <Step title="Remove the old jar">
+    Delete `plugins/Stonkz-1.4.44.jar`.
+  </Step>
+  <Step title="Add the new jar">
+    Copy `Stonkz-1.4.45.jar` from `server/plugins/` in the new download into your server's `plugins/` folder.
+  </Step>
+  <Step title="Start the server">
+    Start it again. The console shows `Enabling Stonkz v1.4.45`.
+  </Step>
+</Steps>
+
+<Warning>
+Do not copy the whole new `server` folder over a running setup. That would overwrite your configs, spawn and any changes you made. Swap only the jar.
+</Warning>
+
+Your Stonkz licence key stays in `plugins/Stonkz/config.yml`, so you do not need a new key.
+
+## Fresh installs
+
+If you have not installed Stonkz SMP yet, use the newest download and follow [Installation](/stonkz-smp/installation). It already has every update.
+
+## Version history
+
+| Version | Changes |
+| --- | --- |
+| 1.0.1 | Ships Stonkz 1.4.45: stock graph maps show their Low and High prices at $100 and up |
+| 1.0 | First release: Stonkz 1.4.44, 3TSpawner 1.0.9, WorldEvents PRO 1.2.18, SeasonManager PRIME 1.1.3 |

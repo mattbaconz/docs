@@ -1,0 +1,50 @@
+---
+title: 'Placeholders'
+description: 'PlaceholderAPI placeholders for the current goal and your retention numbers (PRO).'
+---
+
+<Note>
+Placeholders are a **PRO** feature. Install [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) before FirstHour starts. No eCloud download is needed: FirstHour registers `%firsthour_...%` itself and logs `Registered PlaceholderAPI placeholders %firsthour_...%.`
+</Note>
+
+Use them in scoreboards, tab lists, holograms and menus.
+
+## Player placeholders
+
+These show the viewing player's own progress. They update every second.
+
+| Placeholder | Shows | When there's no goal |
+| --- | --- | --- |
+| `%firsthour_step%` | The current goal's title, as plain text | empty |
+| `%firsthour_step_number%` | The current goal's number, like `2` | the path length, or `0` |
+| `%firsthour_step_total%` | Goals in the player's path | the path length, or `0` |
+| `%firsthour_progress%` | The counter, like `(3/8)`, `($120/$1000)` or `(4/10 min)`. Empty for one-off goals | empty |
+| `%firsthour_status%` | `playing`, `finished` or `skipped` | `skipped` for veterans |
+
+Players who are offline or still loading return empty text, or `0` for the number placeholders.
+
+## Server placeholders
+
+These show new-player numbers for the whole server, over the last 30 days. They refresh every 5 minutes.
+
+| Placeholder | Shows |
+| --- | --- |
+| `%firsthour_new_today%` | New players today |
+| `%firsthour_new_week%` | New players in the last 7 days |
+| `%firsthour_new_month%` | New players in the last 30 days |
+| `%firsthour_day1_rate%` | Day-1 return rate, like `41%`. `n/a` until a window has closed |
+| `%firsthour_day7_rate%` | Day-7 return rate. `n/a` until a window has closed |
+| `%firsthour_median_first_session%` | Median first-session length, like `12:30`. `n/a` until a first session has ended |
+
+The numbers match `/firsthour stats`. See [Retention dashboard](/firsthour/dashboard) for how each one is counted.
+
+## Examples
+
+```text
+Goal %firsthour_step_number%/%firsthour_step_total%: %firsthour_step% %firsthour_progress%
+New today: %firsthour_new_today% · Day-1 return: %firsthour_day1_rate%
+```
+
+<Tip>
+Show a goal line on the scoreboard only while `%firsthour_status%` is `playing`, if your scoreboard plugin supports conditions.
+</Tip>

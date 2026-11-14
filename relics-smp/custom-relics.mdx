@@ -1,0 +1,306 @@
+---
+title: 'Custom relics'
+description: 'PRO 1.1.0+. Build up to 21 relics of your own from ability steps, with the full step reference and three ready-made examples.'
+---
+
+<Note>
+**PRO 1.1.0+.** Custom relics need Relics SMP PRO 1.1.0 or newer. Lite ignores them.
+</Note>
+
+Six relics not enough? Add your own. A custom relic is a list of ability steps that run in order: aim, dash, blink, strike lightning, throw a fireball, explode, pull, push, drain and more. Give it any item, name, cooldown and passive.
+
+Custom relics follow every rule the six built-ins do:
+
+- One copy on the server, claimed from its own altar
+- Boss bar, timed reveals and `/relics info`
+- Drops on death, offline escrow, no storing, copies crumble
+- The same PvP, WorldGuard, world and spawn checks
+- Relic Rain, the WorldEvents PRO hook, seasons and PlaceholderAPI
+- Its own icon on the relic board, in extra rows below the six built-ins
+
+You can add up to **21** custom relics, each with up to **32** steps.
+
+## Add a custom relic
+
+<Steps>
+  <Step title="Open the example file">
+    PRO writes `plugins/RelicsSMP/custom-relics-example.yml` on its first start. It holds three ready-made relics: Frost, Ember Dash and Thunder. This file is never loaded on its own.
+  </Step>
+  <Step title="Copy a relic into config.yml">
+    Paste the relic under `relics:` in `config.yml`, next to `storm`, `inferno` and the rest. If it uses your own sound or particle, add that entry under `sounds:` or `particles:` too.
+  </Step>
+  <Step title="Restart the server">
+    Adding or removing a custom relic needs a restart. After that, `/relics admin reload` picks up any change to its settings.
+  </Step>
+  <Step title="Set its altar">
+    Stand where it should live and run `/relics admin setaltar <id>`, for example `/relics admin setaltar frost`.
+  </Step>
+</Steps>
+
+On startup the console confirms it: `Relics SMP PRO 1.1.0: all 6 relics live, plus 3 custom.`
+
+## Relic fields
+
+A custom relic takes the same fields as a built-in, plus `display` and an `ability` list.
+
+```yaml title="plugins/RelicsSMP/config.yml"
+relics:
+  # ...storm, inferno, void, gravity, blood, orbital...
+  frost:
+    material: PRISMARINE_SHARD
+    bossbar-color: BLUE
+    cooldown-seconds: 20
+    display:
+      name: "<gradient:#C9F6FF:#5AA7FF>Frost Relic</gradient>"
+      symbol: "❄"
+      active: "Freeze and hurl back everyone around you"
+      passive: "Speed I while carried"
+    passive:
+      effects: ["SPEED:0"]
+    ability:
+      - { type: nearby, radius: 6 }
+      - { type: effect, radius: 6, effect: "SLOWNESS:2", seconds: 4 }
+      - { type: damage, radius: 6, amount: 4, particle: frost-burst }
+      - { type: push, radius: 6, strength: 1.2, lift: 0.5 }
+```
+
+| Field | Default | What it does |
+| --- | --- | --- |
+| Relic id (the key, `frost` above) | | 1 to 32 lowercase letters, digits, `-` or `_`. Used in commands and placeholders. The six built-in ids are taken |
+| `enabled` | `true` | Set `false` to keep a relic in config without running it |
+| `material` | `AMETHYST_SHARD` | The relic's item, as a Bukkit material name |
+| `bossbar-color` | `WHITE` | `PINK`, `BLUE`, `RED`, `GREEN`, `YELLOW`, `PURPLE` or `WHITE` |
+| `cooldown-seconds` | `30` | Seconds between casts, from `0.05` to `86400` |
+| `display.name` | `<white>` plus the id and `Relic` | Item and chat name, in MiniMessage |
+| `display.symbol` | `✦` | Shown before the name on the boss bar |
+| `display.active` | empty | The active line on the tooltip and relic board |
+| `display.passive` | empty | The passive line on the tooltip and relic board |
+| `passive.effects` | none | Potion effects while carried, as `NAME` or `NAME:amplifier` |
+| `passive.no-fall-damage` | `false` | `true` cancels fall damage while carried |
+| `passive.lifesteal-percent` | `0` | Percent of melee damage that heals you, `0` to `100` |
+| `ability` | | The list of steps. Up to 32 |
+
+`messages.yml` can still override a custom relic's text: add `relic.<id>.name`, `symbol`, `active` or `passive` there.
+
+## How steps run
+
+Steps run top to bottom. Most act at **the point**:
+
+- The point starts where you stand
+- `aim` moves it to the block you look at
+- A `fireball` moves it to where the fireball lands
+- `blink` brings it back to you
+
+**Gates.** `aim`, `nearby` and `blink` can fail. If a gate fails before any `delay` or `fireball`, the cast stops, no cooldown starts, and you see why, just like the built-ins. Steps above the gate have already run, so put gates first. After a delay or fireball the cooldown has already started, so a failing gate only stops the steps after it.
+
+**Delays and fireballs.** `delay` waits, then runs the rest. A `fireball` flies first, and every step after it runs where it lands. If the fireball flies past its range without hitting anything, the steps after it don't run.
+
+**Enemies.** Every enemy step uses the same rules as the built-ins. It never hits you, your own pets, armor stands, creative or spectator players, or players standing where PvP is off. Damage is credited to you.
+
+**Units.** Damage and healing are in half-hearts: `4` is two hearts. Radius and range are in blocks. Delays are in ticks: 20 ticks is one second.
+
+## Step reference
+
+Every number has a default and an allowed range. A missing number uses its default.
+
+### Gates
+
+| Step | Options (default, range) | What it does |
+| --- | --- | --- |
+| `aim` | `range` (`32`, 1 to 128) | The point becomes the block you look at. Fails with `Aim at a block in range.` when there is none, or `You can't strike there.` when PvP is off there |
+| `nearby` | `radius` (`8`, 0.5 to 64) | Needs at least one enemy within `radius` of the point. Fails with `No enemies in range.` |
+| `blink` | `distance` (`10`, 1 to 64) | Teleports you along your look like the Void Relic, without its slowing trail. The point returns to you. Fails with `No room to blink there.` or `You can't strike there.` |
+
+### Movement
+
+| Step | Options (default, range) | What it does |
+| --- | --- | --- |
+| `dash` | `power` (`1.6`, 0.1 to 5), `lift` (`0.4`, 0 to 3), `safe-seconds` (`3`, 0 to 30) | Launches you forward along your look with some lift. No fall damage for `safe-seconds` |
+
+### Enemies around the point
+
+| Step | Options (default, range) | What it does |
+| --- | --- | --- |
+| `damage` | `radius` (`4`, 0.5 to 64), `amount` (`4`, 0 to 100) | Hurts every enemy in range |
+| `strike` | `radius` (`3`, 0.5 to 64), `damage` (`4`, 0 to 100), `strikes` (`1`, 1 to 20), `spread` (`0`, 0 to 16), `knockback` (`0`, 0 to 5) | Lightning bolts four ticks apart, scattered up to `spread` blocks. Each hurts and knocks back enemies near it. Visual lightning: no fire, no block damage |
+| `fireball` | `speed` (`1.5`, 0.1 to 5), `damage` (`5`, 0 to 100), `radius` (`2`, 0.5 to 16), `fire-seconds` (`3`, 0 to 60), `range` (`48`, 4 to 128) | Throws a fireball straight along your look. Where it lands, it hurts and ignites enemies in `radius`. Steps after it run there |
+| `explode` | `radius` (`4`, 0.5 to 64), `damage` (`8`, 0 to 100), `knockback` (`0.8`, 0 to 5), `power` (`0`, 0 to 8) | Hurts and knocks back enemies. `power` above 0 also makes a real explosion that breaks blocks (never fire), but only when `abilities.break-blocks` is `true` and PvP is on at the point |
+| `pull` | `radius` (`8`, 0.5 to 64), `strength` (`1`, 0 to 5) | Pulls enemies toward the point |
+| `push` | `radius` (`6`, 0.5 to 64), `strength` (`1.2`, 0 to 5), `lift` (`0.4`, 0 to 3) | Pushes enemies away from the point |
+| `launch` | `radius` (`6`, 0.5 to 64), `power` (`1.2`, 0 to 5) | Throws enemies straight up |
+| `ignite` | `radius` (`4`, 0.5 to 64), `seconds` (`4`, 0 to 60) | Sets enemies on fire |
+| `effect` | `effect` (required), `radius` (`6`, 0.5 to 64), `seconds` (`4`, 0 to 600) | Gives enemies a potion effect |
+| `drain` | `radius` (`8`, 0.5 to 64), `amount` (`6`, 0 to 100) | Hurts each enemy by `amount` and heals you by the total it took |
+
+### The caster
+
+| Step | Options (default, range) | What it does |
+| --- | --- | --- |
+| `heal` | `amount` (`4`, 0 to 100) | Heals you, up to your max health |
+| `buff` | `effect` (required), `seconds` (`5`, 0 to 600) | Gives you a potion effect |
+
+### Flow and looks
+
+| Step | Options (default, range) | What it does |
+| --- | --- | --- |
+| `delay` | `ticks` (`10`, 1 to 200) | Waits, then runs the rest of the steps |
+| `sound` | `sound` (required) | Plays a `sounds:` entry at the point |
+| `particle` | `particle` (required), `spread` (`0.5`, 0 to 16), `speed` (`0`, 0 to 5) | Shows a `particles:` entry at the point |
+
+## Sounds, particles and effects
+
+**Looks on any step.** Every step also takes `sound:` and `particle:`. Each names an entry under `sounds:` or `particles:` in `config.yml`, and plays at the point after the step.
+
+When a step sets neither, some types play a default look:
+
+| Step | Default sound | Default particle |
+| --- | --- | --- |
+| `dash` | `custom-dash` | `custom-dash` |
+| `fireball` | `custom-fireball` on throw, `custom-fireball-hit` on impact | `custom-fireball-trail` in flight, `custom-fireball-hit` on impact |
+| `explode` | `custom-explode` | `custom-explode` |
+| `strike` | none | `storm-strike` |
+| `pull` | `gravity-pull` | `gravity-pull` |
+| `launch` | `gravity-launch` | `gravity-launch` |
+| `blink` | `void-blink-in` | none |
+| `drain` | `blood-drain` | `blood-heal` |
+| `heal` | none | `blood-heal` |
+| `effect`, `buff` | none | `custom-effect` |
+
+Other step types have no default look. Set either `sound:` or `particle:` on a step and both defaults are skipped for that step. A `fireball` works differently: the throw sound and the flight trail always play, and your `sound:` and `particle:` each replace only their own impact default.
+
+**Your own entries.** Add new names under `sounds:` and `particles:` and use them from any step:
+
+```yaml title="plugins/RelicsSMP/config.yml"
+sounds:
+  frost-crack: { key: block.glass.break, volume: 1.0, pitch: 1.4 }
+
+particles:
+  frost-burst: { type: dust, count: 40, color: "#BFF4FF", size: 1.2 }
+```
+
+| Entry | Option | Default | Range |
+| --- | --- | --- | --- |
+| Sound | `key` | required | A Minecraft sound id, such as `entity.blaze.shoot` |
+| Sound | `volume` | `1` | 0 to 10 |
+| Sound | `pitch` | `1` | 0.5 to 2 |
+| Particle | `type` | required | A Minecraft particle id, such as `flame` or `dust` |
+| Particle | `count` | `1` | 0 to 1000 |
+| Particle | `color` | `#FFFFFF` | `#RRGGBB`, dust particles only |
+| Particle | `size` | `1` | 0.01 to 10, dust particles only |
+
+`enabled: false` on an entry turns it off. Particles that need block or item data are not supported and are skipped with a console warning.
+
+**Effects.** `effect` and `buff` steps and `passive.effects` take `NAME` or `NAME:amplifier`, for example `SLOWNESS:2`. Amplifier `0` is level I, `2` is level III, up to `9`. Names are Minecraft effect ids: `SPEED`, `SLOWNESS`, `STRENGTH`, `JUMP_BOOST`, `RESISTANCE`, `REGENERATION` and so on.
+
+## Example relics
+
+These three ship in `custom-relics-example.yml`. Copy one into `config.yml` under `relics:` and restart.
+
+<Tabs>
+  <Tab title="Frost">
+    Freeze and hurl back everyone around you. Needs an enemy within 6 blocks, or the cast is cancelled with no cooldown. Then Slowness III for 4 seconds, 2 hearts of damage with an icy burst, and a push.
+
+    ```yaml
+    frost:
+      material: PRISMARINE_SHARD
+      bossbar-color: BLUE
+      cooldown-seconds: 20
+      display:
+        name: "<gradient:#C9F6FF:#5AA7FF>Frost Relic</gradient>"
+        symbol: "❄"
+        active: "Freeze and hurl back everyone around you"
+        passive: "Speed I while carried"
+      passive:
+        effects: ["SPEED:0"]
+      ability:
+        - { type: nearby, radius: 6 }
+        - { type: effect, radius: 6, effect: "SLOWNESS:2", seconds: 4 }
+        - { type: damage, radius: 6, amount: 4, particle: frost-burst }
+        - { type: push, radius: 6, strength: 1.2, lift: 0.5 }
+    ```
+
+    Frost's burst uses its own particle. Add this under `particles:` in `config.yml` too:
+
+    ```yaml
+    particles:
+      frost-burst: { type: dust, count: 40, color: "#BFF4FF", size: 1.2 }
+    ```
+  </Tab>
+  <Tab title="Ember Dash">
+    Dash forward, then torch everyone where you land. Twelve ticks after the dash, enemies within 4 blocks of where you are catch fire for 5 seconds and take 2.5 hearts.
+
+    ```yaml
+    ember-dash:
+      material: FIRE_CHARGE
+      bossbar-color: RED
+      cooldown-seconds: 15
+      display:
+        name: "<gradient:#FFB347:#FF4E1A>Ember Dash</gradient>"
+        symbol: "➶"
+        active: "Dash forward, then torch everyone where you land"
+        passive: "No fall damage while carried"
+      passive:
+        no-fall-damage: true
+      ability:
+        - { type: dash, power: 1.8, lift: 0.5 }
+        - { type: delay, ticks: 12 }
+        - { type: ignite, radius: 4, seconds: 5 }
+        - { type: damage, radius: 4, amount: 5, particle: custom-fireball-hit }
+    ```
+  </Tab>
+  <Tab title="Thunder">
+    Throw a fireball that calls lightning where it lands. The fireball hurts enemies within 3 blocks of impact and sets them alight for 3 seconds (the `fire-seconds` default). Then three bolts hit around the same spot.
+
+    ```yaml
+    thunder:
+      material: LIGHTNING_ROD
+      bossbar-color: YELLOW
+      cooldown-seconds: 40
+      display:
+        name: "<gradient:#FFF6A0:#FFC800>Thunder Relic</gradient>"
+        symbol: "⚡"
+        active: "Throw a fireball that calls lightning where it lands"
+        passive: "Strength I while carried"
+      passive:
+        effects: ["STRENGTH:0"]
+      ability:
+        - { type: fireball, speed: 1.6, damage: 4, radius: 3 }
+        - { type: strike, strikes: 3, spread: 2, radius: 3, damage: 4, knockback: 0.8 }
+    ```
+  </Tab>
+</Tabs>
+
+## When something is wrong
+
+A mistake never stops the plugin. The console names the exact key and only that option, step or relic is skipped. For example:
+
+```text
+config.yml relics.frost.ability[2].amount: "900" must be a number from 0 to 100, using 4.
+```
+
+Step numbers in these lines count from 0, so `ability[2]` is the third step.
+
+| Mistake | What happens |
+| --- | --- |
+| Relic id with capitals, spaces or more than 32 characters | Relic skipped |
+| More than 21 custom relics | The extra relics are skipped |
+| Unknown step `type` | Step skipped |
+| Number out of range or not a number | That option uses its default |
+| Option a step doesn't have | Ignored |
+| `effect` or `buff` with no valid `effect` | Step skipped |
+| Effect name the server doesn't know | Logged on start and on reload. The step does nothing |
+| `sound:` or `particle:` naming a missing entry | That look is dropped. A step left with no look of its own uses its default look, if it has one. A `sound` or `particle` step is skipped |
+| More than 32 steps | The rest are ignored |
+| No usable steps, or only `delay` steps | Relic skipped |
+| `material` that isn't an item | Uses `AMETHYST_SHARD` |
+| Bad `bossbar-color` | Uses `WHITE` |
+| Bad `cooldown-seconds` | Uses `30` |
+
+`/relics admin reload` tells you how many values were ignored.
+
+## Adding, removing and reloading
+
+- **Settings changes** to an existing custom relic apply on `/relics admin reload`
+- **Adding or removing** a custom relic needs a restart. Reload says so, for example `Custom relics changed (+frost, -thunder). Restart the server to add or remove relics; until then the old set stays.` A removed relic keeps working with its old settings until the restart
+- **After you remove one and restart,** the relic leaves the server and any copy of its item crumbles. Its altar and saved state stay in `relics.yml`, so adding it back and restarting brings it back
+- **A YAML error in `config.yml`** never deletes custom relics. If `config.yml` can't be read at startup and `relics.yml` holds custom relics, Relics SMP stays off and says so in the console. Fix the file and restart. Reload refuses a broken `config.yml` and changes nothing

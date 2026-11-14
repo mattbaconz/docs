@@ -1,0 +1,106 @@
+---
+title: 'Seasons'
+description: 'Run 30-day seasons with SeasonManager PRIME, and start the next season on the same map or a fresh one.'
+---
+
+Seasons give the grind a finish line. SeasonManager PRIME runs a 30-day season with stats, a countdown boss bar and a leaderboard, then archives the world before the next one.
+
+## The season cycle
+
+The setup ships in **pre-season**. Nothing counts until you start the first season.
+
+<Steps>
+  <Step title="Start">
+    Run `/season start` when you open. The 30-day countdown begins, with a 1-hour grace period at the start.
+  </Step>
+  <Step title="Play">
+    The season tracks every player's kills, deaths and playtime. A boss bar shows the time left, and players get warnings as the end gets close.
+  </Step>
+  <Step title="End">
+    After 30 days the season ends on its own. You can also end it early with `/season stop`.
+  </Step>
+  <Step title="Next">
+    Run `/season next`. It archives the world to `season-archives/` and moves to the next season number. Then run `/season start` again.
+  </Step>
+</Steps>
+
+<Note>
+`/season next` keeps your map as it is. If you want a fresh map for the new season, follow the steps under [Start a new map](#start-a-new-map).
+
+The console shows one SeasonManager warning about a world wipe or seed when you run `/season next`. That is expected. Your map and seed stay the same.
+</Note>
+
+## What players see
+
+- **Scoreboard:** season number and state, plus kills, deaths and playtime
+- **Boss bar:** a season timer with the time left
+- **`/season`:** a menu with the current season info
+- **`/leaderboard`:** top players this season
+- **`/menu`:** the sunflower opens season info and the golden helmet opens leaderboards
+
+## Owner commands
+
+| Command | What it does |
+| --- | --- |
+| `/season start` | Start the season |
+| `/season stop` | End the current season early |
+| `/season next` | Archive the world and move to the next season |
+| `/season settime <time>` | Set the time left, for example `7d`, `12h` or `30m` |
+| `/season grace <on\|off\|auto\|status>` | Force the grace period on or off, or let it follow the schedule |
+| `/season backup [label]` | Make an instant backup |
+| `/season reload` | Reload SeasonManager's config |
+
+`settime` and `grace on`, `off` or `auto` only work while a season is running. `grace status` works any time.
+
+## Start a new map
+
+To give the next season a brand-new world while keeping the Stonkz Exchange:
+
+<Steps>
+  <Step title="Close the season">
+    Run `/season stop` (skip this if the season already ended on its own), then `/season next`, then stop the server.
+  </Step>
+  <Step title="Delete the old world">
+    In your world folder, delete `level.dat` and `level.dat_old`. Inside `dimensions/minecraft`, delete the `overworld`, `the_nether` and `the_end` folders.
+  </Step>
+  <Step title="Reset inventories (optional)">
+    Delete the `players` folder too if inventories should reset.
+  </Step>
+  <Step title="Start fresh">
+    Start the server. It generates a new seed. Then run `/season start`.
+  </Step>
+</Steps>
+
+<Warning>
+Keep the `spawn` folder inside `dimensions/minecraft`. That is the Stonkz Exchange. If you delete it, your spawn is gone.
+</Warning>
+
+Money balances are not stored in the world, so a new map keeps them. If you want a full economy reset as well, reset balances with EssentialsX's `/eco` command before you start the new season.
+
+## Configuration
+
+```yaml title="plugins/SeasonManager-Prime/config.yml"
+season:
+  display-name: Season
+  increment: 1.0
+  duration: 30d
+  auto-end: true
+  grace-period: 1h
+  on-start-commands:
+  - weather clear
+  on-end-commands:
+  - say The season has ended! Thanks for playing, see you next season.
+world:
+  managed-worlds:
+  - world
+  - world_nether
+  - world_the_end
+  archive-folder: season-archives
+  archive-enabled: true
+```
+
+- Change `duration` for shorter or longer seasons, for example `14d`.
+- Add your own commands to `on-start-commands` and `on-end-commands`, such as rewards for the top players.
+- Archives go to `season-archives/`. Clear out old ones now and then to save disk space.
+
+See the [SeasonManager docs](/seasonmanager/index) for every SeasonManager feature.

@@ -1,0 +1,173 @@
+---
+title: 'Configuration'
+description: 'config.yml, messages.yml, editor.yml and the games folder.'
+---
+
+You build games in the editor, so most servers never touch a file. These files are for timings, sounds, wording and the licence key.
+
+Run `/gs reload` after editing. It reloads `config.yml`, `messages.yml`, `editor.yml` and every game file. Matches already running keep the version they started with.
+
+## Main config
+
+`plugins/Gamesmith/config.yml` as shipped:
+
+```yaml title="plugins/Gamesmith/config.yml"
+# PRO: paste the key from Discord /claim, then restart.
+license_key: "YOUR_KEY_HERE"
+
+editor:
+  # auto = a native form on 1.21.6+, chat below that; chat = always one chat line.
+  input: auto
+
+match:
+  # Commands players may still use while in a game. /gs always works.
+  allowed-commands: [msg, tell, r, w]
+  # Seconds between the end of a match and players going home.
+  end-delay-seconds: 5
+  # A kill counts for the last player who hit the victim within this many seconds.
+  kill-credit-seconds: 10
+  # How often a running match saves its arena journal for crash recovery.
+  journal-save-seconds: 10
+  # color: pink, blue, red, green, yellow, purple, white.
+  # style: progress, notched_6, notched_10, notched_12, notched_20.
+  bossbar: {color: yellow, style: progress}
+
+restore:
+  # Arena blocks put back per tick after a match. Lower it if a big arena causes lag.
+  blocks-per-tick: 500
+
+# PRO on an AdvancedSlimePaper server: games set to "Fresh world" in the editor's Settings.
+instances:
+  # Matches of one game running side by side.
+  max-per-game: 10
+  # Arena blocks copied per tick while building a template. Lower it if building causes lag.
+  blocks-per-tick: 4000
+
+# Set a key to "" to silence that sound. Keys are Minecraft sound names.
+sounds:
+  countdown: {key: block.note_block.hat, volume: 1.0, pitch: 1.0}
+  won: {key: ui.toast.challenge_complete, volume: 1.0, pitch: 1.0}
+  lost: {key: entity.villager.no, volume: 1.0, pitch: 1.0}
+  saved: {key: ui.button.click, volume: 0.6, pitch: 1.4}
+  error: {key: entity.villager.no, volume: 1.0, pitch: 1.0}
+  wand-first: {key: block.note_block.pling, volume: 0.6, pitch: 1.2}
+  wand-second: {key: block.note_block.pling, volume: 0.6, pitch: 1.6}
+
+# Lite only: show PRO actions as locked tiles in the editor.
+pro-hints: true
+```
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `license_key` | `YOUR_KEY_HERE` | PRO licence key from `/claim GAMESMITH`. Checked on startup only; a change needs a restart. Lite ignores it |
+| `editor.input` | `auto` | `auto` uses a native form on Paper 1.21.6+ and chat below that. `chat` always asks in chat |
+| `match.allowed-commands` | `[msg, tell, r, w]` | Commands players may use in a match, besides `/gs`. List each alias you want, without the slash |
+| `match.end-delay-seconds` | `5` | Seconds between the winner announcement and players going home |
+| `match.kill-credit-seconds` | `10` | How long a hit counts toward a kill |
+| `match.journal-save-seconds` | `10` | How often a match saves its arena changes for crash recovery |
+| `match.bossbar.color` | `yellow` | `pink`, `blue`, `red`, `green`, `yellow`, `purple` or `white`. An unknown name keeps the default |
+| `match.bossbar.style` | `progress` | `progress`, `notched_6`, `notched_10`, `notched_12` or `notched_20` |
+| `restore.blocks-per-tick` | `500` | Arena blocks put back per tick after a match. Lower it if a big reset causes lag. The minimum is 50 |
+| `instances.max-per-game` | `10` | PRO fresh worlds: matches of one game at the same time |
+| `instances.blocks-per-tick` | `4000` | PRO fresh worlds: blocks copied per tick while building a template. The minimum is 100 |
+| `sounds.<name>` | see above | `key`, `volume` and `pitch` for each plugin sound. Set `key: ""` to silence one |
+| `pro-hints` | `true` | Lite: show PRO actions and the fresh-world tile as locked tiles in the editor. `false` hides them |
+
+Commands in `match.allowed-commands` match with or without a plugin prefix, so `msg` also allows `/minecraft:msg`.
+
+## Messages
+
+`plugins/Gamesmith/messages.yml` holds every chat line, title, boss bar, menu text and the help pages. Players see most of these, so word them for your server. All of it is [MiniMessage](https://docs.advntr.dev/minimessage/format.html).
+
+| Key | What it is |
+| --- | --- |
+| `prefix` | Put before every chat line |
+| `pro-url` | The link Lite shows for PRO |
+| `joined`, `left`, `countdown`, `eliminated`, `ended`, ... | Match chat lines |
+| `title-*`, `subtitle-*` | Countdown, victory and game-over titles |
+| `bar-*` | Boss bar text while waiting, counting down, playing and after the end |
+| `join-*` | Why a player cannot join |
+| `menu-*` | The `/gs` game menu |
+| `help`, `help-admin`, `pro-info` | Help pages |
+
+Placeholders such as `<player>`, `<game>`, `<count>` and `<seconds>` are filled in by the plugin. Keep them where they are.
+
+A key you delete falls back to the default in the jar. New keys from updates work the same way, so you never have to merge files.
+
+## Editor text
+
+`plugins/Gamesmith/editor.yml` holds the editor's button names, lore, materials and slots, plus the trigger, action and win-rule labels and the problem-list lines.
+
+```yaml title="plugins/Gamesmith/editor.yml (excerpt)"
+hub:
+  test:
+    material: "EMERALD"
+    name: "<green>Test"
+    lore:
+      - "<gray>Start a match now, even alone."
+      - "<gray>Closes the editor."
+      - ""
+      - "<green>● Click <gray>to play it"
+    slot: 48
+```
+
+- Lore lines can be reordered or removed. Empty lines stay blank.
+- Values in `<angle-brackets>` are filled in by the plugin before MiniMessage runs.
+- Missing keys fall back to the jar's copy.
+
+## Game files
+
+Each game is one file: `plugins/Gamesmith/games/<id>.yml`. The editor writes it on every change. You can also edit it by hand and run `/gs reload`. Problems in a hand-edited file are logged to the console and shown in the editor. The comments below are for this page only: the editor rewrites the file on its next save and drops comments.
+
+```yaml title="plugins/Gamesmith/games/hill.yml"
+id: hill
+name: <gradient:#ffb347:#ffcc33>King of the Hill</gradient>
+icon: GOLDEN_HELMET
+players: {min: 2, max: 8}
+countdown: 15
+instance: false            # PRO: true = fresh world per match
+end-below-min: true
+teams: []                  # e.g. [{id: red, color: RED}, {id: blue, color: BLUE}]
+arena:
+  world: games
+  region: [-17, 62, -23, 17, 74, 17]          # x1, y1, z1, x2, y2, z2
+  markers:
+    lobby:
+    - [0.5, 64.0, -19.5, 0.0, 0.0]            # x, y, z, yaw, pitch
+    spawn:
+    - [-12.5, 64.0, -12.5, -45.0, 0.0]
+    - [12.5, 64.0, 12.5, 135.0, 0.0]
+  zones:
+    hill: [-2, 65, -2, 2, 68, 2]
+kit: [STONE_SWORD, LEATHER_CHESTPLATE]
+win: {type: first-to-score, score: 60}       # last-standing, first-to-score, top-score, survive
+rewards:
+  winner: ['xp:50']
+  everyone: []
+phases:
+- id: fight
+  name: King of the Hill
+  duration: 240                               # seconds, 0 = until a rule moves on
+  allow:
+    pvp: true
+    hunger: false
+    fall-damage: true
+    drops: false
+    place: false
+    break: []                                 # block names, or ['*'] for any
+  'on':
+  - when: {trigger: in-zone, zone: hill, every: 1, contested: pause}
+    do:
+    - {action: score, amount: 1, target: self}
+  - when: {trigger: death}
+    do:
+    - {action: respawn, delay: 3, target: self}
+```
+
+Kit lines are `MATERIAL [amount] [enchantment:level ...] [unbreakable]`, for example `DIAMOND_SHOVEL 1 efficiency:5 unbreakable`. Kits saved with **Use my inventory** are stored as exact item data instead, so names and every other detail survive.
+
+Triggers, actions and their settings are listed in [Rules](/gamesmith/rules).
+
+<Warning>
+Keep the `'on':` key quoted. Unquoted, YAML reads `on` as `true` and the phase loses its rules.
+</Warning>

@@ -1,0 +1,94 @@
+---
+title: 'Matches'
+description: 'How a match runs: joining, lobby and countdown, the boss bar and scoreboard, eliminations, the end and restores.'
+---
+
+A match is one round of one game. Gamesmith runs it from join to reset on its own. A match always plays a copy of the game, so editing a game never changes a match in progress.
+
+## Joining
+
+Players have three ways in:
+
+- **`/gs`** opens the game menu. Every ready game shows its icon, win rule, player count, state and the player's own wins. Click to join. If you are already in a game, the menu has a **Leave your game** button.
+- **`/gs join <game>`** joins directly.
+- **`/gs list`** shows every game. Click a name to join.
+
+On joining, Gamesmith saves the player's inventory, XP, health, effects and location. The player is healed, their inventory is cleared, and they wait in the lobby in adventure mode.
+
+A player cannot join when:
+
+| Message | Why |
+| --- | --- |
+| `You're already in a game.` | Leave the current one first with `/gs leave` |
+| `<game> isn't ready yet.` | The game still has problems in the editor |
+| `That game already started.` | Wait for the next round |
+| `That game is full.` | Max players reached |
+| `The arena is being reset.` | The last match is still putting blocks back |
+| `Another game is using that arena right now.` | Two games share the arena and the other is running |
+| `Every match of that game is busy.` | PRO fresh worlds: `instances.max-per-game` reached |
+
+## Lobby and countdown
+
+1. The boss bar shows `waiting for players` with the count against the game's minimum.
+2. When the minimum is reached, the countdown starts from the game's countdown setting. Chat announces it, and the last five seconds show as big titles with a sound.
+3. When the game is full, the countdown drops to 5 seconds.
+4. If players leave and the count falls below the minimum, the countdown stops: `Not enough players. Waiting for more.`
+
+Admins can skip the wait with `/gs start <id>`. It starts the waiting match even below the minimum. The editor's **Test** button does the same for you alone.
+
+## Playing
+
+When the match starts:
+
+- Teams are filled evenly and each player is told their team.
+- Players switch to survival mode, go to their spawns and get the kit.
+- A sidebar scoreboard shows each player's score, or each team's total in a team game.
+- The boss bar shows the game, the current phase and the time left in it.
+
+During the match:
+
+- Each phase's rules and permissions apply: PvP, fall damage, hunger, placing, breaking and drops.
+- Players cannot use other commands. `/gs` always works, and `match.allowed-commands` lists the others that do (`msg`, `tell`, `r` and `w` by default). `gamesmith.bypass` skips the block.
+- Players stay inside the arena region.
+- When a phase's time runs out, the next phase starts. After the last one, the game ends.
+
+### Deaths and eliminations
+
+Players never really die in a match. There are no drops and no respawn screen. Instead, the phase's **Player dies** rules run. A phase with no death rule eliminates the player.
+
+Eliminated players lose their match inventory and watch from the lobby in spectator mode. They still see the match's chat messages, titles and sounds. They can leave with `/gs leave` at any time.
+
+## The end
+
+The match ends when the win rule is met, when an **End the game** action runs, or when the last phase runs out.
+
+- Winners see **Victory!** and everyone else sees **Game over**, with the winner's name.
+- Wins and games played are recorded for every player still in the match.
+- After `match.end-delay-seconds` (5 by default), every player is put back exactly as they were before joining: inventory, XP, health, effects and location.
+- Then rewards are handed out, into the player's own inventory. Items that do not fit drop at the player's feet.
+- The arena is reset.
+
+If every player is eliminated, nobody wins.
+
+### Leaving early
+
+- `/gs leave` puts the player back right away.
+- Disconnecting does the same, in the same tick.
+- If **End when too few stay** is on (the default) and fewer than the minimum remain, the match ends. In a contest, the win rule picks the winner from the players still in. A co-op game just stops with no winner. A match started with `/gs start` or **Test** keeps going instead.
+- `/gs stop <id>` ends every match of the game with no winner. Players and the arena come back.
+
+## Crash safety
+
+Gamesmith writes each player's saved state to disk when they join, and saves the arena's block changes while the match runs.
+
+- If the server stops mid-match, players get everything back the next time they join: `The server stopped during your game. Your things are back.`
+- The arena is restored on the next start. If the arena's world loads late (for example through Multiverse-Core), Gamesmith waits for it.
+- If Gamesmith cannot save a player's state when they join, it takes them straight back out: `Could not save your things, so you can't join right now.`
+
+On a normal shutdown, every match stops and everything is put back at once.
+
+## Stats and leaderboards
+
+Every finished match adds to each player's wins and games played, per game, in `plugins/Gamesmith/data/stats.yml`. Both editions record them, and the `/gs` menu shows each player their wins.
+
+PRO adds `/gs top [game]` (the top ten by wins) and [PlaceholderAPI placeholders](/gamesmith/placeholders).

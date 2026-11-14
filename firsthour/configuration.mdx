@@ -1,0 +1,267 @@
+---
+title: 'Configuration'
+description: 'Every config.yml key with its default: welcome, bossbar, trail, sounds, titles, stats menu, new players, rewards, buddy pings and messages.'
+---
+
+FirstHour has three files you edit:
+
+- `config.yml`: everything on this page
+- `paths.yml`: the goals. See [Paths and step types](/firsthour/paths)
+- `messages.yml`: every line players and admins read. See [Messages](#messages)
+
+Apply changes with `/firsthour reload`. A bad value never stops the plugin. It falls back to the shipped default, and the console says what was ignored. Unknown keys under `sounds`, `titles` and `stats-menu` are flagged too.
+
+## Licence key (PRO)
+
+```yaml
+license_key: "YOUR_KEY_HERE"
+```
+
+Paste the key from Discord `/claim FIRST_HOUR`, then restart. Lite ignores this key. See [Installation](/firsthour/installation#install-firsthour-pro).
+
+## Welcome
+
+```yaml
+welcome:
+  enabled: true
+  delay-ticks: 40
+  button-width: 150
+```
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `enabled` | `true` | Show the welcome screen on a player's first join |
+| `delay-ticks` | `40` | Wait this long after the join (20 ticks = 1 second) |
+| `button-width` | `150` | Width of the Start button in pixels, 1 to 1024. Native dialog only |
+
+The text is in `messages.yml` under `welcome`. See [The welcome screen](/firsthour/welcome-and-goals#the-welcome-screen).
+
+## Bossbar
+
+```yaml
+bossbar:
+  enabled: true
+  color: GREEN
+  style: PROGRESS
+```
+
+| Key | Default | Values |
+| --- | --- | --- |
+| `enabled` | `true` | Show the current goal and the countdown to the next timed reward |
+| `color` | `GREEN` | `PINK`, `BLUE`, `RED`, `GREEN`, `YELLOW`, `PURPLE`, `WHITE` |
+| `style` | `PROGRESS` | `PROGRESS`, `NOTCHED_6`, `NOTCHED_10`, `NOTCHED_12`, `NOTCHED_20` |
+
+## Trail
+
+The particle line toward `go_to` goals.
+
+```yaml
+trail:
+  enabled: true
+  particle: END_ROD
+  color: "#55f7c0"
+  size: 1.0
+  every-seconds: 2
+  length: 8
+```
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `enabled` | `true` | Draw the trail |
+| `particle` | `END_ROD` | Any particle that needs no extra data (`END_ROD`, `HAPPY_VILLAGER`, `FLAME`...) or `DUST` |
+| `color` | `#55f7c0` | `DUST` only. `#RRGGBB` |
+| `size` | `1.0` | `DUST` only. 0.1 to 4 |
+| `every-seconds` | `2` | Draw it this often. 1 or more |
+| `length` | `8` | How many blocks long. 2 to 32 |
+
+## Sounds
+
+One sound per moment. Any sound key works, including resource-pack sounds as `namespace:path`.
+
+```yaml
+sounds:
+  step-done:
+    sound: entity.player.levelup
+    volume: 0.7
+    pitch: 1.4
+```
+
+| Moment | Default sound | Volume | Pitch |
+| --- | --- | --- | --- |
+| `step-done` | `entity.player.levelup` | 0.7 | 1.4 |
+| `path-complete` | `ui.toast.challenge_complete` | 0.8 | 1.0 |
+| `goal-start` | `block.note_block.chime` | 0.8 | 1.2 |
+| `timed-reward` | `entity.experience_orb.pickup` | 0.7 | 1.2 |
+| `day-reward` | `entity.player.levelup` | 0.8 | 1.0 |
+| `buddy-ping` | `block.note_block.bell` | 0.6 | 1.4 |
+| `greeted` | `entity.villager.celebrate` | 0.7 | 1.2 |
+| `menu-click` | `ui.button.click` | 0.6 | 1.2 |
+
+Volume is 0 or more, and 1 is normal. Pitch runs from 0.5 to 2. Add `enabled: false` to a moment to mute it. `buddy-ping` and `greeted` are for the PRO buddy pings.
+
+## Titles
+
+Title timings in ticks. The text is in `messages.yml`.
+
+```yaml
+titles:
+  welcome:
+    fade-in: 8
+    stay: 80
+    fade-out: 16
+  goal-start:
+    fade-in: 6
+    stay: 60
+    fade-out: 12
+  path-complete:
+    fade-in: 6
+    stay: 60
+    fade-out: 16
+```
+
+| Title | When |
+| --- | --- |
+| `welcome` | The first-join title on servers without the native dialog |
+| `goal-start` | The **Goal 1** title when the player presses Start |
+| `path-complete` | The **All set!** title when the path is done |
+
+`fade-in` and `fade-out` are 0 or more, `stay` is 1 or more. Add `enabled: false` to skip a title.
+
+## Stats menu
+
+The `/firsthour stats` layout: a 54-slot menu, slots 0 to 53. Names and lore are in `messages.yml` under `stats`.
+
+```yaml
+stats-menu:
+  filler: GRAY_STAINED_GLASS_PANE
+  header: { slot: 4, material: BOOK }
+  new-players: { slot: 10, material: EMERALD }
+  day1: { slot: 12, material: CLOCK }
+  day7: { slot: 14, material: ENDER_EYE }
+  session: { slot: 16, material: COMPASS }
+  funnel: { slot: 22, material: HOPPER }
+  export: { slot: 48, material: WRITABLE_BOOK }
+  refresh: { slot: 49, material: SUNFLOWER }
+  path: { slot: 50, material: MAP }
+  funnel-steps:
+    slots: [28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43]
+    material: MAP
+    worst-material: REDSTONE_BLOCK
+  locked:
+    material: BARRIER
+    funnel-slot: 31
+```
+
+| Key | What it does |
+| --- | --- |
+| `filler` | Fills empty slots. `none` leaves them empty |
+| `header` ... `refresh` | Slot and material of each item |
+| `path` | PRO with more than one path: switches the funnel to the next path |
+| `funnel-steps.slots` | One slot per path step, in order. A path longer than the list shows its first goals only |
+| `funnel-steps.material` | Item for each step |
+| `funnel-steps.worst-material` | Item for the step most players quit on |
+| `locked.material` | Lite: the item that marks a PRO feature |
+| `locked.funnel-slot` | Lite: where the locked funnel hint goes |
+
+Two items on the same slot, or a funnel slot that another item uses, get a console warning.
+
+## New players
+
+```yaml
+new-players:
+  auto-skip-playtime-minutes: 30
+```
+
+When you add FirstHour to a running server, players it has never seen who already have this many minutes of playtime count as veterans. They get no path, no welcome and none of the new-player rewards, and they don't count as new players in your stats. The playtime is the vanilla play-time statistic.
+
+Set it to `-1` to treat everyone FirstHour hasn't seen as new.
+
+## Timed rewards
+
+```yaml
+timed-rewards:
+  5:
+    items: ["COOKED_BEEF:8"]
+  15:
+    items: ["IRON_INGOT:6"]
+  30:
+    money: 250
+    items: ["GOLDEN_APPLE:1"]
+  60:
+    money: 500
+    items: ["DIAMOND:2"]
+```
+
+Paid at these minutes of playtime since the first join. Each pays once. Keys are whole minutes above 0. See [Timed rewards](/firsthour/rewards#timed-rewards).
+
+## Day rewards
+
+```yaml
+day-rewards:
+  2:
+    money: 500
+    items: ["DIAMOND:2"]
+  3:
+    items: ["EXPERIENCE_BOTTLE:16"]
+  4:
+    money: 750
+  5:
+    items: ["GOLDEN_APPLE:3"]
+  6:
+    money: 1000
+  7:
+    money: 1500
+    items: ["DIAMOND:5"]
+    label: "$1500 and 5 Diamonds"
+```
+
+Day 2 opens 20 hours after the first join, day 3 at 44 hours, and so on. Lite pays day 2. **PRO** pays days 2 to 7. See [Come-back days](/firsthour/rewards#come-back-days).
+
+Every reward, here and in `paths.yml`, takes `commands`, `money`, `items` and `label`. See [Reward format](/firsthour/rewards#reward-format).
+
+## Buddy pings (PRO)
+
+```yaml
+buddy:
+  enabled: true
+  reward:
+    money: 50
+    items: ["EMERALD:2"]
+  greet-window-seconds: 300
+  ping-cooldown-seconds: 120
+  max-rewards-per-hour: 3
+  greet-by-chat: true
+```
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `enabled` | `true` | Ping veterans when a brand-new player joins |
+| `reward` | $50, 2 emeralds | What the first greeter gets |
+| `greet-window-seconds` | `300` | How long a new player can be greeted for a reward. Minimum 10 |
+| `ping-cooldown-seconds` | `120` | One ping per veteran per this many seconds |
+| `max-rewards-per-hour` | `3` | Greeting rewards per veteran per hour |
+| `greet-by-chat` | `true` | Typing the new player's name in chat counts as a greeting |
+
+See [Veterans say hi](/firsthour/veterans).
+
+## PRO hints
+
+```yaml
+pro-hints: true
+```
+
+Lite only. Shows admins the PRO items on the stats screen as locked barriers. Players never see them. Set `false` to hide them.
+
+## Messages
+
+`messages.yml` holds every line in [MiniMessage](https://docs.advntr.dev/minimessage/format.html). Chat lines get the `prefix` automatically. Step titles, hints and reward labels in `paths.yml` take MiniMessage too.
+
+- Keys you delete fall back to the copy in the jar, so updates that add new keys work without edits.
+- Tags such as `<step>`, `<number>`, `<total>`, `<reward>` and `<player>` are filled in by FirstHour. Keep them in the lines you edit.
+- `pro-url` is the link shown by `/firsthour pro` on Lite.
+
+`/firsthour reload` reloads `messages.yml` with the rest.
+
+## bStats
+
+FirstHour sends anonymous usage counts to bStats. Turn it off for every plugin in `plugins/bStats/config.yml`.

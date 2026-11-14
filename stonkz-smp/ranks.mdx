@@ -1,0 +1,80 @@
+---
+title: 'Ranks and permissions'
+sidebarTitle: 'Ranks'
+description: 'The default, VIP, MVP and Admin ranks that ship with Stonkz SMP, and how to change them.'
+---
+
+Stonkz SMP ships four LuckPerms ranks with prefixes and perks. They are ready to hand out or sell. Each rank inherits everything from the one below it.
+
+| Rank | Prefix | Homes | Auction listings | Extra perks |
+| --- | --- | --- | --- | --- |
+| `default` | none | 3 | 3 | Every player command, `/rtp` to the Nether and End |
+| `vip` | **VIP** (green) | 5 | 6 | `/craft`, `/ec`, `/hat`, higher spawner limits |
+| `mvp` | **MVP** (aqua) | 10 | 10 | `/feed`, `/anvil`, colored chat |
+| `admin` | **ADMIN** (red) | see below | see below | Every permission (`*`) |
+
+The tab list sorts players by rank: admin, then MVP, VIP and default.
+
+## Rank details
+
+### default
+
+Every new player is in `default`. It covers homes, `/tpa`, `/pay`, `/balance`, `/baltop`, `/back`, `/spawn`, `/msg`, `/mail`, AFK, and the Nether and End buttons in the `/rtp` picker. Market, spawner, team, bounty, crate, event and season commands are open to everyone by default.
+
+### vip
+
+- 5 homes and 6 auction listings
+- `/craft` (portable crafting table), `/ec` (ender chest) and `/hat`
+- Spawner stacks up to **128** instead of 64
+- Up to **500** virtual spawners instead of 250
+
+### mvp
+
+- 10 homes and 10 auction listings
+- `/feed` and `/anvil`
+- Color codes in chat
+
+### admin
+
+`admin` inherits MVP and also has `*`, so it can use every command on the server, including bypass and limit permissions. Give it only to staff you trust.
+
+## Give a rank
+
+Run this in the console, or in game with a leading `/`:
+
+```text
+lp user <player> parent set vip
+lp user <player> parent set mvp
+lp user <player> parent set admin
+```
+
+`parent set` replaces the player's current rank. Make yourself admin right after install:
+
+```text
+lp user <your name> parent set admin
+```
+
+## Change a rank
+
+The easiest way is the LuckPerms web editor:
+
+```text
+/lp editor
+```
+
+It opens a link where you can add or remove permissions, then apply the changes with one command.
+
+The ranks are stored as YAML in `plugins/LuckPerms/yaml-storage/groups/`, one file per rank.
+
+### Common changes
+
+| To change | Edit |
+| --- | --- |
+| Number of homes | `sethome-multiple` in `plugins/Essentials/config.yml` (`default: 3`, `vip: 5`, `mvp: 10`) |
+| Auction listings | The `crazyauctions.sell.<number>` and `crazyauctions.bid.<number>` permissions on each rank |
+| Spawner limits | `plugins/3TSpawner/permissions.yml` (`3tspawner.limit.stack.vip`, `3tspawner.limit.virtual.vip`) |
+| Prefixes | The `prefixes` entry in each rank's file, or `/lp editor` |
+
+<Tip>
+Selling ranks? Pair them with your store of choice and run the `lp user` command when a player buys. The perks above are already in place.
+</Tip>

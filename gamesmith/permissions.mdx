@@ -1,0 +1,32 @@
+---
+title: 'Permissions'
+description: 'gamesmith.play for players, gamesmith.admin for builders and gamesmith.bypass for commands in a match.'
+---
+
+Gamesmith has three permissions. Players can play out of the box. Building and running games is for ops.
+
+| Permission | Default | What it allows |
+| --- | --- | --- |
+| `gamesmith.play` | everyone | `/gs`, `/gs join`, `/gs leave`, `/gs list`, `/gs top`, `/gs pro`, `/gs help` |
+| `gamesmith.admin` | op | `/gs create`, `/gs edit`, `/gs delete`, `/gs start`, `/gs stop`, `/gs wand`, `/gs reload`, using the wand, and changing blocks in an arena while a match plays there |
+| `gamesmith.bypass` | op | Using any command while in a match |
+
+## Notes
+
+- `gamesmith.play` is the permission for the `/gs` command itself. Anyone without it, admins included, cannot run any `/gs` subcommand. Keep it on your staff groups.
+- `gamesmith.admin` does not include `gamesmith.bypass`. Give both to staff who need other commands mid-match.
+- The wand only selects corners for players with `gamesmith.admin`.
+- Without `gamesmith.admin`, players outside a match cannot break or place blocks in an arena while a match is playing or resetting in it.
+
+## LuckPerms examples
+
+```text
+# Stop a group from joining games
+lp group default permission set gamesmith.play false
+
+# Let builders make and edit games
+lp group builder permission set gamesmith.admin true
+
+# Let moderators use their commands in a match
+lp group mod permission set gamesmith.bypass true
+```
