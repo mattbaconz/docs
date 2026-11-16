@@ -1,0 +1,39 @@
+---
+title: 'Updating and getting help'
+description: 'Back up plugin data, update without losing configuration, and collect useful support details.'
+---
+
+Check the plugin's installation page before updating. Server requirements, licence fields and reload commands differ between products. Use the edition and server versions listed for the release you download.
+
+For the host runtime, follow [Paper's Java requirements](https://docs.papermc.io/paper/getting-started/): Java 21 for 1.20–1.21.11, Java 25 for 26.1+. Each plugin can have a narrower Minecraft version range.
+
+## Update a plugin
+
+1. Stop the server cleanly. For a network plugin such as OmniSync, schedule maintenance across the proxy and affected backends.
+2. Back up the old JAR and the plugin's whole data folder. Include worlds for anything that resets or modifies them, and back up external databases separately.
+3. Read the release's migration notes. Replace the old JAR with the new one; keep only one edition of that plugin installed unless its instructions explicitly require a companion plugin.
+4. Keep your existing configuration. Add newly required keys to the matching sections; do not paste duplicate YAML sections or replace your whole config with a documentation example.
+5. Start the server and check its loaded plugin version and startup log. Confirm licence verification for paid editions.
+6. Test the feature you depend on with a normal player account. For storage or sync plugins, check the saved data after reconnecting and restarting as well.
+
+Keep the backup until the updated server passes these checks. Rolling back a JAR alone can be unsafe after a data migration; restore a matching backup of the affected data if the release requires it.
+
+## Config changes and reloads
+
+Use the reload command documented for that plugin. Bukkit `/reload` and plugin hot-load tools are not substitutes for a clean restart after a JAR update. Licence, database and dependency changes may require a restart even when a config reload command exists.
+
+Examples in these docs show the relevant settings, not necessarily the entire default file. The config bundled with your installed edition supplies the remaining defaults.
+
+## Get support
+
+Open a ticket in the [Extremely Cool Studios Discord](https://discord.gg/kgHNjJsB2t) and include:
+
+- Plugin name, edition and exact loaded version.
+- Server software, Minecraft version and Java version.
+- What you expected, what happened, and the shortest steps that reproduce it.
+- The relevant config section and the first related console error, including the stack trace.
+- The names and versions of integrations involved, such as your economy provider.
+
+Remove licence keys, tokens, webhook URLs and database passwords before sharing files. Send the relevant excerpt rather than your entire server folder.
+
+For a licence problem, include the product name and verification error. Claim the product ID shown on its installation page; a key for another product or edition will not activate it.

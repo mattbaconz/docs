@@ -1,36 +1,31 @@
 ---
-title: 'Features'
-description: 'Comparison of Lite and Prime features'
+title: 'Core and PRIME'
+description: 'Choose an edition and understand season transitions and display limits.'
 ---
 
-SeasonManager comes in two editions: **Lite** and **Prime**. Choose the one that best fits your server's needs.
+Core is the free edition; older documentation calls it Lite. PRIME includes the season controls and adds storage, automation and integrations.
 
-## Feature Comparison
+| Feature | Core | PRIME |
+| --- | --- | --- |
+| Season timer, start/stop/next | Yes | Yes |
+| Bossbar and title notifications | Yes | Yes |
+| Grace controls, settime and reload | Yes | Yes |
+| PlaceholderAPI season display | Yes | Yes |
+| Cross-season `/stash` | No | Yes |
+| World archives | No | Yes |
+| Scheduled actions in `events.yml` | No | Yes |
+| Discord integration and web dashboard | No | Yes |
 
-| Feature                   | Lite  | Prime |
-| :------------------------ | :---: | :---: |
-| **Season Timer**          |   ✅   |   ✅   |
-| **BossBar HUD**           |   ✅   |   ✅   |
-| **Title Notifications**   |   ✅   |   ✅   |
-| **Automated World Reset** |   ❌   |   ✅   |
-| **World Archiving (Zip)** |   ❌   |   ✅   |
-| **S3 Cloud Backup**       |   ❌   |   ✅   |
-| **Cross-Season Vault**    |   ❌   |   ✅   |
-| **Discord Webhooks**      |   ❌   |   ✅   |
-| **Reward Delivery**       |   ❌   |   ✅   |
+## Cross-season stash
 
-## Feature Details
+PRIME stores a player's stash outside the world. `/stash` opens it; `/vault` is an alias. The permission is `seasonmanager.stash`. Back up the PRIME data folder as well as the world before a reset or upgrade.
 
-### Season Timer (Lite & Prime)
-The core of the plugin. Define a duration in the config, and the plugin will count down. Once the timer hits zero, the season ends automatically (if configured).
+## Season transitions
 
-### World Management (Prime)
-Prime automates the tedious process of resetting for a new season.
-*   **Archiving**: The plugin automatically zips your worlds and moves them to an `archive` folder.
-*   **Reset**: Generates fresh worlds for the new season.
+Set the duration and grace rules, then start the season with `/season start`. PRIME can run timeline actions, phase changes and archive operations. Configure the intended worlds before advancing a season. A timer reaching zero, stopping a season and advancing to the next season are different actions; check your configured end commands and archive/reset behavior on a copy first.
 
-### Cross-Season Vault (Prime)
-Allow your players to keep a few precious items between seasons. Players can store items in their `/vault` before the season ends and retrieve them in the next season.
+## Displays and platform limits
 
-### Discord Integration (Prime)
-Keep your community engaged even when they are offline. SeasonManager can send beautiful embeds to your Discord server when a season starts, ends, or when warnings are broadcast.
+Use the bossbar or [PlaceholderAPI](/seasonmanager/placeholders) with a separate tab/scoreboard plugin. The released plugin's `tab:` and `scoreboard:` config sections do not create those displays. Hologram integration also has a startup limitation in the current release.
+
+Use Paper or Purpur for the released editions. Folia support is not available for the full season/world lifecycle.

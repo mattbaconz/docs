@@ -21,6 +21,10 @@ Soft dependencies never crash the plugin when missing. Check live status with:
 
 Price provider in `economy.yml`: `auto` | `builtin` | `stonkz` | `essentials` | `shopguiplus`.
 
+3TSpawner 1.0.8+ connects to Stonkz when its API service becomes available, including when Stonkz finishes loading after 3TSpawner. Use a Stonkz build that registers its public API service, and check `/3ts integrations` after startup if prices fall back to another source.
+
+For Stonkz's automatic vanilla starting prices, see [Automatic item pricing](https://mbaconz.gitbook.io/stonkz/admin-guide/automatic-pricing). That setup happens in Stonkz; selecting `prices.provider: stonkz` here chooses which prices 3TSpawner uses.
+
 ## Protection and display
 
 | Plugin | Role |

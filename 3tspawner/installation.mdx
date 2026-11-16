@@ -5,13 +5,13 @@ description: 'Install 3TSpawner on Paper or Purpur and activate your license.'
 
 ## Requirements
 
-- **Server software**: Paper, Purpur, or Folia `1.20.6` through `26.x`
-- **Java**: Java 21 or newer
+- **Server software**: Paper or Purpur **1.21.4–26.3**, using a release listed for your version. Folia support is partial.
+- **Java**: Java 21 for 1.21.x; Java 25 for 26.1+.
 - **Economy**: Vault + an economy plugin (required for shop/sell)
 - **License**: A paid 3TSpawner license key (product id `3TSPAWNER`)
 - **Optional**: PlaceholderAPI, WorldGuard, MythicMobs, EliteMobs, Stonkz
 
-Folia uses the same region-safe scheduler facade as Paper/Purpur. After install, `/3ts doctor` should report Folia when running on a Folia host.
+The released JAR requires the 1.21.4 API; older docs listing 1.20.6 were incorrect. `/3ts doctor` reports the detected platform, but detection alone does not verify selling, menu refresh and holograms across Folia regions. Use Paper/Purpur for the complete workflow.
 
 ## Install 3TSpawner
 
@@ -65,3 +65,7 @@ If the plugin cannot verify the key and grace does not apply, it disables during
 - [ ] Open `/3ts virtual`, `/3ts shop`, `/3ts storage` (skip shop if `shop.enabled` is false)
 - [ ] Sell loot once (`/3ts sell`)
 - [ ] Create a backup (`/3ts backup create`) before migration experiments
+
+## Updates and support
+
+Keep your existing configuration and data when replacing the JAR. Follow [Updating and getting help](/maintenance) for backups, restart checks and the details to include in a support ticket.

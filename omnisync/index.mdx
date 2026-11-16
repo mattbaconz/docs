@@ -7,13 +7,15 @@ description: 'Redis-backed player data sync for Paper/Folia and Velocity network
 It is built for modern proxy networks where player transfers must wait for safe data
 handoff instead of racing between servers.
 
+See [Installation](/omnisync/installation) for the current release's save-lifecycle limitation and the required transfer/restart checks.
+
 ## What OmniSync Provides
 
 - **Redis locks** to protect profile saves during transfers.
 - **Velocity transfer guard** to delay backend switches while a lock is active.
 - **Limbo queue** to hold joining players until their data can be applied safely.
 - **Dirty flag protection** to stop stale session overwrites after crashes.
-- **Folia-safe player application** through entity scheduler calls.
+- **Player application** through entity scheduler calls, with release-specific Folia limits.
 - **Admin recovery commands** for force saves, unlocks, cleanup, and status checks.
 
 ## Synced Data
@@ -29,11 +31,12 @@ OmniSync can synchronize:
 - Absorption hearts
 - Fire ticks and remaining air
 - Optional game mode
+- Advancements (awarded criteria, added in 1.1.0)
+- Statistics (configurable categories, added in 1.1.0)
 
 ## Not Included
 
-OmniSync does not sync economy, location, advancements, statistics, permissions,
-or chat data in the current release.
+OmniSync 1.1.0 does not sync potion effects, economy, location, permissions or chat data. Advancements and statistics are included in that release; older docs that excluded them were out of date.
 
 <Warning>
 BungeeCord is not supported in this release. Use Velocity for proxy transfer

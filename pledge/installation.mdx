@@ -6,9 +6,13 @@ description: 'Install Pledge on Paper or Folia and activate your license.'
 ## Requirements
 
 - **Server software**: Paper/Folia `1.20.6-26.x.x`
-- **Java**: Java 21 or newer
+- **Java**: Java 21 for 1.20.6–1.21.x; Java 25 for 26.1+.
 - **License**: A paid Pledge license key
 - **Optional**: PlaceholderAPI for placeholders
+
+<Warning>
+On Folia, goal rewards triggered in game can fail in the current release. Use Paper/Purpur if your setup depends on those reward commands. Test reward delivery with a normal player before opening the store.
+</Warning>
 
 ## Install Pledge
 
@@ -43,3 +47,7 @@ Run these commands after startup:
 ```
 
 If Pledge cannot verify the key, it disables itself during startup. Check the console log and confirm the key is present, valid, and claimed for the `PLEDGE` product.
+
+## Updates and support
+
+Keep your existing configuration and data when replacing the JAR. Follow [Updating and getting help](/maintenance) for backups, restart checks and the details to include in a support ticket.

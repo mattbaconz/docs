@@ -3,7 +3,7 @@ title: 'Configuration'
 description: 'Configuring SeasonManager'
 ---
 
-The `config.yml` file allows you to customize every aspect of SeasonManager. Below is the default configuration with explanations for each setting.
+Edit your edition's generated `config.yml`: `plugins/SeasonManager/` for Core or `plugins/SeasonManager-Prime/` for PRIME. The example below is a subset of the settings, not a replacement for the entire file. Keep your licence and existing settings, and merge keys into the existing sections.
 
 ```yaml
 # ══════════════════════════════════════════════════════════════════════════════
@@ -75,3 +75,25 @@ on-join:
 *   **season.duration**: Supports standard time formats (d, h, m, s).
 *   **world.managed-worlds**: If left empty `[]`, all worlds on the server will be included in archival/reset processes.
 *   **notifications.warning-times**: Add or remove integers to configure when chat/title warnings appear before the season ends.
+
+## Grace period
+
+Add these keys inside your existing `season:` section:
+
+```yaml
+season:
+  grace-period: 1h
+  grace-period-pvp: true
+  grace-period-damage: false
+  clear-inventory-on-start: false
+```
+
+`grace-period-pvp: true` disables PvP during grace. `grace-period-damage: true` also blocks other player damage. Keep `clear-inventory-on-start: false` unless you deliberately want a season start to empty player inventories.
+
+Run `/season reload` after supported config edits. Use `/season info` and `/season grace status` to inspect the result. Set the remaining time of an already active season with `/season settime`, rather than editing runtime state fields.
+
+## PRIME data and displays
+
+PRIME uses additional files for its timeline, Discord and storage features. Keep those files and its data directory when updating. Review `world.managed-worlds` before enabling archives or reset actions; an empty list targets all worlds.
+
+The released `tab:` and `scoreboard:` sections are inactive. Use the bossbar, or the [placeholders](/seasonmanager/placeholders) in your own tab/scoreboard plugin.

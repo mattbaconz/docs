@@ -20,7 +20,8 @@
           {
             "group": "Introduction",
             "pages": [
-              "index"
+              "index",
+              "maintenance"
             ]
           }
         ]

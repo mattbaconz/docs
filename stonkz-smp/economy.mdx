@@ -43,6 +43,14 @@ Players open it with `/shop`, the Market Broker NPC at spawn, or the emerald in 
 
 Limit orders and short selling are on too. See the [Stonkz listing](https://builtbybit.com/resources/84623/) for every market feature.
 
+## Automatic starting prices
+
+The included Stonkz build has recipe-aware starting prices. In `plugins/Stonkz/config.yml`, keep `market.auto_populate_items: true`. It runs on startup; after a config change, run `/stonkz reload`, then `/stonkz admin populate` to run it now.
+
+You do not need to enter every recipe price manually. The scan adjusts eligible default prices and keeps owner-customized pricing. Back up your plugin folder and database first. Do not apply a fresh preset or clear the market just to enable it: those actions replace your listings.
+
+Check the console for the balancing summary and any remaining profitable routes. Live prices still move with trades and events; other shops and custom recipes need separate checks. See [Stonkz automatic pricing](https://mbaconz.gitbook.io/stonkz/admin-guide/automatic-pricing) for the full procedure.
+
 ## Spawners
 
 <Frame>

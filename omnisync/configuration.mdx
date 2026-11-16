@@ -34,6 +34,14 @@ sync:
   absorption: true
   environment-state: true
   game-mode: false
+  advancements: true
+  statistics: true
+  statistics-categories:
+    - BLOCK
+    - ITEM
+    - ENTITY
+    - GENERAL
+  max-payload-kilobytes: 64
 
 experimental:
   native-serialization: false
@@ -75,6 +83,12 @@ sync:
 
 `game-mode` is disabled by default because most networks manage game modes per
 server or per game.
+
+## Advancements and statistics (1.1.0+)
+
+The 1.1.0 backend includes advancement criteria and statistics. `sync.advancements` and `sync.statistics` default to `true`. Select statistic groups with `sync.statistics-categories`: `BLOCK`, `ITEM`, `ENTITY` and `GENERAL`. The bundled payload setting is `sync.max-payload-kilobytes: 64`.
+
+Merge these keys into your existing `sync:` section when updating an older config. Keep the Paper and Velocity components on the same release. These fields do not remove the save-lifecycle limitation described in [Installation](/omnisync/installation).
 
 ## Messages
 

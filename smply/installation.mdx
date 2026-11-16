@@ -6,11 +6,11 @@ description: 'Install Smply on Paper or Folia, add your license, and apply a pre
 ## Requirements
 
 - **Server software:** Paper or Folia `1.20.6` through `26.1.2`
-- **Java:** Java 21
+- **Java:** Java 21 for 1.20.6–1.21.x; Java 25 for 26.1+.
 - **License:** A paid Smply license key (product id `SMPLY`)
 - **Optional:** Vault + an economy plugin, LuckPerms, PlaceholderAPI, TAB
 
-Folia uses the same region-safe scheduler as Paper. After install, `/smply doctor` reports Folia when you are on a Folia host.
+Folia support is partial. `/smply doctor` detects the host, but does not verify simultaneous heart/quest changes or reloads across regions. Check those workflows with your exact release before opening a Folia server.
 
 ## Install Smply
 
@@ -109,3 +109,7 @@ There is no Essentials or CMI data import. Treat this as a fresh world relaunch.
 - Tune `kits.yml`, `rewards.yml`, `hud.yml`, and `messages.yml`
 - Enable auction and shop with the `economy_smp` preset, or turn those modules on in `config.yml`
 - If you keep Essentials for economy only, disable its overlapping travel commands. See [Integrations](/smply/integrations)
+
+## Updates and support
+
+Keep your existing configuration and data when replacing the JAR. Follow [Updating and getting help](/maintenance) for backups, restart checks and the details to include in a support ticket.

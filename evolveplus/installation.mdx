@@ -6,7 +6,7 @@ description: 'How to install Evolve+'
 ## Requirements
 
 - **Server**: Paper, Folia, or Purpur.
-- **Versions**: 1.20.6+, 1.21.x, 26.1+, and newer compatible Paper API builds.
+- **Versions**: Use the release's listed builds within 1.20.6–26.3. A newer server version is not automatically compatible.
 - **Java**: Java 21 bytecode. Use the Java version required by your server software.
 - **License**: Evolve+ requires a Matt DRM license key for commercial releases.
 
@@ -38,16 +38,9 @@ license-key: "YOUR_KEY_HERE"
 Buyers can claim their Evolve+ license key from the official Discord after purchase.
 </Note>
 
-## Local Testing
+## Folia
 
-For private local testing only, you can disable DRM by removing the top-level `license-key` field and using:
-
-```yaml
-drm:
-  enabled: false
-```
-
-Do not ship public production servers with your private test configuration.
+Folia support is partial. Tree refresh and era transitions have cross-region limitations in the current release. Test a paid unlock, rewards and saved progress on your exact setup; use Paper/Purpur for the complete workflow. On Folia, choose a compatible economy bridge and provider too.
 
 ## Economy Setup
 
@@ -64,3 +57,7 @@ Vault Economy Hook successfully established.
 ```
 
 If Vault is missing or no provider is registered, Evolve+ still loads, but money requirements and contributions will fail until an economy is available.
+
+## Updates and support
+
+Keep your existing configuration and data when replacing the JAR. Follow [Updating and getting help](/maintenance) for backups, restart checks and the details to include in a support ticket.
